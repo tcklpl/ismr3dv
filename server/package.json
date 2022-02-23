@@ -1,0 +1,19 @@
+{
+  "name": "ismr3dv-server",
+  "version": "1.0.0",
+  "description": "ismr 3d visualizer - server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.17.3"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.2",
+    "@types/express": "^4.17.13"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "ismr3d",
+  "version": "1.0.0",
+  "description": "ismr 3d visualizer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "minify-html": "npx html-minifier --collapse-whitespace --remove-comments --input-dir ./src/ --output-dir ./out/ --file-ext html",
+    "sync-others": "rsync -a --exclude '*.html' --exclude '*.ts' src/ out/",
+    "compile": "npm run minify-html && tsc && npm run sync-others",
+    "clean": "rm -r ./out/*"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jquery": "^3.5.13",
+    "html-minifier": "^4.0.0"
+  },
+  "dependencies": {
+    "jquery": "^3.6.0"
+  }
+}

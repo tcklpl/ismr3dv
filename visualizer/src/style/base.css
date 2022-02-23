@@ -1,0 +1,25 @@
+body {
+    width: 100vw;
+    height: 100vh;
+}
+
+#ismr3dcanvas {
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    position: absolute;
+    margin: 0;
+    border: 0;
+}
+
+.error-screen {
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    position: fixed;
+    margin: 0;
+    border: 0;
+    background-color: rgb(255, 103, 103);
+    color: black;
+    display: none;
+}
