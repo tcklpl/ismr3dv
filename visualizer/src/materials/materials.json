@@ -1,0 +1,34 @@
+{
+    "materials": [
+
+        {
+            "name": "earth",
+            "maps": [ "daymap", "nightmap", "clouds", "normal", "specular" ],
+            "resolutions": [ "2k", "8k" ],
+            "default_resolution": "2k",
+            "images": [
+                {
+                    "resolution": "2k",
+                    "maps": {
+                        "daymap": "earth/2k_earth_daymap.jpg",
+                        "nightmap": "earth/2k_earth_nightmap.jpg",
+                        "clouds": "earth/2k_earth_clouds.jpg",
+                        "normal": "earth/2k_earth_normal_map.png",
+                        "specular": "earth/2k_earth_specular_map.png"
+                    }
+                },
+                {
+                    "resolution": "8k",
+                    "maps": {
+                        "daymap": "earth/8k_earth_daymap.jpg",
+                        "nightmap": "earth/8k_earth_nightmap.jpg",
+                        "clouds": "earth/8k_earth_clouds.jpg",
+                        "normal": "earth/8k_earth_normal_map.png",
+                        "specular": "earth/8k_earth_specular_map.png"
+                    }
+                }
+            ]
+        }
+
+    ]
+}
