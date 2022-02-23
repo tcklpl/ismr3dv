@@ -20,3 +20,7 @@ To compile the visualizer:
     npm run compile
 ```
 > The visualizer compile script uses `rsync` to copy the source files to the `out` dir. If you don't have acess to `rsync` you can use something similar or just manually copy the files to the destination. `rsync` copies all files that are not `html` or `ts`, that means: images, css, shaders sources and so on.
+
+# Credits
+
+Earth textures by [**Solar System Scope**](https://www.solarsystemscope.com/textures/), distributed under Creative Commons 4.0 International (CC BY 4.0). No additional changes were made to the textures.
