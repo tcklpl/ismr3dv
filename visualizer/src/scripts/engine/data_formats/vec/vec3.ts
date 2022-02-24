@@ -64,6 +64,14 @@ export class Vec3 extends Vec2 {
         );
     }
 
+    static multiplyByValue(a: Vec3, b: number) {
+        return new Vec3(
+            a.x * b,
+            a.y * b,
+            a.z * b
+        )
+    }
+
     static normalize(v: Vec3) {
         let length = Math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
         // no division by 0

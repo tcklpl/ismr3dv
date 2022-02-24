@@ -46,6 +46,13 @@ export class Vec2 implements IUniformable {
         this._values[1] = v;
     }
 
+    static subtract(a: Vec2, b: Vec2): Vec2 {
+        return new Vec2(
+            a.x - b.x,
+            a.y - b.y
+        );
+    }
+
     static clamp(min: Vec2, max: Vec2, value: Vec2) {
         return new Vec2(
             MUtils.clamp(min.x, max.x, value.x),
