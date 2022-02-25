@@ -19,13 +19,6 @@ export class MaterialLoader extends GenericLoader {
     private _gl = Visualizer.instance.gl;
     private _materialManager = Visualizer.instance.materialManager;
 
-    private _onTextureFetch: () => void;
-
-    constructor(source: any, onTextureFetch: () => void, onLoad: () => void) {
-        super(source, onLoad);
-        this._onTextureFetch = onTextureFetch;
-    }
-
     protected initialize() {
         this._loadList = this._source as MaterialLoadlist;
     }
@@ -78,7 +71,7 @@ export class MaterialLoader extends GenericLoader {
                 loaded = false;
         });
         if (loaded) {
-            this._onTextureFetch();
+            this.onLoad();
         }
     }
 
@@ -93,7 +86,7 @@ export class MaterialLoader extends GenericLoader {
             });
             this._materialManager.registerMaterial(new Material(s.name, finalMap));
         });
-        this.onLoad();
+        this.onConstruct();
     }
     
 

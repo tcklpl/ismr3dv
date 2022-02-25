@@ -1,3 +1,4 @@
 {
-    "material_loadlist": "materials/materials.json"
+    "material_loadlist": "materials/materials.json",
+    "mesh_loadlist": "meshes/meshes.json"
 }

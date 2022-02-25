@@ -3,12 +3,16 @@ import { ILoadList } from "./loadlist";
 import { LoadState } from "./load_states";
 import { MaterialLoader } from "./material_loader";
 import { MaterialLoadlist } from "./material_loadlist";
+import { MeshLoader } from "./mesh_loader";
+import { IMeshLoadlist } from "./mesh_loadlist";
 
 export class Loader {
 
     private _materialLoader!: MaterialLoader;
+    private _meshLoader!: MeshLoader;
+
     private _loadedSources: number = 0;
-    private _sourcesToLoad: number = 1;
+    private _sourcesToLoad!: number;
 
     private _loadState: LoadState = LoadState.FETCHING_MAIN_LOADLIST;
 
@@ -19,9 +23,16 @@ export class Loader {
     private fetchSources() {
 
         AsyncUtils.getUrlAs('loadlist.json', (res: ILoadList) => {
+            this._sourcesToLoad = Object.keys(res).length;
             this.nextStage();
+
             AsyncUtils.getUrlAs(res.material_loadlist, (res: MaterialLoadlist) => {
                 this._materialLoader = new MaterialLoader(res, () => this.nextStage(), () => this.nextStage());
+                this.notifyFetchedSource();
+            });
+
+            AsyncUtils.getUrlAs(res.mesh_loadlist, (res: IMeshLoadlist) => {
+                this._meshLoader = new MeshLoader(res, () => this.nextStage(), () => this.nextStage());
                 this.notifyFetchedSource();
             });
         });
@@ -49,6 +60,14 @@ export class Loader {
                 this._materialLoader.construct();
                 break;
             case LoadState.CONSTRUCTING_MATERIALS:
+                this._loadState = LoadState.FETCHING_MESHES;
+                this._meshLoader.load();
+                break;
+            case LoadState.FETCHING_MESHES:
+                this._loadState = LoadState.CONSTRUCTING_MESHES;
+                this._meshLoader.construct();
+                break;
+            case LoadState.CONSTRUCTING_MESHES:
                 this._loadState = LoadState.FINISHED;
                 this.loadFinished();
                 break;

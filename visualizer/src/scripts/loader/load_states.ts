@@ -7,5 +7,9 @@ export enum LoadState {
     FETCHING_MATERIALS = 2,
     CONSTRUCTING_MATERIALS = 3,
 
-    FINISHED = 4
+    // MESHES
+    FETCHING_MESHES = 4,
+    CONSTRUCTING_MESHES = 5,
+
+    FINISHED = 6
 }
