@@ -1,0 +1,8 @@
+{
+    "meshes": [
+        {
+            "name": "earth",
+            "obj": "earth/earth.obj"
+        }
+    ]
+}
