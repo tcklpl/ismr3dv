@@ -1,0 +1,9 @@
+{
+    "shaders": [
+        {
+            "name": "earth",
+            "vertex": "earth/earth.vert",
+            "fragment": "earth/earth.frag"
+        }
+    ]
+}

@@ -16,5 +16,6 @@ export abstract class GenericLoader implements ILoader {
 
     protected initialize(): void {};
     abstract load(): void;
+    abstract construct(): void;
     
 }
