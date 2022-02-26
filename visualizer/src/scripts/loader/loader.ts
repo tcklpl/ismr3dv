@@ -5,11 +5,14 @@ import { MaterialLoader } from "./material_loader";
 import { MaterialLoadlist } from "./material_loadlist";
 import { MeshLoader } from "./mesh_loader";
 import { IMeshLoadlist } from "./mesh_loadlist";
+import { ShaderLoader } from "./shader_loader";
+import { IShaderLoadlist } from "./shader_loadlist";
 
 export class Loader {
 
     private _materialLoader!: MaterialLoader;
     private _meshLoader!: MeshLoader;
+    private _shaderLoader!: ShaderLoader;
 
     private _loadedSources: number = 0;
     private _sourcesToLoad!: number;
@@ -33,6 +36,11 @@ export class Loader {
 
             AsyncUtils.getUrlAs(res.mesh_loadlist, (res: IMeshLoadlist) => {
                 this._meshLoader = new MeshLoader(res, () => this.nextStage(), () => this.nextStage());
+                this.notifyFetchedSource();
+            });
+
+            AsyncUtils.getUrlAs(res.shader_loadlist, (res: IShaderLoadlist) => {
+                this._shaderLoader = new ShaderLoader(res, () => this.nextStage(), () => this.nextStage());
                 this.notifyFetchedSource();
             });
         });
@@ -68,6 +76,14 @@ export class Loader {
                 this._meshLoader.construct();
                 break;
             case LoadState.CONSTRUCTING_MESHES:
+                this._loadState = LoadState.FETCHING_SHADERS;
+                this._shaderLoader.load();
+                break;
+            case LoadState.FETCHING_SHADERS:
+                this._loadState = LoadState.COMPILING_SHADERS;
+                this._shaderLoader.construct();
+                break;
+            case LoadState.COMPILING_SHADERS:
                 this._loadState = LoadState.FINISHED;
                 this.loadFinished();
                 break;

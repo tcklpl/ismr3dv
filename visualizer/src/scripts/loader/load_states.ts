@@ -11,5 +11,9 @@ export enum LoadState {
     FETCHING_MESHES = 4,
     CONSTRUCTING_MESHES = 5,
 
-    FINISHED = 6
+    // SHADERS
+    FETCHING_SHADERS = 6,
+    COMPILING_SHADERS = 7,
+
+    FINISHED = 8
 }
