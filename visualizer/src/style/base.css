@@ -23,3 +23,20 @@ body {
     color: black;
     display: none;
 }
+
+.loading-screen {
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+    display: flex;
+    position: fixed;
+    margin: 0;
+    border: 0;
+    background-color: rgb(18, 18, 19);
+    color: rgb(212, 212, 212);
+}
+
+#loading-progress-bar-holder {
+    width: 30%;
+    min-width: 500px;
+}
