@@ -3,7 +3,7 @@ import { Visualizer } from "../../visualizer/visualizer";
 export class Material {
     
     private _name: string;
-    private _maps: Map<string, WebGLTexture>;
+    protected _maps: Map<string, WebGLTexture>;
 
     constructor(name: string, textureMaps: Map<string, WebGLTexture>) {
         this._name = name;
@@ -12,6 +12,10 @@ export class Material {
 
     public get name() {
         return this._name;
+    }
+
+    public get maps() {
+        return this._maps;
     }
 
     bind(map: Map<string, WebGLUniformLocation>) {

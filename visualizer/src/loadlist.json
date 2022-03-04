@@ -1,5 +1,6 @@
 {
     "material_loadlist": "materials/materials.json",
     "mesh_loadlist": "meshes/meshes.json",
-    "shader_loadlist": "shaders/shaders.json"
+    "shader_loadlist": "shaders/shaders.json",
+    "object_loadlist": "objects.json"
 }
