@@ -4,7 +4,7 @@ import { Basic3DTransformative } from "../traits/basic_3d_transformative";
 import { IIdentifiable } from "../traits/i_identifiable";
 import { Mesh } from "./mesh/mesh";
 
-export abstract class RenderableOBject extends Basic3DTransformative implements IIdentifiable {
+export abstract class RenderableObject extends Basic3DTransformative implements IIdentifiable {
     
     _id: number;
 

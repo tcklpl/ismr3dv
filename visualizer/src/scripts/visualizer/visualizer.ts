@@ -1,5 +1,6 @@
 import { MaterialManager } from "../engine/materials/material_manager";
 import { MeshManager } from "../engine/mesh_manager";
+import { ObjectManager } from "../engine/object_manager";
 import { ShaderManager } from "../engine/shaders/shader_manager";
 import { Loader } from "../loader/loader";
 
@@ -16,6 +17,7 @@ export class Visualizer {
     private _materialManager: MaterialManager = new MaterialManager();
     private _meshManager: MeshManager = new MeshManager();
     private _shaderManager: ShaderManager = new ShaderManager();
+    private _objectManager: ObjectManager = new ObjectManager();
 
     constructor(gl: WebGL2RenderingContext) {
         this._gl = gl;
@@ -41,6 +43,10 @@ export class Visualizer {
 
     public get shaderManager() {
         return this._shaderManager;
+    }
+
+    public get objectManager() {
+        return this._objectManager;
     }
 
 }

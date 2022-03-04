@@ -6,6 +6,8 @@ import { MaterialLoader } from "./material_loader";
 import { MaterialLoadlist } from "./material_loadlist";
 import { MeshLoader } from "./mesh_loader";
 import { IMeshLoadlist } from "./mesh_loadlist";
+import { ObjectLoader } from "./object_loader";
+import { IObjectLoadlist } from "./object_loadlist";
 import { ShaderLoader } from "./shader_loader";
 import { IShaderLoadlist } from "./shader_loadlist";
 
@@ -14,6 +16,7 @@ export class Loader {
     private _materialLoader!: MaterialLoader;
     private _meshLoader!: MeshLoader;
     private _shaderLoader!: ShaderLoader;
+    private _objectLoader!: ObjectLoader;
 
     private _loadedSources: number = 0;
     private _sourcesToLoad!: number;
@@ -42,6 +45,11 @@ export class Loader {
 
             AsyncUtils.getUrlAs(res.shader_loadlist, (res: IShaderLoadlist) => {
                 this._shaderLoader = new ShaderLoader(res, () => this.nextStage(), () => this.nextStage());
+                this.notifyFetchedSource();
+            });
+
+            AsyncUtils.getUrlAs(res.object_loadlist, (res: IObjectLoadlist) => {
+                this._objectLoader = new ObjectLoader(res, () => this.nextStage(), () => this.nextStage());
                 this.notifyFetchedSource();
             });
         });
@@ -98,6 +106,16 @@ export class Loader {
                 this._shaderLoader.construct();
                 break;
             case LoadState.COMPILING_SHADERS:
+                this._loadState = LoadState.FETCHING_GAME_OBJECTS;
+                this.updateUI('Fetching game objects');
+                this._objectLoader.load();
+                break;
+            case LoadState.FETCHING_GAME_OBJECTS:
+                this._loadState = LoadState.REGISTERING_GAME_OBJECTS;
+                this.updateUI('Registering game objects');
+                this._objectLoader.construct();
+                break;
+            case LoadState.REGISTERING_GAME_OBJECTS:
                 this._loadState = LoadState.FINISHED;
                 this.updateUI('Finished');
                 this.loadFinished();

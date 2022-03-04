@@ -15,5 +15,9 @@ export enum LoadState {
     FETCHING_SHADERS = 6,
     COMPILING_SHADERS = 7,
 
-    FINISHED = 8
+    // GAME OBJECTS
+    FETCHING_GAME_OBJECTS = 8,
+    REGISTERING_GAME_OBJECTS = 9,
+
+    FINISHED = 10
 }

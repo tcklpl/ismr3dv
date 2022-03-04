@@ -1,0 +1,10 @@
+{
+    "objects": [
+        {
+            "name": "earth",
+            "mesh": "earth",
+            "shader": "earth",
+            "material": "earth"
+        }
+    ]
+}
