@@ -42,7 +42,7 @@ export class MeshLoader extends GenericLoader {
         this._meshSources.forEach(s => {
             const submeshes = OBJUtils.loadWavefrontObj(s.objSource);
             submeshes.forEach(sm => {
-                this._meshManager.registerMesh(sm);
+                this._meshManager.register(sm);
             });
         });
         this.onConstruct();

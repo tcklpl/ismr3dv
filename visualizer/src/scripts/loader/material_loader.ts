@@ -84,7 +84,7 @@ export class MaterialLoader extends GenericLoader {
             s.maps.forEach((value, key) => {
                 finalMap.set(key, TextureUtils.createTextureFromImage(this._gl, value));
             });
-            this._materialManager.registerMaterial(new Material(s.name, finalMap));
+            this._materialManager.register(new Material(s.name, finalMap));
         });
         this.onConstruct();
     }

@@ -1,15 +1,10 @@
+import { GenericManager } from "../generic_manager";
 import { Shader } from "./shader";
 
-export class ShaderManager {
-
-    private _shaders: Shader[] = [];
-
-    registerShader(shader: Shader) {
-        this._shaders.push(shader);
-    }
+export class ShaderManager extends GenericManager<Shader> {
 
     getByName(name: string) {
-        return this._shaders.find(x => x.name == name);
+        return this.allRegistered.find(x => x.name == name);
     }
 
 }
