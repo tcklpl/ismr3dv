@@ -1,19 +1,11 @@
 import { Mesh } from "./data_formats/mesh/mesh";
+import { GenericManager } from "./generic_manager";
 
-export class MeshManager {
+export class MeshManager extends GenericManager<Mesh> {
 
-    private _meshes: Mesh[] = [];
 
-    public getByName(name: string) {
-        return this._meshes.find(x => x.name == name);
-    }
-
-    public registerMesh(m: Mesh) {
-        this._meshes.push(m);
-    }
-
-    public get meshes() {
-        return this._meshes;
+    getByName(name: string) {
+        return this.allRegistered.find(x => x.name == name);
     }
 
 }

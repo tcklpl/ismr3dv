@@ -45,7 +45,7 @@ export class ObjectLoader extends GenericLoader {
     construct(): void {
         
         this._sources.forEach(s => {
-            this._objectManager.registerObject(s);
+            this._objectManager.register(s);
         });
 
         this.onConstruct();

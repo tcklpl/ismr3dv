@@ -47,7 +47,7 @@ export class ShaderLoader extends GenericLoader {
 
     construct(): void {
         this._sources.forEach(s => {
-            this._shaderManager.registerShader(new Shader(s.name, s.vertexSource as string, s.fragmentSource as string));
+            this._shaderManager.register(new Shader(s.name, s.vertexSource as string, s.fragmentSource as string));
         });
         this.onConstruct();
     }
