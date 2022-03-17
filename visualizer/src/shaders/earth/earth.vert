@@ -8,10 +8,13 @@ layout (location = 2) in vec3 a_normal;
 layout (location = 3) in vec3 a_tangent;
 layout (location = 4) in vec3 a_bitangent;
 
+out vec2 vtf_texCoord;
+
 uniform mat4 u_model;
 uniform mat4 u_view;
 uniform mat4 u_projection;
 
 void main() {
     gl_Position = u_projection * u_view * u_model * vec4(a_position, 1.0);
+    vtf_texCoord = a_uv;
 }

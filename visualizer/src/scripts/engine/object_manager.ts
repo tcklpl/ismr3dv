@@ -13,11 +13,11 @@ export class ObjectManager extends GenericManager<IObjectSource> {
         return this._currentId++;
     }
 
-    summon<T extends RenderableObject>(name: string, type: (id: number, mesh: Mesh, material: Material, shader: Shader) => T) {
+    summon<T extends RenderableObject>(name: string, type: new (id: number, mesh: Mesh, material: Material, shader: Shader) => T) {
         let found = this.allRegistered.find(x => x.name == name);
         if (!found) throw `Could not find object '${name}'`;
 
-        return type(this.requestId(), found.mesh, found.material, found.shader);
+        return new type(this.requestId(), found.mesh, found.material, found.shader);
     }
 
 }
