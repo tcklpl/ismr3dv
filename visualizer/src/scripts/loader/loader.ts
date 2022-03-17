@@ -23,6 +23,8 @@ export class Loader {
 
     private _loadState: LoadState = LoadState.FETCHING_MAIN_LOADLIST;
 
+    onLoad?: () => void;
+
     constructor() {
         this.fetchSources();
     }
@@ -62,6 +64,8 @@ export class Loader {
     private loadFinished() {
         UILoader.hideLoadingScreen();
         console.log('everything loaded!');
+        if (this.onLoad)
+            this.onLoad();
     }
 
     private updateUI(message: string) {

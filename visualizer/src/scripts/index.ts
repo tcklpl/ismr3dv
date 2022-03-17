@@ -10,3 +10,7 @@ try {
     $('#crash-motive').html(e as string);
     $('#error-screen').css('display', 'flex');
 }
+
+$(window).on("resize", () => {
+    Visualizer.instance.engine.adjustToWindowSize();
+});

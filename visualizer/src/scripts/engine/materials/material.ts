@@ -36,6 +36,7 @@ export class Material {
             gl.uniform1i(k, i);
             gl.activeTexture(gl.TEXTURE0 + i);
             gl.bindTexture(gl.TEXTURE_2D, v);
+            i++;
         })
     }
 }
