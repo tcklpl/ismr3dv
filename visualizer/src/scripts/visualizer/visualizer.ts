@@ -9,6 +9,7 @@ import { Scene } from "../engine/scenes/scene";
 import { SceneManager } from "../engine/scenes/scene_manager";
 import { ShaderManager } from "../engine/shaders/shader_manager";
 import { Loader } from "../loader/loader";
+import { VisualizerIO } from "./io/visualizer_io";
 import { EarthRenderableObject } from "./objects/earth";
 
 export class Visualizer {
@@ -20,6 +21,7 @@ export class Visualizer {
     private _gl: WebGL2RenderingContext;
     private _loader: Loader;
     private _engine!: Engine;
+    private _io = new VisualizerIO();
 
     // Managers
     private _materialManager: MaterialManager = new MaterialManager();
@@ -87,6 +89,10 @@ export class Visualizer {
 
     public get engine() {
         return this._engine;
+    }
+
+    public get io() {
+        return this._io;
     }
 
 }
