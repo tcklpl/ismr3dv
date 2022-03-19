@@ -6,9 +6,13 @@ try {
     if (!context) throw `Failed to acquire WebGL2 context`;
 
     const visualizer = new Visualizer(context);
+    canvas.on('click', e => {
+        document.getElementById('ismr3dcanvas')?.requestPointerLock();
+    });
 } catch (e) {
     $('#crash-motive').html(e as string);
     $('#error-screen').css('display', 'flex');
+    throw e;
 }
 
 $(window).on("resize", () => {

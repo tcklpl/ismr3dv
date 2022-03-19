@@ -11,7 +11,7 @@ export class Renderer {
 
     private _perspectiveProjectionMatrix!: Mat4;
 
-    private _near = 1;
+    private _near = 0.1;
     private _far = 100;
     private _width = 1920;
     private _height = 1080;

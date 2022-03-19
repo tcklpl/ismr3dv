@@ -10,6 +10,7 @@ export class Mouse {
     private _listeners: IMouseListener[] = [];
 
     private _scrollStopTimer: number = -1;
+    private _mouseStopTimer: number = -1;
 
     constructor() {
         this.registerEvents();
@@ -21,9 +22,14 @@ export class Mouse {
             const rect = this._gl.canvas.getBoundingClientRect();
             this._x = e.clientX - rect.left;
             this._y = e.clientY - rect.top;
+            
             this._listeners.forEach(l => {
                 if (l.onMouseMove) l.onMouseMove(this._x, this._y);
-            })
+                if (l.onMouseMoveOffset) l.onMouseMoveOffset(e.movementX, e.movementY);
+            });
+
+            if (this._mouseStopTimer != -1) clearTimeout(this._mouseStopTimer);
+            this._mouseStopTimer = setTimeout(() => this.triggerMouseStop(), 50);
         });
 
         // Mouse click event
@@ -47,6 +53,13 @@ export class Mouse {
         this._scrollStopTimer = -1;
         this._listeners.forEach(l => {
             if (l.onMouseScrollStop) l.onMouseScrollStop();
+        })
+    }
+
+    private triggerMouseStop() {
+        this._mouseStopTimer = -1;
+        this._listeners.forEach(l => {
+            if (l.onMouseStop) l.onMouseStop();
         })
     }
 
