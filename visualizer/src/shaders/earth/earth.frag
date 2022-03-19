@@ -3,6 +3,7 @@
 precision highp float;
 
 in vec2 vtf_texCoord;
+in vec4 vtf_viewCoords;
 
 out vec4 out_color;
 
