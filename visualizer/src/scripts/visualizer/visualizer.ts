@@ -32,6 +32,8 @@ export class Visualizer {
     private _cameraManager: CameraManager = new CameraManager();
     private _sceneManager: SceneManager = new SceneManager();
 
+    private _pointerLocked: boolean = false;
+
     constructor(gl: WebGL2RenderingContext) {
         this._gl = gl;
         Visualizer._instance = this;
@@ -97,6 +99,14 @@ export class Visualizer {
 
     public get io() {
         return this._io;
+    }
+
+    public get pointerLocked() {
+        return this._pointerLocked;
+    }
+
+    public set pointerLocked(v: boolean) {
+        this._pointerLocked = v;
     }
 
 }

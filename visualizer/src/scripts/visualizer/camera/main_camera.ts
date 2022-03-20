@@ -44,11 +44,13 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
     }
 
     onMouseMoveOffset(x: number, y: number) {
+        if (!Visualizer.instance.pointerLocked) return;
         this._deltaX = MUtils.clamp(-5, 5, x) * 1000;
         this._deltaZ = MUtils.clamp(-5, 5, y) * 1000;
     }
 
     onMouseScroll(dy: number) {
+        if (!Visualizer.instance.pointerLocked) return;
         this._deltaY = dy * 0.05;
     }
 
