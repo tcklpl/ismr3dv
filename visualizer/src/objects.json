@@ -2,7 +2,7 @@
     "objects": [
         {
             "name": "earth",
-            "mesh": "earth",
+            "mesh": "sphere",
             "shader": "earth",
             "material": "earth"
         }
