@@ -18,3 +18,7 @@ try {
 $(window).on("resize", () => {
     Visualizer.instance.engine.adjustToWindowSize();
 });
+
+document.addEventListener('pointerlockchange', e => {
+    Visualizer.instance.pointerLocked = document.pointerLockElement === document.getElementById('ismr3dcanvas');
+}, false);
