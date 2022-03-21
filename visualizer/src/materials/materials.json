@@ -28,6 +28,26 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "sun",
+            "maps": [ "diffuse" ],
+            "resolutions": [ "2k", "8k" ],
+            "default_resolution": "2k",
+            "images": [
+                {
+                    "resolution": "2k",
+                    "maps": {
+                        "diffuse": "sun/2k_sun.jpg"
+                    }
+                },
+                {
+                    "resolution": "8k",
+                    "maps": {
+                        "diffuse": "sun/8k_sun.jpg"
+                    }
+                }
+            ]
         }
 
     ]

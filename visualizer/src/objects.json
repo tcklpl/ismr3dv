@@ -5,6 +5,12 @@
             "mesh": "sphere",
             "shader": "earth",
             "material": "earth"
+        },
+        {
+            "name": "sun",
+            "mesh": "sphere",
+            "shader": "sun",
+            "material": "sun"
         }
     ]
 }
