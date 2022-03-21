@@ -12,6 +12,7 @@ import { Loader } from "../loader/loader";
 import { MainCamera } from "./camera/main_camera";
 import { VisualizerIO } from "./io/visualizer_io";
 import { EarthRenderableObject } from "./objects/earth";
+import { SunRenderableObject } from "./objects/sun";
 
 export class Visualizer {
     
@@ -52,10 +53,15 @@ export class Visualizer {
         this._cameraManager.register(cam);
         this._cameraManager.setActiveCamera(cam);
 
-        const earth = this._objectManager.summon<EarthRenderableObject>("earth", EarthRenderableObject);
+        const earth = this._objectManager.summon("earth", EarthRenderableObject);
         earth.rotate(new Vec3(-1, 23.5, 90));
+
+        const sun = this._objectManager.summon("sun", SunRenderableObject);
+        sun.translate(new Vec3(8, 0, 0));
+
         const scene = new Scene("main");
         scene.objects.push(earth);
+        scene.objects.push(sun);
         this._sceneManager.active = scene;
 
         requestAnimationFrame(t => this._engine.render(t));

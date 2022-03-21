@@ -4,6 +4,11 @@
             "name": "earth",
             "vertex": "earth/earth.vert",
             "fragment": "earth/earth.frag"
+        },
+        {
+            "name": "sun",
+            "vertex": "sun/sun.vert",
+            "fragment": "sun/sun.frag"
         }
     ]
 }
