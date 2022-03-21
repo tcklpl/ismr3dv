@@ -79,8 +79,8 @@ export class Mesh {
                 r
             );
 
-            tangents.push(tangent);
-            bitangents.push(bitangent);
+            tangents.push(tangent, tangent, tangent);
+            bitangents.push(bitangent, bitangent, bitangent);
             this._vertices[i + 0].tangent = tangent;
             this._vertices[i + 1].tangent = tangent;
             this._vertices[i + 2].tangent = tangent;
