@@ -34,7 +34,7 @@ export class Shader {
         words.filter(x => x.startsWith('u_')).forEach(uniform => {
             let name = uniform.replace(/[^a-z0-9_]/gi, "");
             let u = this._gl.getUniformLocation(this._program, name);
-            if (!u) throw `Faield to get uniform ${name} at shader ${name}`;
+            if (!u) throw `Failed to get uniform '${name}' at shader ${this._name}`;
             this._uniforms.set(name, u);
         });
     }
