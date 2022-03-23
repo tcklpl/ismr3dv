@@ -83,5 +83,17 @@ export class Basic3DTransformative implements IPositionable, IRotatable, IScalab
     public get modelMatrix() {
         return this._modelMatrix;
     }
+
+    get position() {
+        return this._translation;
+    }
+
+    get rotation() {
+        return this._rotation;
+    }
+
+    get currentScale() {
+        return this._scale;
+    }
     
 }
