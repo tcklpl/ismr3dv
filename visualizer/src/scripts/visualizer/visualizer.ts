@@ -13,6 +13,7 @@ import { MainCamera } from "./camera/main_camera";
 import { VisualizerIO } from "./io/visualizer_io";
 import { EarthRenderableObject } from "./objects/earth";
 import { SunRenderableObject } from "./objects/sun";
+import { UniverseScene } from "./universe_scene";
 
 export class Visualizer {
     
@@ -35,6 +36,9 @@ export class Visualizer {
 
     private _pointerLocked: boolean = false;
 
+    // Scene
+    private _universeScene!: UniverseScene;
+
     constructor(gl: WebGL2RenderingContext) {
         this._gl = gl;
         Visualizer._instance = this;
@@ -48,21 +52,9 @@ export class Visualizer {
 
         this._io = new VisualizerIO();
 
-        //const cam = new LookAtCamera(new Vec3(-3, 0, 0), new Vec3(0, 1, 0), new Vec3(0, 0, 0));
-        const cam = new MainCamera();
-        this._cameraManager.register(cam);
-        this._cameraManager.setActiveCamera(cam);
-
-        const earth = this._objectManager.summon("earth", EarthRenderableObject);
-        earth.rotate(new Vec3(-1, 23.5, 90));
-
-        const sun = this._objectManager.summon("sun", SunRenderableObject);
-        sun.translate(new Vec3(8, 0, 0));
-
-        const scene = new Scene("main");
-        scene.objects.push(earth);
-        scene.objects.push(sun);
-        this._sceneManager.active = scene;
+        this._universeScene = new UniverseScene("universe");
+        this._cameraManager.setActiveCamera(this._universeScene.mainCamera);
+        this._sceneManager.active = this._universeScene;
 
         requestAnimationFrame(t => this._engine.render(t));
     }
@@ -113,6 +105,10 @@ export class Visualizer {
 
     public set pointerLocked(v: boolean) {
         this._pointerLocked = v;
+    }
+
+    get universeScene() {
+        return this._universeScene;
     }
 
 }
