@@ -18,4 +18,8 @@ export abstract class Camera {
     public get matrix() {
         return this._cameraMatrix;
     }
+
+    get position() {
+        return this._pos;
+    }
 }
