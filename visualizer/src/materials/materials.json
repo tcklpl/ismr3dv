@@ -5,7 +5,7 @@
             "name": "earth",
             "maps": [ "daymap", "nightmap", "clouds", "normal", "specular" ],
             "resolutions": [ "2k", "8k" ],
-            "default_resolution": "2k",
+            "default_resolution": "8k",
             "images": [
                 {
                     "resolution": "2k",
