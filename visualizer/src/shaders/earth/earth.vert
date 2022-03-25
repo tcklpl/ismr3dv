@@ -11,6 +11,7 @@ layout (location = 4) in vec3 a_bitangent;
 out vec2 vtf_texCoord;
 out vec4 vtf_vertPos_modelSpace;
 out vec4 vtf_vertPos_cameraSpace;
+out vec3 vtf_normal_cameraSpace;
 
 out vec3 vtf_normal_modelSpace;
 out vec3 vtf_tangent_modelSpace;
@@ -27,11 +28,13 @@ void main() {
     vtf_texCoord = vec2(1.0 - a_uv.x, a_uv.y);
     vtf_vertPos_modelSpace = modelCoords;
     vtf_vertPos_cameraSpace = viewCoords;
+    mat3 modelView3x3 = mat3(u_view * u_model);
+    vtf_normal_cameraSpace = modelView3x3 * a_normal;
 
-    mat3 modelView3x3 = mat3(inverse(u_model));
-    vtf_normal_modelSpace = modelView3x3 * normalize(a_normal);
-    vtf_tangent_modelSpace = modelView3x3 * normalize(a_tangent);
-    vtf_bitangent_modelSpace = modelView3x3 * normalize(a_bitangent);
+    mat3 model3x3 = mat3(inverse(u_model));
+    vtf_normal_modelSpace = model3x3 * normalize(a_normal);
+    vtf_tangent_modelSpace = model3x3 * normalize(a_tangent);
+    vtf_bitangent_modelSpace = model3x3 * normalize(a_bitangent);
 
     gl_Position = u_projection * viewCoords;
 }
