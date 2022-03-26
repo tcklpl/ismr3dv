@@ -11,7 +11,8 @@ in vec3 vtf_normal_modelSpace;
 in vec3 vtf_tangent_modelSpace;
 in vec3 vtf_bitangent_modelSpace;
 
-out vec4 out_color;
+layout (location = 0) out vec4 out_color;
+layout (location = 1) out vec4 out_bloom;
 
 uniform sampler2D u_map_day;
 uniform sampler2D u_map_night;
@@ -80,4 +81,5 @@ void main() {
     vec3 ringColor = mix(ringNightColor, ringDayColor, incidence);
 
     out_color = dayNight + (clouds * clouds.w) + vec4(specularColor, 1.0) + vec4(ringColor * ringIntensity, 1.0);
+    out_bloom = vec4(ringColor * ringIntensity * 0.1, 1.0);
 }

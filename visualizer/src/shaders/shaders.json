@@ -9,6 +9,16 @@
             "name": "sun",
             "vertex": "sun/sun.vert",
             "fragment": "sun/sun.frag"
+        },
+        {
+            "name": "gaussian",
+            "vertex": "gaussian_blur/gaussian_blur.vert",
+            "fragment": "gaussian_blur/gaussian_blur.frag"
+        },
+        {
+            "name": "post_process_combine",
+            "vertex": "post_process_combine/post_process_combine.vert",
+            "fragment": "post_process_combine/post_process_combine.frag"
         }
     ]
 }
