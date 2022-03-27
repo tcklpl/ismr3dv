@@ -18,12 +18,17 @@ export class Vec2 implements IUniformable {
         y += y;
     }
 
-    addVec2(other: Vec2) {
+    divide(factor: number) {
+        this.x /= factor;
+        this.y /= factor;
+    }
+
+    add(other: Vec2) {
         this.sum(other.x, other.y);
     }
 
-    differentFrom(other: Vec2) {
-        return this.x != other.x || this.y != other.y;
+    equals(other: Vec2) {
+        return this.x == other.x && this.y == other.y;
     }
 
     public get values() {

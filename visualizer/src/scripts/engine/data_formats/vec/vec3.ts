@@ -12,16 +12,8 @@ export class Vec3 extends Vec2 {
         gl.uniform3fv(to, new Float32Array(this.values));
     }
 
-    public get z() {
-        return this._values[2];
-    }
-
-    public set z(v: number) {
-        this._values[2] = v;
-    }
-
-    differentFrom(other: Vec3) {
-        return this.x != other.x || this.y != other.y || this.z != other.z;
+    equals(other: Vec3) {
+        return this.x == other.x && this.y == other.y && this.z == other.z;
     }
 
     add(v: Vec3) {
@@ -34,6 +26,14 @@ export class Vec3 extends Vec2 {
         this.x /= factor;
         this.y /= factor;
         this.z /= factor;
+    }
+
+    public get z() {
+        return this._values[2];
+    }
+
+    public set z(v: number) {
+        this._values[2] = v;
     }
 
     static get zero() {

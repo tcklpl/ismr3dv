@@ -12,16 +12,30 @@ export class Vec4 extends Vec3 {
         gl.uniform4fv(to, new Float32Array(this.values));
     }
 
+    divide(factor: number) {
+        this.x /= factor;
+        this.y /= factor;
+        this.z /= factor;
+        this.w /= factor;
+    }
+
+    add(v: Vec4) {
+        this.x += v.x;
+        this.y += v.y;
+        this.z += v.z;
+        this.w += v.w;
+    }
+
+    equals(other: Vec4) {
+        return this.x == other.x && this.y == other.y && this.z == other.z && this.w == other.w;
+    }
+
     public get w() {
         return this._values[3];
     }
 
     public set w(v: number) {
         this._values[3] = v;
-    }
-
-    differentFrom(other: Vec4) {
-        return this.x != other.x || this.y != other.y || this.z != other.z || this.w != other.w;
     }
 
     static fromId(id: number): Vec4 {
