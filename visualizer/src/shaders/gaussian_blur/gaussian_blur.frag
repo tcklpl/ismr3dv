@@ -9,6 +9,7 @@ out vec4 out_color;
 
 uniform sampler2D u_image;
 uniform bool u_horizontal;
+uniform float u_aspect;
 
 float weight[5] = float[] (0.227027, 0.1945946, 0.1216216, 0.054054, 0.016216);
 
@@ -28,8 +29,8 @@ void main() {
     } else {
         for (int i = 0; i < 5; i++) {
             float fi = float(i);
-            result += texture(u_image, vtf_texCoords + vec2(0.0, texOffset.x * fi * yMultiplier)).rgb * weight[i];
-            result += texture(u_image, vtf_texCoords - vec2(0.0, texOffset.x * fi * yMultiplier)).rgb * weight[i];
+            result += texture(u_image, vtf_texCoords + vec2(0.0, texOffset.x * fi * yMultiplier * u_aspect )).rgb * weight[i];
+            result += texture(u_image, vtf_texCoords - vec2(0.0, texOffset.x * fi * yMultiplier * u_aspect )).rgb * weight[i];
         }
     }
 
