@@ -19,7 +19,7 @@ export class Mesh {
     private _bufIndices: WebGLBuffer;
 
     private _vao: WebGLVertexArrayObject;
-    private _vaoSize: number;
+    private _indicesSize: number;
 
     constructor(name: string, vertices: Vec3[], uvs: Vec2[], normals: Vec3[], indices: Vec3[]) {
         this._name = name;
@@ -27,26 +27,7 @@ export class Mesh {
         // populate _vertices
         indices.forEach(i => this._vertices.push(new Vertex(vertices[i.x - 1], uvs[i.y - 1], normals[i.z - 1])));
 
-        // vertex position buffer
-        this._bufPositions = BufferUtils.createBuffer(this.gl);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufPositions);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this._vertices.flatMap(v => v.position.values)), this.gl.STATIC_DRAW);
-
-        // vertex uv buffer
-        this._bufUVs = BufferUtils.createBuffer(this.gl);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufUVs);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this._vertices.flatMap(v => v.uv.values)), this.gl.STATIC_DRAW);
-
-        // vertex normal buffer
-        this._bufNormals = BufferUtils.createBuffer(this.gl);
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufNormals);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this._vertices.flatMap(v => v.normal.values)), this.gl.STATIC_DRAW);
-
-        const tangents: Vec3[] = [];
-        const bitangents: Vec3[] = [];
-
         // compute tangents and bitangents
-        // += 3 because we are working with triangles
         for (let i = 0; i < this._vertices.length; i += 3) {
 
             const v0 = this._vertices[i + 0].position;
@@ -79,8 +60,6 @@ export class Mesh {
                 r
             );
 
-            tangents.push(tangent, tangent, tangent);
-            bitangents.push(bitangent, bitangent, bitangent);
             this._vertices[i + 0].tangent = tangent;
             this._vertices[i + 1].tangent = tangent;
             this._vertices[i + 2].tangent = tangent;
@@ -89,15 +68,47 @@ export class Mesh {
             this._vertices[i + 2].bitangent = bitangent;
         }
 
+        const filteredIndices: number[] = [];
+        const filteredVertexList: Vertex[] = [];
+
+        this._vertices.forEach(v => {
+            let index = filteredVertexList.findIndex(x => x.equals(v));
+            // if not found, isnert on list
+            if (index == -1) {
+                filteredVertexList.push(v);
+                index = filteredVertexList.length - 1;
+            } else {
+                // otherwise, average the tangents
+                filteredVertexList[index].tangent.add(v.tangent);
+                filteredVertexList[index].bitangent.add(v.bitangent);
+            }
+            filteredIndices.push(index);
+        });
+
+        // vertex position buffer
+        this._bufPositions = BufferUtils.createBuffer(this.gl);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufPositions);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(filteredVertexList.flatMap(v => v.position.values)), this.gl.STATIC_DRAW);
+
+        // vertex uv buffer
+        this._bufUVs = BufferUtils.createBuffer(this.gl);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufUVs);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(filteredVertexList.flatMap(v => v.uv.values)), this.gl.STATIC_DRAW);
+
+        // vertex normal buffer
+        this._bufNormals = BufferUtils.createBuffer(this.gl);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufNormals);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(filteredVertexList.flatMap(v => v.normal.values)), this.gl.STATIC_DRAW);
+
         // create tangent buffer
         this._bufTangents = BufferUtils.createBuffer(this.gl);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufTangents);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(tangents.flatMap(t => t.values)), this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(filteredVertexList.flatMap(t => t.tangent.values)), this.gl.STATIC_DRAW);
 
         // create bitangent buffer
         this._bufBitangents = BufferUtils.createBuffer(this.gl);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufBitangents);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(bitangents.flatMap(t => t.values)), this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(filteredVertexList.flatMap(t => t.bitangent.values)), this.gl.STATIC_DRAW);
 
         // create VAO
         this._vao = BufferUtils.createVAO(this.gl);
@@ -131,9 +142,9 @@ export class Mesh {
         // create index buffer
         this._bufIndices = BufferUtils.createBuffer(this.gl);
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this._bufIndices);
-        this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices.flatMap(i => i.values)), this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(filteredIndices), this.gl.STATIC_DRAW);
 
-        this._vaoSize = this.gl.getBufferParameter(this.gl.ELEMENT_ARRAY_BUFFER, this.gl.BUFFER_SIZE);
+        this._indicesSize = filteredIndices.length;
     }
 
     public get name() {
@@ -146,7 +157,7 @@ export class Mesh {
 
     draw() {
         this.bindVAO();
-        this.gl.drawArrays(this.gl.TRIANGLES, 0, this._vaoSize / 3);
+        this.gl.drawElements(this.gl.TRIANGLES, this._indicesSize, this.gl.UNSIGNED_SHORT, 0);
     }
 
 }
