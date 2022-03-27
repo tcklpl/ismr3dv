@@ -19,6 +19,11 @@
             "name": "post_process_combine",
             "vertex": "post_process_combine/post_process_combine.vert",
             "fragment": "post_process_combine/post_process_combine.frag"
+        },
+        {
+            "name": "monitoring_station",
+            "vertex": "monitoring_station/monitoring_station.vert",
+            "fragment": "monitoring_station/monitoring_station.frag"
         }
     ]
 }

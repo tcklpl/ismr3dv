@@ -48,6 +48,21 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "monitoring_station",
+            "maps": [ "diffuse", "normal" ],
+            "resolutions": [ "1k" ],
+            "default_resolution": "1k",
+            "images": [
+                {
+                    "resolution": "1k",
+                    "maps": {
+                        "diffuse": "monitoring_station/1k_monitoring_station_diffuse.jpg",
+                        "normal": "monitoring_station/1k_monitoring_station_normal.jpg"
+                    }
+                }
+            ]
         }
 
     ]

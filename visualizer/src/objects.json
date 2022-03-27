@@ -11,6 +11,12 @@
             "mesh": "sphere",
             "shader": "sun",
             "material": "sun"
+        },
+        {
+            "name": "monitoring_station",
+            "mesh": "pyramid",
+            "shader": "monitoring_station",
+            "material": "monitoring_station"
         }
     ]
 }

@@ -3,9 +3,8 @@ import { GenericManager } from "./generic_manager";
 
 export class MeshManager extends GenericManager<Mesh> {
 
-
     getByName(name: string) {
-        return this.allRegistered.find(x => x.name == name);
+        return this.allRegistered.find(x => x.name.trim() == name.trim());
     }
 
 }
