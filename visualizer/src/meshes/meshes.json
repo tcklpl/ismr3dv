@@ -3,6 +3,10 @@
         {
             "name": "sphere",
             "obj": "sphere/sphere.obj"
+        },
+        {
+            "name": "pyramid",
+            "obj": "pyramid/pyramid.obj"
         }
     ]
 }

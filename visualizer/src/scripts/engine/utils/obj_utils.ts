@@ -23,17 +23,12 @@ export class OBJUtils {
             if (line.startsWith('#')) continue;
 
             // Object indentifiers
-            //TODO: load only needed vertices
             if (line.startsWith('o ')) {
                 if (objName) {
                     meshes.push(new Mesh(objName, objVertices, objUV, objNormals, objIndices));
-                    // objVertices = [];
-                    // objUV = [];
-                    // objNormals = [];
                     objIndices = [];
                 }
                 objName = line.replace('o ', '');
-                console.log(`Reading obj ${objName}`);
                 continue;
             }
 
