@@ -41,6 +41,7 @@ export class Renderer {
     private _gaussianShader!: Shader;
     private _gaussianUniformImage!: WebGLUniformLocation;
     private _gaussianUniformHorizontal!: WebGLUniformLocation;
+    private _gaussianUniformAspect!: WebGLUniformLocation;
 
     private _postProcessCombineShader!: Shader;
     private _ppcsUniformColorBuffer!: WebGLUniformLocation;
@@ -71,6 +72,7 @@ export class Renderer {
 
         this._gaussianUniformImage = this._gaussianShader.assertGetUniform('u_image');
         this._gaussianUniformHorizontal = this._gaussianShader.assertGetUniform('u_horizontal');
+        this._gaussianUniformAspect = this._gaussianShader.assertGetUniform('u_aspect');
 
         this._ppcsUniformColorBuffer = this._postProcessCombineShader.assertGetUniform('u_color_buffer');
         this._ppcsUniformBloomBuffer = this._postProcessCombineShader.assertGetUniform('u_bloom_buffer');
@@ -173,9 +175,11 @@ export class Renderer {
         // 2. Blur bloom fragments
         let firstIteration = true;
         let horizontal = new UBoolean(true);
+        let aspect = new UFloat(this._width / this._height);
         let amount = 10;
         this._gaussianShader.bind();
-        
+        aspect.bindUniform(this._gl, this._gaussianUniformAspect);
+
         for (let i = 0; i < amount; i++) {
             this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, horizontal.value ? this._pongFramebuffer : this._pingFramebuffer);
             horizontal.bindUniform(this._gl, this._gaussianUniformHorizontal);
