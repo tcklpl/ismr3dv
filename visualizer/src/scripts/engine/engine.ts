@@ -1,4 +1,5 @@
 import { Visualizer } from "../visualizer/visualizer";
+import { ImplementationLimitations } from "./limitations";
 import { Renderer } from "./renderer";
 import { Time } from "./time";
 import { IFrameListener } from "./traits/i_frame_listener";
@@ -9,6 +10,7 @@ export class Engine {
 
     private _lastFrame: number = 0;
     private _gl = Visualizer.instance.gl;
+    private _limitations = new ImplementationLimitations();
 
     private _frameListeners: IFrameListener[] = [];
     
@@ -34,8 +36,12 @@ export class Engine {
         this._frameListeners.push(l);
     }
 
-    public get renderer() {
+    get renderer() {
         return this._renderer;
+    }
+
+    get limitations() {
+        return this._limitations;
     }
 
 }
