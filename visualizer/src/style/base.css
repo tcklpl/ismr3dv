@@ -40,3 +40,11 @@ body {
     width: 30%;
     min-width: 500px;
 }
+
+.config-hud {
+    z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0 0;
+}

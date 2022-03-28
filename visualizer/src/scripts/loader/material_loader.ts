@@ -15,6 +15,7 @@ export class MaterialLoader extends GenericLoader {
 
     private _loadList!: MaterialLoadlist;
     private _sources: MaterialSource[] = [];
+    private _config = Visualizer.instance.configurationManager.graphical;
 
     private _gl = Visualizer.instance.gl;
     private _materialManager = Visualizer.instance.materialManager;
@@ -51,11 +52,12 @@ export class MaterialLoader extends GenericLoader {
             this._sources.push(source);
 
             // TODO: load other resolutions
-            let resToLoad = mat.images.find(x => x.resolution == mat.default_resolution) as { resolution: string, maps: any};
+            let resToLoad: string = (this._config as any)[`${mat.name}_texture_size`] || mat.default_resolution;
+            let mapsToLoad = mat.images.find(x => x.resolution == resToLoad) as { resolution: string, maps: any};
 
             // now we can load all the maps
             mat.maps.forEach(map => {
-                AsyncUtils.getImage(`materials/${resToLoad.maps[map]}`, img => {
+                AsyncUtils.getImage(`materials/${mapsToLoad.maps[map]}`, img => {
                     source.maps.set(map, img);
                     this.notifyLoad();
                 });

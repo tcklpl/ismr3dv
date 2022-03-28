@@ -1,18 +1,14 @@
 import { CameraManager } from "../engine/camera/camera_manager";
-import { LookAtCamera } from "../engine/camera/lookat_camera";
-import { Vec3 } from "../engine/data_formats/vec/vec3";
+import { ConfigurationManager } from "../engine/config/configuration_manager";
 import { Engine } from "../engine/engine";
 import { MaterialManager } from "../engine/materials/material_manager";
 import { MeshManager } from "../engine/mesh_manager";
 import { ObjectManager } from "../engine/object_manager";
-import { Scene } from "../engine/scenes/scene";
 import { SceneManager } from "../engine/scenes/scene_manager";
 import { ShaderManager } from "../engine/shaders/shader_manager";
 import { Loader } from "../loader/loader";
-import { MainCamera } from "./camera/main_camera";
+import { UIConfig } from "../ui/ui_config";
 import { VisualizerIO } from "./io/visualizer_io";
-import { EarthRenderableObject } from "./objects/earth";
-import { SunRenderableObject } from "./objects/sun";
 import { UniverseScene } from "./universe_scene";
 
 export class Visualizer {
@@ -33,6 +29,7 @@ export class Visualizer {
     private _objectManager: ObjectManager = new ObjectManager();
     private _cameraManager: CameraManager = new CameraManager();
     private _sceneManager: SceneManager = new SceneManager();
+    private _configurationManager: ConfigurationManager = new ConfigurationManager();
 
     private _pointerLocked: boolean = false;
 
@@ -42,6 +39,10 @@ export class Visualizer {
     constructor(gl: WebGL2RenderingContext) {
         this._gl = gl;
         Visualizer._instance = this;
+
+        this._configurationManager.loadConfiguration();
+        this._configurationManager.saveConfigurations();
+
         this._loader = new Loader();
         this._loader.onLoad = () => this.postLoad();
     }
@@ -56,10 +57,12 @@ export class Visualizer {
         this._cameraManager.setActiveCamera(this._universeScene.mainCamera);
         this._sceneManager.active = this._universeScene;
 
+        UIConfig.registerEvents();
+
         requestAnimationFrame(t => this._engine.render(t));
     }
 
-    public get gl() {
+    get gl() {
         return this._gl;
     }
 
@@ -67,39 +70,43 @@ export class Visualizer {
         return this._instance;
     }
 
-    public get materialManager() {
+    get materialManager() {
         return this._materialManager;
     }
 
-    public get meshManager() {
+    get meshManager() {
         return this._meshManager;
     }
 
-    public get shaderManager() {
+    get shaderManager() {
         return this._shaderManager;
     }
 
-    public get objectManager() {
+    get objectManager() {
         return this._objectManager;
     }
 
-    public get cameraManager() {
+    get cameraManager() {
         return this._cameraManager;
     }
 
-    public get sceneManager() {
+    get sceneManager() {
         return this._sceneManager;
     }
 
-    public get engine() {
+    get configurationManager() {
+        return this._configurationManager;
+    }
+
+    get engine() {
         return this._engine;
     }
 
-    public get io() {
+    get io() {
         return this._io;
     }
 
-    public get pointerLocked() {
+    get pointerLocked() {
         return this._pointerLocked;
     }
 
@@ -110,5 +117,6 @@ export class Visualizer {
     get universeScene() {
         return this._universeScene;
     }
+
 
 }

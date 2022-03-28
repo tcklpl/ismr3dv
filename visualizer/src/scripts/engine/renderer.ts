@@ -2,6 +2,7 @@ import { Visualizer } from "../visualizer/visualizer";
 import { Mat4 } from "./data_formats/mat/mat4";
 import { UBoolean } from "./data_formats/uniformable_basics/u_boolean";
 import { UFloat } from "./data_formats/uniformable_basics/u_float";
+import { Scene } from "./scenes/scene";
 import { Shader } from "./shaders/shader";
 import { BufferUtils } from "./utils/buffer_utils";
 import { MUtils } from "./utils/math_utils";
@@ -15,6 +16,8 @@ export class Renderer {
     private _sceneManager = Visualizer.instance.sceneManager;
     private _shaderManager = Visualizer.instance.shaderManager;
 
+    private _config = Visualizer.instance.configurationManager.graphical;
+
     private _perspectiveProjectionMatrix!: Mat4;
 
     private _near = 0.1;
@@ -22,8 +25,6 @@ export class Renderer {
     private _width = 1920;
     private _height = 1080;
     private _fovY = 45;
-
-    private _exposure = new UFloat(1);
 
     private _quadVAO!: WebGLVertexArrayObject;
 
@@ -42,11 +43,12 @@ export class Renderer {
     private _gaussianUniformImage!: WebGLUniformLocation;
     private _gaussianUniformHorizontal!: WebGLUniformLocation;
     private _gaussianUniformAspect!: WebGLUniformLocation;
+    private _gaussianLastHorizontalValue!: boolean;
 
     private _postProcessCombineShader!: Shader;
     private _ppcsUniformColorBuffer!: WebGLUniformLocation;
     private _ppcsUniformBloomBuffer!: WebGLUniformLocation;
-    private _ppcsUniformExposure!: WebGLUniformLocation;
+    private _ppcsUniformApplyBloom!: WebGLUniformLocation;
 
     constructor() {
         this.setupGl();
@@ -76,7 +78,7 @@ export class Renderer {
 
         this._ppcsUniformColorBuffer = this._postProcessCombineShader.assertGetUniform('u_color_buffer');
         this._ppcsUniformBloomBuffer = this._postProcessCombineShader.assertGetUniform('u_bloom_buffer');
-        this._ppcsUniformExposure = this._postProcessCombineShader.assertGetUniform('u_exposure');
+        this._ppcsUniformApplyBloom = this._postProcessCombineShader.assertGetUniform('u_bloom');
     }
 
     private constructPerspectiveProjectionMatrix() {
@@ -160,19 +162,25 @@ export class Renderer {
             return;
         }
 
-        // 1. Render color and bloom buffers
+        this.renderSceneIntoFramebuffers();
+        if (this._config.bloom) this.applyBloom();
+        this.composeScene();
+    }
+
+    private renderSceneIntoFramebuffers() {
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, this._postEffectsFramebuffer);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
 
-        this._sceneManager.active.objects.forEach(o => {
+        (this._sceneManager.active as Scene).objects.forEach(o => {
             o.render(() => {
                 this._cameraManager.activeCamera?.matrix.bindUniform(this._gl, o.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(this._gl, o.u_projection);
             });
         });
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
+    }
 
-        // 2. Blur bloom fragments
+    private applyBloom() {
         let firstIteration = true;
         let horizontal = new UBoolean(true);
         let aspect = new UFloat(this._width / this._height);
@@ -190,9 +198,11 @@ export class Renderer {
             if (firstIteration)
                 firstIteration = false;
         }
+        this._gaussianLastHorizontalValue = horizontal.value;
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
+    }
 
-        // 3. Now compose everything
+    private composeScene() {
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
         this._postProcessCombineShader.bind();
 
@@ -202,9 +212,9 @@ export class Renderer {
 
         this._gl.uniform1i(this._ppcsUniformBloomBuffer, 1);
         this._gl.activeTexture(this._gl.TEXTURE1);
-        this._gl.bindTexture(this._gl.TEXTURE_2D, horizontal.value ? this._pingBuffer : this._pongBuffer);
+        this._gl.bindTexture(this._gl.TEXTURE_2D, this._gaussianLastHorizontalValue ? this._pingBuffer : this._pongBuffer);
 
-        this._exposure.bindUniform(this._gl, this._ppcsUniformExposure);
+        new UBoolean(this._config.bloom).bindUniform(this._gl, this._ppcsUniformApplyBloom);
         this.renderQuad();
     }
 
