@@ -1,4 +1,5 @@
 {
+    "html_loadlist": "html_parts/html_parts.json",
     "material_loadlist": "materials/materials.json",
     "mesh_loadlist": "meshes/meshes.json",
     "shader_loadlist": "shaders/shaders.json",

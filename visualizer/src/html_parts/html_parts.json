@@ -1,0 +1,16 @@
+{
+    "html_parts": [
+        {
+            "url": "error_screen.html",
+            "append_to": "body"
+        },
+        {
+            "url": "config_hud.html",
+            "append_to": "body"
+        },
+        {
+            "url": "graphical_configuration.html",
+            "append_to": "body"
+        }
+    ]
+}
