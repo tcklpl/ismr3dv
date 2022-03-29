@@ -23,13 +23,6 @@
 
 <body>
 
-    <!-- Error screen, is shown if the js crashes -->
-    <div class="error-screen text-center flex-column min-vh-100 justify-content-center align-items-center"
-        id="error-screen">
-        <h1>The visualizer crashed</h1>
-        <a id="crash-motive"></a>
-    </div>
-
     <!-- Loading screen, is shown when the page is loading (fetching and constructing resources) -->
     <div class="loading-screen text-center flex-column min-vh-100 justify-content-center align-items-center"
         id="loading-screen">
@@ -39,75 +32,7 @@
                 aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="loading-progress-bar"></div>
         </div>
         <a id="loading-message"></a>
-    </div>
-
-    <div class="config-hud">
-        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#config-modal"
-            id="cfg-graphical-btn" style="color: white">
-            <i class="bi-gear"></i>
-        </button>
-    </div>
-
-    <div class="modal fade" id="config-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Graphical Configuration</h5>
-                    <button type="button" class="btn btn-outline-dark close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="alert alert-warning" id="cfg-warn-textures" style="display: none;">
-                        Some texture sizes are disabled because your system does not support it.
-                    </div>
-
-                    <form>
-                        <!-- Bloom -->
-                        <div class="form-group row align-items-center">
-                            <label for="cfg-bloom" class="col-sm-4 col-form-label">Bloom</label>
-                            <div class="col-sm-8">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="cfg-bloom">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earth texture size -->
-                        <div class="form-group form-inline row align-items-center">
-                            <label class="col-sm-4" for="ctf-earth-texsize">Earth resolution<b>*</b></label>
-                            <div class="col-sm-8">
-                                <select class="form-control" id="ctf-earth-texsize">
-                                    <option value="2k">2k</option>
-                                    <option value="8k">8k</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Sun texture size -->
-                        <div class="form-group form-inline row align-items-center">
-                            <label class="col-sm-4" for="ctf-sun-texsize">Sun resolution<b>*</b></label>
-                            <div class="col-sm-8">
-                                <select class="form-control" id="ctf-sun-texsize">
-                                    <option value="2k">2k</option>
-                                    <option value="8k">8k</option>
-                                </select>
-                            </div>
-                        </div>
-
-                    </form>
-
-                </div>
-                <div class="modal-footer">
-                    <i>Configurations marked with an asterisk (<b>*</b>) mean that you'll need to reload the page for them to take effect.</i>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="cfg-btn-save">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    </div>    
 
     <!-- Visualizer canvas, is used with WebGL2 -->
     <canvas id="ismr3dcanvas"></canvas>

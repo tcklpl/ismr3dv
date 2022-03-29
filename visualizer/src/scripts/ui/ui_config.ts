@@ -1,11 +1,6 @@
-import { IGraphicalConfiguration } from "../engine/config/graphical_configuration";
 import { Visualizer } from "../visualizer/visualizer";
 
 export class UIConfig {
-
-    private static _cfgBloom = $('#cfg-bloom');
-    private static _cfgEarthTex = $('#ctf-earth-texsize');
-    private static _cfgSunTex = $('#ctf-sun-texsize');
 
     private static _hasUnsupportedTextures: boolean = false;
 
@@ -19,7 +14,7 @@ export class UIConfig {
         $('#cfg-graphical-btn').on('click', () => {
             this._hasUnsupportedTextures = false;
 
-            this._cfgBloom.prop('checked', graphicalConfig.bloom);
+            $('#cfg-bloom').prop('checked', graphicalConfig.bloom);
 
             earthTsChildren.removeAttr('selected').filter(`[value=${graphicalConfig.earth_texture_size}]`).prop('selected', true);
             this.disableUnsupportedTextureSizes(earthTsChildren);
@@ -33,9 +28,9 @@ export class UIConfig {
         });
 
         $('#cfg-btn-save').on('click', () => {
-            graphicalConfig.bloom = this._cfgBloom.is(':checked');
-            graphicalConfig.earth_texture_size = this._cfgEarthTex.val() as string;
-            graphicalConfig.sun_texture_size = this._cfgSunTex.val() as string;
+            graphicalConfig.bloom = $('#cfg-bloom').is(':checked');
+            graphicalConfig.earth_texture_size = $('#ctf-earth-texsize').val() as string;
+            graphicalConfig.sun_texture_size = $('#ctf-sun-texsize').val() as string;
             configManager.saveConfigurations();
         });
     }

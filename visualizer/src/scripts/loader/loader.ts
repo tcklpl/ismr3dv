@@ -1,5 +1,7 @@
 import { AsyncUtils } from "../engine/utils/async_utils";
 import { UILoader } from "../ui/ui_loader";
+import { HTMLLoader } from "./html_loader";
+import { IHTMLLoadlist } from "./html_loadlist";
 import { ILoadList } from "./loadlist";
 import { LoadState } from "./load_states";
 import { MaterialLoader } from "./material_loader";
@@ -13,6 +15,7 @@ import { IShaderLoadlist } from "./shader_loadlist";
 
 export class Loader {
 
+    private _htmlLoader!: HTMLLoader;
     private _materialLoader!: MaterialLoader;
     private _meshLoader!: MeshLoader;
     private _shaderLoader!: ShaderLoader;
@@ -34,6 +37,11 @@ export class Loader {
         AsyncUtils.getUrlAs('loadlist.json', (res: ILoadList) => {
             this._sourcesToLoad = Object.keys(res).length;
             this.nextStage();
+
+            AsyncUtils.getUrlAs(res.html_loadlist, (res: IHTMLLoadlist) => {
+                this._htmlLoader = new HTMLLoader(res, () => this.nextStage(), () => this.nextStage());
+                this.notifyFetchedSource();
+            });
 
             AsyncUtils.getUrlAs(res.material_loadlist, (res: MaterialLoadlist) => {
                 this._materialLoader = new MaterialLoader(res, () => this.nextStage(), () => this.nextStage());
@@ -80,6 +88,16 @@ export class Loader {
                 this.updateUI('Fetching loadlists');
                 break;
             case LoadState.FETCHING_INDIVIDUAL_LOADLISTS:
+                this._loadState = LoadState.FETCHING_HTML_PARTS;
+                this.updateUI('Fetching HTML parts');
+                this._htmlLoader.load();
+                break;
+            case LoadState.FETCHING_HTML_PARTS:
+                this._loadState = LoadState.APPENDING_HTML_PARTS;
+                this.updateUI('Appending HTML parts');
+                this._htmlLoader.construct();
+                break;
+            case LoadState.APPENDING_HTML_PARTS:
                 this._loadState = LoadState.FETCHING_MATERIALS;
                 this.updateUI('Fetching materials');
                 this._materialLoader.load();
