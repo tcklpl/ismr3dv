@@ -6,7 +6,18 @@ The project contains 2 folders: `server` and `visualizer`. `visualizer` is the a
 
 # Compiling and Running
 
-You can compile the server and the visualizer on any order you like. 
+## Script
+
+There is an automated script to setup the project, you can run it using
+```
+    ./setup.sh
+```
+> If the `setup.sh` script is not runnable, you can make it so with `chmod +x setup.sh`.
+
+## Manually
+
+You can compile the server and the visualizer on any order you like.
+> Before compiling, make sure that all required packages are installed for each project. If you just downloaded it you can install them with `npm install` on each project.
 
 To compile the server:
 ```
