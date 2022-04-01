@@ -8,5 +8,4 @@ const port = 3333;
 server.use(compression());
 server.use(express.static(path.join(__dirname, "..", "..", "visualizer", "out")));
 
-console.log(`Listening on *:${port}`);
-server.listen(port);
+server.listen(port, () => console.log(`Listening on *:${port}`));
