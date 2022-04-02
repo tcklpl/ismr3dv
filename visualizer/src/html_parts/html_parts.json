@@ -5,12 +5,28 @@
             "append_to": "body"
         },
         {
-            "url": "config_hud.html",
+            "url": "info_hud.html",
             "append_to": "body"
         },
         {
-            "url": "graphical_configuration.html",
+            "url": "config/config_hud.html",
             "append_to": "body"
+        },
+        {
+            "url": "config/config.html",
+            "append_to": "body"
+        },
+        {
+            "url": "config/config_tabs.html",
+            "append_to": "#config-modal-body-nav"
+        },
+        {
+            "url": "config/general_configuration.html",
+            "append_to": "#config-modal-body-content"
+        },
+        {
+            "url": "config/graphical_configuration.html",
+            "append_to": "#config-modal-body-content"
         }
     ]
 }

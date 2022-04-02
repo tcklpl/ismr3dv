@@ -1,3 +1,4 @@
+import { UIInfo } from "../ui/ui_info";
 import { Visualizer } from "../visualizer/visualizer";
 import { ImplementationLimitations } from "./limitations";
 import { Renderer } from "./renderer";
@@ -11,6 +12,7 @@ export class Engine {
     private _lastFrame: number = 0;
     private _gl = Visualizer.instance.gl;
     private _limitations = new ImplementationLimitations();
+    private _config = Visualizer.instance.configurationManager;
 
     private _frameListeners: IFrameListener[] = [];
     
@@ -18,6 +20,10 @@ export class Engine {
         const msDiff = time - this._lastFrame;
         Time.deltaTime = msDiff / 1000;
         this._lastFrame = time;
+
+        if (this._config.general.show_fps) {
+            UIInfo.setFPS(1 / Time.deltaTime);
+        }
 
         this._frameListeners.forEach(f => f.update());
 
