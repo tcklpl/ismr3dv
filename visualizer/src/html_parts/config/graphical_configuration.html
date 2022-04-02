@@ -1,0 +1,40 @@
+<div class="tab-pane fade" id="config-tab-graphical" role="tabpanel">
+    <div class="alert alert-warning" id="cfg-warn-textures" style="display: none;">
+        Some texture sizes are disabled because your system does not support it.
+    </div>
+
+    <form>
+        <!-- Bloom -->
+        <div class="form-group row align-items-center">
+            <label for="cfg-bloom" class="col-sm-4 col-form-label">Bloom</label>
+            <div class="col-sm-8">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="cfg-bloom">
+                </div>
+            </div>
+        </div>
+
+        <!-- Earth texture size -->
+        <div class="form-group form-inline row align-items-center">
+            <label class="col-sm-4" for="ctf-earth-texsize">Earth resolution<b>*</b></label>
+            <div class="col-sm-8">
+                <select class="form-control" id="ctf-earth-texsize">
+                    <option value="2k">2k</option>
+                    <option value="8k">8k</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Sun texture size -->
+        <div class="form-group form-inline row align-items-center">
+            <label class="col-sm-4" for="ctf-sun-texsize">Sun resolution<b>*</b></label>
+            <div class="col-sm-8">
+                <select class="form-control" id="ctf-sun-texsize">
+                    <option value="2k">2k</option>
+                    <option value="8k">8k</option>
+                </select>
+            </div>
+        </div>
+
+    </form>
+</div>

@@ -8,6 +8,7 @@ import { SceneManager } from "../engine/scenes/scene_manager";
 import { ShaderManager } from "../engine/shaders/shader_manager";
 import { Loader } from "../loader/loader";
 import { UIConfig } from "../ui/ui_config";
+import { UIInfo } from "../ui/ui_info";
 import { VisualizerIO } from "./io/visualizer_io";
 import { UniverseScene } from "./universe_scene";
 
@@ -58,6 +59,7 @@ export class Visualizer {
         this._sceneManager.active = this._universeScene;
 
         UIConfig.registerEvents();
+        UIInfo.update();
 
         requestAnimationFrame(t => this._engine.render(t));
     }
