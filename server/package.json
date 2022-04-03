@@ -4,12 +4,12 @@
   "description": "ismr 3d visualizer - server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "compression": "^1.7.4",
+    "dotenv": "^16.0.0",
     "express": "^4.17.3"
   },
   "devDependencies": {
