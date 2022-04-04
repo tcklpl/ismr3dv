@@ -5,6 +5,7 @@ import { IHTMLLoadlist } from "./html_loadlist";
 interface IHTMLElementInfo {
     html: string;
     append_to: string;
+    order: number;
 }
 
 export class HTMLLoader extends GenericLoader {
@@ -18,12 +19,13 @@ export class HTMLLoader extends GenericLoader {
 
     load(): void {
         
-        this._loadlist.html_parts.forEach(p => {
+        this._loadlist.html_parts.forEach((p, i) => {
 
             AsyncUtils.getUrlAs(`html_parts/${p.url}`, (res: string) => {
                 this._parts.push({
                     html: res,
-                    append_to: p.append_to
+                    append_to: p.append_to,
+                    order: i
                 });
                 this.onPartLoaded();
             });
@@ -37,6 +39,10 @@ export class HTMLLoader extends GenericLoader {
     }
 
     construct(): void {
+
+        this._parts.sort((a, b) => {
+            return a.order > b.order ? 1 : -1;
+        });
         
         this._parts.forEach(p => {
             $(p.append_to).append($.parseHTML(p.html));
