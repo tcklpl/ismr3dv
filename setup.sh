@@ -70,7 +70,7 @@ setup_npm() {
     echo "[-] Setting up server..."
     cd server
     npm install
-    tsc
+    npm run compile
     cd ..
 
     echo "[-] Setting up visualizer..."
