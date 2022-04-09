@@ -24,7 +24,7 @@ You can compile the server and the visualizer on any order you like.
 To compile the server:
 ```
 $ cd server
-$ tsc
+$ npm run compile
 ```
 
 To compile the visualizer:
