@@ -13,6 +13,8 @@ import { IObjectLoadlist } from "./object_loadlist";
 import { ShaderLoader } from "./shader_loader";
 import { IShaderLoadlist } from "./shader_loadlist";
 
+declare var bootstrap: any;
+
 export class Loader {
 
     private _htmlLoader!: HTMLLoader;
@@ -70,6 +72,10 @@ export class Loader {
     }
 
     private loadFinished() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
         UILoader.hideLoadingScreen();
         console.log('everything loaded!');
         if (this.onLoad)

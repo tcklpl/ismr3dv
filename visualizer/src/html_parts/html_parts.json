@@ -27,6 +27,10 @@
         {
             "url": "config/graphical_configuration.html",
             "append_to": "#config-modal-body-content"
+        },
+        {
+            "url": "timeline.html",
+            "append_to": "body"
         }
     ]
 }
