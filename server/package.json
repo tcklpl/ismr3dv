@@ -4,16 +4,22 @@
   "description": "ismr 3d visualizer - server",
   "main": "index.js",
   "scripts": {
+    "sync-others": "rsync -a --exclude '*.html' --exclude '*.ts' src/ out/",
+    "compile": "tsc && npm run sync-others",
+    "clean": "rm -r ./out/*"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "compression": "^1.7.4",
     "dotenv": "^16.0.0",
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "node-fetch": "^2.6.7"
   },
   "devDependencies": {
     "@types/compression": "^1.7.2",
-    "@types/express": "^4.17.13"
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.23",
+    "@types/node-fetch": "^2.6.1"
   }
 }
