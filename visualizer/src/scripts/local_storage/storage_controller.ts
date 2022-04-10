@@ -38,11 +38,17 @@ export class StorageController {
 
     private getUsedStorage() {
 
+        const toRemove: string[] = [];
+
         for (let i = 0; i < localStorage.length; i++) {
             let key = localStorage.key(i) as string;
             let prefix = key.split('-')[0];
             let typeFetch = Object.entries(StorageType).find(([k, v]) => v.toString() == prefix);
-            if (!typeFetch) throw `Invalid local storage key: '${key}'`;
+            if (!typeFetch) {
+                console.warn(`Invalid local storage key: '${key}', removing it...`);
+                toRemove.push(key);
+                continue;
+            }
 
             let type = typeFetch[1];
             if (!this._storageUsedByCategory.get(type)) {
@@ -53,6 +59,8 @@ export class StorageController {
             currentSize += (localStorage.getItem(key) as string).length;
             this._storageUsedByCategory.set(type, currentSize);
         }
+
+        toRemove.forEach(k => localStorage.removeItem(k));
     }
 
     set(type: StorageType, key: string, value: string) {
