@@ -7,6 +7,7 @@ import { ObjectManager } from "../engine/object_manager";
 import { SceneManager } from "../engine/scenes/scene_manager";
 import { ShaderManager } from "../engine/shaders/shader_manager";
 import { Loader } from "../loader/loader";
+import { StorageController } from "../local_storage/storage_controller";
 import { UIConfig } from "../ui/ui_config";
 import { UIInfo } from "../ui/ui_info";
 import { VisualizerIO } from "./io/visualizer_io";
@@ -30,6 +31,7 @@ export class Visualizer {
     private _objectManager: ObjectManager = new ObjectManager();
     private _cameraManager: CameraManager = new CameraManager();
     private _sceneManager: SceneManager = new SceneManager();
+    private _storageController: StorageController = new StorageController();
     private _configurationManager: ConfigurationManager = new ConfigurationManager();
 
     private _pointerLocked: boolean = false;
@@ -100,6 +102,10 @@ export class Visualizer {
         return this._configurationManager;
     }
 
+    get storageController() {
+        return this._storageController;
+    }
+
     get engine() {
         return this._engine;
     }
@@ -112,7 +118,7 @@ export class Visualizer {
         return this._pointerLocked;
     }
 
-    public set pointerLocked(v: boolean) {
+    set pointerLocked(v: boolean) {
         this._pointerLocked = v;
     }
 

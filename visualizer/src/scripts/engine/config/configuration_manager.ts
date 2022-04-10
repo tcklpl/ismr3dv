@@ -1,14 +1,24 @@
+import { StorageController } from "../../local_storage/storage_controller";
+import { StorageType } from "../../local_storage/storage_type";
+import { Visualizer } from "../../visualizer/visualizer";
 import { IGeneralConfiguration } from "./general_configuration";
 import { IGraphicalConfiguration } from "./graphical_configuration";
 
 export class ConfigurationManager {
 
+    private _storage!: StorageController;
+
     private _graphical!: IGraphicalConfiguration;
     private _general!: IGeneralConfiguration;
 
+    private _keyGraphical = 'graphical-configuration';
+    private _keyGeneral = 'general-configuration';
+
     loadConfiguration() {
-        const graphicalStorage = localStorage.getItem('ismr3d-graphical-configuration');
-        const generalStorage = localStorage.getItem('ismr3d-general-configuration');
+        this._storage = Visualizer.instance.storageController;
+
+        const graphicalStorage = this._storage.get(StorageType.CONFIG, this._keyGraphical);
+        const generalStorage = this._storage.get(StorageType.CONFIG, this._keyGeneral);
 
         try {
             if (!graphicalStorage) throw `No graphical storage`;
@@ -32,8 +42,8 @@ export class ConfigurationManager {
     }
 
     saveConfigurations() {
-        localStorage.setItem('ismr3d-graphical-configuration', JSON.stringify(this._graphical));
-        localStorage.setItem('ismr3d-general-configuration', JSON.stringify(this._general));
+        this._storage.set(StorageType.CONFIG, this._keyGraphical, JSON.stringify(this._graphical));
+        this._storage.set(StorageType.CONFIG, this._keyGeneral, JSON.stringify(this._general));
     }
 
     get graphical() {
