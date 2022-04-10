@@ -73,8 +73,18 @@ export class UIConfig {
         $('#cfg-storage-info-cache-size').html(`${SizeNameUtils.getNameBySize(cacheSize, ['B', 'KB', 'MB'], 1000)}`);
         $('#cfg-storage-info-free-size').html(`${SizeNameUtils.getNameBySize(storage.totalFreeSpaceBytes, ['B', 'KB', 'MB'], 1000)}`);
 
-        $('#cfg-storage-pb-config').css('width', `${configSize / totalSize * 100}%`);
-        $('#cfg-storage-pb-cache').css('width', `${cacheSize / totalSize * 100}%`);
+        let usedProgressBar = 0;
+        const minumumPercentage = 0.005;
+        let configPercentage = configSize / totalSize;
+        configPercentage = configPercentage > 0 ? Math.max(configPercentage, minumumPercentage) : 0;
+        usedProgressBar += configPercentage;
+
+        let cachePercentage = cacheSize / totalSize;
+        cachePercentage = cachePercentage > 0 ? Math.min(Math.max(cachePercentage, minumumPercentage), 100 - usedProgressBar) : 0;
+        usedProgressBar += cachePercentage;
+
+        $('#cfg-storage-pb-config').css('width', `${configPercentage * 100}%`);
+        $('#cfg-storage-pb-cache').css('width', `${cachePercentage * 100}%`);
 
         $('#btn-clear-storage-cache').prop('disabled', cacheSize <= 0 ? 'disabled': '');
         $('#btn-clear-storage-cache').on('click', () => {
