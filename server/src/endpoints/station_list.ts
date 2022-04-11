@@ -10,22 +10,27 @@ export default {
         if (!Config.instance.hasApiKey) return response.status(200).json(ExampleData.instance.exampleStations);
 
         let requestInfo: IStationInfoRequest;
-        let dateBegin: string;
-        let dateEnd: string;
+        let dateBeginStr: string;
+        let dateEndStr: string;
+        let dateBegin: Date;
+        let dateEnd: Date;
 
         try {
-            requestInfo = request.body as IStationInfoRequest;
+            let { startdate, enddate } = request.params;
 
-            requestInfo.date_begin = new Date(requestInfo.date_begin);
-            requestInfo.date_end = new Date(requestInfo.date_end);
+            dateBeginStr = startdate;
+            dateEndStr = enddate;
 
-            dateBegin = requestInfo.date_begin.toISOString().slice(0, 19).replace('T', '%20');
-            dateEnd = requestInfo.date_end.toISOString().slice(0, 19).replace('T', '%20');
+            dateBegin = new Date(dateBeginStr);
+            dateEnd = new Date(dateEndStr);
+
+            dateBeginStr = dateBegin.toISOString().slice(0, 19).replace('T', '%20');
+            dateEndStr = dateEnd.toISOString().slice(0, 19).replace('T', '%20');
         } catch (e) {
             return response.status(400).json();
         }
 
-        fetch(`https://ismrquerytool.fct.unesp.br/is/ismrtool/calc-var/service_loadStationList.php?date_begin=${dateBegin}&date_end=${dateEnd}&mode=json&key=${Config.instance.apiKey}`).then(res => {
+        fetch(`https://ismrquerytool.fct.unesp.br/is/ismrtool/calc-var/service_loadStationList.php?date_begin=${dateBeginStr}&date_end=${dateEndStr}&mode=json&key=${Config.instance.apiKey}`).then(res => {
             res.json().then(j => {
                 return response.status(200).json(j);
             });
