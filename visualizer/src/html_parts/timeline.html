@@ -4,7 +4,45 @@
         <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Timeline</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body">
-        <p>Try scrolling the rest of the page to see this option in action.</p>
+    <div class="offcanvas-body row">
+        
+        <div class="col-4">
+
+            <div class="d-flex form-group form-inline row align-items-center">
+                <label class="col-sm-4" for="ctf-sun-texsize">Start Date</label>
+                <div class="col-sm-8">
+                    <input type="datetime-local" class="form-control" id="timeline-start-date" required>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="d-flex form-group form-inline row align-items-center">
+                <label class="col-sm-4" for="ctf-sun-texsize">End Date</label>
+                <div class="col-sm-8">
+                    <input type="datetime-local" class="form-control" id="timeline-end-date" required>
+                </div>
+            </div>
+
+            <br>
+
+            <button class="btn btn-primary float-end" id="timeline-dateinterval-btn">Search</button>
+
+        </div>
+
+        <div class="col-8 border-start border-1">
+            
+            <div class="d-flex text-secondary align-items-center justify-content-center h-100" id="timeline-start-msg">
+                Please select the start and end dates.
+            </div>
+
+            <div class="d-none text-secondary align-items-center justify-content-center h-100" id="timeline-fetching-api-msg">
+                <div class="spinner-border" role="status"></div><label style="margin-left: 15px;">Fetching the API, this could take some time...</label>
+            </div>
+
+            <div class="d-none h-100 row" id="timeline-station-list"></div>
+
+        </div>
+
     </div>
 </div>

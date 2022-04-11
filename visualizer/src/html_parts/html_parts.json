@@ -35,6 +35,10 @@
         {
             "url": "timeline.html",
             "append_to": "body"
+        },
+        {
+            "url": "confirmation_screen.html",
+            "append_to": "body"
         }
     ]
 }

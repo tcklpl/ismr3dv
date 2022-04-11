@@ -8,9 +8,10 @@ import { SceneManager } from "../engine/scenes/scene_manager";
 import { ShaderManager } from "../engine/shaders/shader_manager";
 import { Loader } from "../loader/loader";
 import { StorageController } from "../local_storage/storage_controller";
-import { UIConfig } from "../ui/ui_config";
-import { UIInfo } from "../ui/ui_info";
+import { UI } from "../ui/ui";
+import { ISMRAPIConnector } from "./api/api_connector";
 import { VisualizerIO } from "./io/visualizer_io";
+import { ISMRSession } from "./session/ismr_session";
 import { UniverseScene } from "./universe_scene";
 
 export class Visualizer {
@@ -23,16 +24,21 @@ export class Visualizer {
     private _loader: Loader;
     private _engine!: Engine;
     private _io!: VisualizerIO;
+    private _ui = new UI();
 
     // Managers
-    private _materialManager: MaterialManager = new MaterialManager();
-    private _meshManager: MeshManager = new MeshManager();
-    private _shaderManager: ShaderManager = new ShaderManager();
-    private _objectManager: ObjectManager = new ObjectManager();
-    private _cameraManager: CameraManager = new CameraManager();
-    private _sceneManager: SceneManager = new SceneManager();
-    private _storageController: StorageController = new StorageController();
-    private _configurationManager: ConfigurationManager = new ConfigurationManager();
+    private _materialManager = new MaterialManager();
+    private _meshManager = new MeshManager();
+    private _shaderManager = new ShaderManager();
+    private _objectManager = new ObjectManager();
+    private _cameraManager = new CameraManager();
+    private _sceneManager = new SceneManager();
+    private _storageController = new StorageController();
+    private _configurationManager = new ConfigurationManager();
+
+    // Api
+    private _api = new ISMRAPIConnector();
+    private _session?: ISMRSession;
 
     private _pointerLocked: boolean = false;
 
@@ -60,8 +66,9 @@ export class Visualizer {
         this._cameraManager.setActiveCamera(this._universeScene.mainCamera);
         this._sceneManager.active = this._universeScene;
 
-        UIConfig.registerEvents();
-        UIInfo.update();
+        this.ui.timeline.registerEvents();
+        this.ui.config.registerEvents();
+        this.ui.info.update();
 
         requestAnimationFrame(t => this._engine.render(t));
     }
@@ -114,6 +121,10 @@ export class Visualizer {
         return this._io;
     }
 
+    get ui() {
+        return this._ui;
+    }
+
     get pointerLocked() {
         return this._pointerLocked;
     }
@@ -124,6 +135,18 @@ export class Visualizer {
 
     get universeScene() {
         return this._universeScene;
+    }
+
+    get api() {
+        return this._api;
+    }
+
+    get session() {
+        return this._session;
+    }
+
+    set session(s: ISMRSession | undefined) {
+        this._session = s;
     }
 
 
