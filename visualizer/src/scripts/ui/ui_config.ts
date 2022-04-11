@@ -3,13 +3,12 @@ import { IGraphicalConfiguration } from "../engine/config/graphical_configuratio
 import { StorageType } from "../local_storage/storage_type";
 import { SizeNameUtils } from "../visualizer/utils/size_name_utils";
 import { Visualizer } from "../visualizer/visualizer";
-import { UIInfo } from "./ui_info";
 
 export class UIConfig {
 
-    private static _hasUnsupportedTextures: boolean = false;
+    private _hasUnsupportedTextures: boolean = false;
 
-    static registerEvents() {
+    registerEvents() {
         const configManager = Visualizer.instance.configurationManager;
 
         $('#cfg-graphical-btn').on('click', () => {
@@ -25,16 +24,16 @@ export class UIConfig {
         });
     }
 
-    private static setupGeneral(generalConfig: IGeneralConfiguration) {
+    private setupGeneral(generalConfig: IGeneralConfiguration) {
         $('#cfg-fps').prop('checked', generalConfig.show_fps);
     }
 
-    private static saveGeneral(generalConfig: IGeneralConfiguration) {
+    private saveGeneral(generalConfig: IGeneralConfiguration) {
         generalConfig.show_fps = $('#cfg-fps').is(':checked');
-        UIInfo.update();
+        Visualizer.instance.ui.info.update();
     }
 
-    private static setupGraphical(graphicalConfig: IGraphicalConfiguration) {
+    private setupGraphical(graphicalConfig: IGraphicalConfiguration) {
         const earthTsChildren = $('#ctf-earth-texsize option');
         const sunTsChildren = $('#ctf-sun-texsize option');
         this._hasUnsupportedTextures = false;
@@ -52,13 +51,13 @@ export class UIConfig {
         }
     }
 
-    private static saveGraphical(graphicalConfig: IGraphicalConfiguration) {
+    private saveGraphical(graphicalConfig: IGraphicalConfiguration) {
         graphicalConfig.bloom = $('#cfg-bloom').is(':checked');
         graphicalConfig.earth_texture_size = $('#ctf-earth-texsize').val() as string;
         graphicalConfig.sun_texture_size = $('#ctf-sun-texsize').val() as string;
     }
 
-    private static setupStorage() {
+    private setupStorage() {
         const storage = Visualizer.instance.storageController;
 
         const totalSize = storage.maxSizeKb * 1000;
@@ -93,7 +92,7 @@ export class UIConfig {
         });
     }
 
-    private static checkForTextureSizeSupport(elementValue: string) {
+    private checkForTextureSizeSupport(elementValue: string) {
         const bigger = parseInt(elementValue.replace(/[^0-9]/gi, "")) * 1024 > Visualizer.instance.engine.limitations.maxTextureSize;
         if (bigger) {
             this._hasUnsupportedTextures = true;
@@ -101,7 +100,7 @@ export class UIConfig {
         return bigger;
     }
 
-    private static disableUnsupportedTextureSizes(e: JQuery<HTMLElement>) {
+    private disableUnsupportedTextureSizes(e: JQuery<HTMLElement>) {
         e.filter((index, value) => {
             return this.checkForTextureSizeSupport($(value).val() as string);
         }).attr('disabled', "").css('color', 'red');

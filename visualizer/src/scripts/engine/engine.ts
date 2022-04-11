@@ -22,7 +22,7 @@ export class Engine {
         this._lastFrame = time;
 
         if (this._config.general.show_fps) {
-            UIInfo.setFPS(1 / Time.deltaTime);
+            Visualizer.instance.ui.info.setFPS(1 / Time.deltaTime);
         }
 
         this._frameListeners.forEach(f => f.update());

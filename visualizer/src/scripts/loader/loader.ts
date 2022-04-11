@@ -1,5 +1,6 @@
 import { AsyncUtils } from "../engine/utils/async_utils";
 import { UILoader } from "../ui/ui_loader";
+import { Visualizer } from "../visualizer/visualizer";
 import { HTMLLoader } from "./html_loader";
 import { IHTMLLoadlist } from "./html_loadlist";
 import { ILoadList } from "./loadlist";
@@ -25,6 +26,8 @@ export class Loader {
 
     private _loadedSources: number = 0;
     private _sourcesToLoad!: number;
+
+    private _ui = Visualizer.instance.ui.loader;
 
     private _loadState: LoadState = LoadState.FETCHING_MAIN_LOADLIST;
 
@@ -76,7 +79,7 @@ export class Loader {
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
-        UILoader.hideLoadingScreen();
+        this._ui.hideLoadingScreen();
         console.log('everything loaded!');
         if (this.onLoad)
             this.onLoad();
@@ -84,7 +87,7 @@ export class Loader {
 
     private updateUI(message: string) {
         let percentage = this._loadState.valueOf() / LoadState.FINISHED.valueOf() * 100;
-        UILoader.updateStatus(percentage, message);
+        this._ui.updateStatus(percentage, message);
     }
 
     private nextStage() {
