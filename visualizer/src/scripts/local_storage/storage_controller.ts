@@ -63,6 +63,15 @@ export class StorageController {
         toRemove.forEach(k => localStorage.removeItem(k));
     }
 
+    /**
+     * Saves a value to the local storage.
+     * Will return true if it succeeds or false if there's not enough space.
+     * 
+     * @param type The type of storage to be used, currently there are 2: CONFIG and CACHE.
+     * @param key The key to identify the value, will be prefixed by the storage type.
+     * @param value The value to be saved.
+     * @returns true if it was able to insert or false if there's not enough space in the storage.
+     */
     set(type: StorageType, key: string, value: string) {
         let fullKey = `${type.toString()}-${key}`;
 
@@ -72,18 +81,35 @@ export class StorageController {
             oldSize = alreadyPresent.length;
         }
 
+        let sizeDiff = value.length - oldSize;
+        if (this.totalUsedSizeBytes + sizeDiff > this._maxSizeKb * 1000) return false;
+
         let currentSize = this._storageUsedByCategory.get(type) as number;
-        this._storageUsedByCategory.set(type, currentSize - oldSize + value.length);
+        this._storageUsedByCategory.set(type, currentSize + sizeDiff);
 
         localStorage.setItem(fullKey, value);
+        return true;
     }
 
+    /**
+     * Tries to get a value from the storage.
+     * 
+     * @param type The type of storage to be used, currently there are 2: CONFIG and CACHE.
+     * @param key The key to identify the value, will be prefixed by the storage type.
+     * @returns The value if it exists, or null otherwise.
+     */
     get(type: StorageType, key: string) {
         let fullKey = `${type.toString()}-${key}`;
 
         return localStorage.getItem(fullKey);
     }
 
+    /**
+     * Removes (if it exists) the desired key from the storage.
+     * 
+     * @param type The type of storage to be used, currently there are 2: CONFIG and CACHE.
+     * @param key The key to identify the value, will be prefixed by the storage type.
+     */
     remove(type: StorageType, key: string) {
         let fullKey = `${type.toString()}-${key}`;
 
@@ -98,6 +124,11 @@ export class StorageController {
         localStorage.removeItem(fullKey);
     }
 
+    /**
+     * Removes everything from one category from the storage.
+     * 
+     * @param type The type of storage to be used, currently there are 2: CONFIG and CACHE.
+     */
     removeCategory(type: StorageType) {
         let catPrefix = type.toString();
         let toRemove: string[] = [];
@@ -113,6 +144,9 @@ export class StorageController {
         this._storageUsedByCategory.set(type, 0);
     }
 
+    /**
+     * Clears all the storage.
+     */
     nuke() {
         localStorage.clear();
         this._storageUsedByCategory = new Map();
