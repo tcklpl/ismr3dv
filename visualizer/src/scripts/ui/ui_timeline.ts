@@ -61,7 +61,7 @@ export class UITimeline {
         
         this.state = TimelineState.FETCHING_API;
 
-        Visualizer.instance.api.fetchStations(startDate, endDate)
+        Visualizer.instance.providers.stations.requireOnInterval(startDate, endDate)
         .then(res => this.populateStationList(res))
         .catch(err => {
             console.warn(err);

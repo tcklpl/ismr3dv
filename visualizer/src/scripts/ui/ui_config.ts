@@ -87,7 +87,7 @@ export class UIConfig {
 
         $('#btn-clear-storage-cache').prop('disabled', cacheSize <= 0 ? 'disabled': '');
         $('#btn-clear-storage-cache').on('click', () => {
-            storage.removeCategory(StorageType.CACHE);
+            Visualizer.instance.cache.nuke();
             this.setupStorage();
         });
     }

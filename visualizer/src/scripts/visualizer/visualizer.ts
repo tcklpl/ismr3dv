@@ -10,7 +10,9 @@ import { Loader } from "../loader/loader";
 import { StorageController } from "../local_storage/storage_controller";
 import { UI } from "../ui/ui";
 import { ISMRAPIConnector } from "./api/api_connector";
+import { ISMRCacheHub } from "./cache/cache_hub";
 import { VisualizerIO } from "./io/visualizer_io";
+import { ISMRProviders } from "./providers/providers";
 import { ISMRSession } from "./session/ismr_session";
 import { UniverseScene } from "./universe_scene";
 
@@ -25,6 +27,7 @@ export class Visualizer {
     private _engine!: Engine;
     private _io!: VisualizerIO;
     private _ui = new UI();
+    private _cache!: ISMRCacheHub;
 
     // Managers
     private _materialManager = new MaterialManager();
@@ -38,6 +41,7 @@ export class Visualizer {
 
     // Api
     private _api = new ISMRAPIConnector();
+    private _providers!: ISMRProviders;
     private _session?: ISMRSession;
 
     private _pointerLocked: boolean = false;
@@ -61,6 +65,8 @@ export class Visualizer {
         this._engine.adjustToWindowSize();
 
         this._io = new VisualizerIO();
+        this._cache = new ISMRCacheHub();
+        this._providers = new ISMRProviders();
 
         this._universeScene = new UniverseScene("universe");
         this._cameraManager.setActiveCamera(this._universeScene.mainCamera);
@@ -143,6 +149,14 @@ export class Visualizer {
 
     get session() {
         return this._session;
+    }
+
+    get cache() {
+        return this._cache;
+    }
+
+    get providers() {
+        return this._providers;
     }
 
     set session(s: ISMRSession | undefined) {
