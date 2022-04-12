@@ -25,6 +25,12 @@ then
     exit
 fi
 
+if ! command -v scss > /dev/null
+then
+    echo "[!] scss was not found, please install it or correct your path."
+    exit
+fi
+
 help() {
     echo "ISMR3DV Setup utility."
     echo
@@ -32,6 +38,7 @@ help() {
     echo "Options:"
     echo "e     --env-only      Only asks for information to fill the .env file and fills it."
     echo "n     --npm-only      Skips the .env file configuration."
+    echo "p     --prerequisites Only checks for prerequisites."
     echo "c     --clear         Removes the node_modules and out folders as well as the .env file."
     echo "q     --quiet         Sends the NPM output to /dev/null."
     echo "h     --help          Displays this message."
@@ -83,12 +90,13 @@ setup_npm() {
     echo "    node server/out/index.js"
 }
 
+FLAG_PREREQUISITES_ONLY=false
 FLAG_ENV_ONLY=false
 FLAG_CLEAR=false
 FLAG_NPM_ONLY=false
 FLAG_QUIET_NPM=false
 
-while getopts ecnqh-: OPT; do
+while getopts ecnqph-: OPT; do
     if [ "$OPT" = "-" ]; then
         OPT="${OPTARG%%=*}"
         OPTARG="${OPTARG#$OPT}"
@@ -98,12 +106,17 @@ while getopts ecnqh-: OPT; do
         e | env-only ) FLAG_ENV_ONLY=true ;;
         c | clear ) FLAG_CLEAR=true ;;
         n | npm-only ) FLAG_NPM_ONLY=true ;;
+        p | prerequisites ) FLAG_PREREQUISITES_ONLY=true ;;
         q | quiet ) FLAG_QUIET_NPM=true ;;
         h | help ) help ;;
         ??* ) echo "Illegal option --$OPT"; exit ;;
         ? ) exit
     esac
 done
+
+echo "[-] Prerequisites OK"
+
+if $FLAG_PREREQUISITES_ONLY; then exit; fi
 
 if $FLAG_CLEAR; then
     rm -rf .env server/node_modules server/out visualizer/node_modules visualizer/out

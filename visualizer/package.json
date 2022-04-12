@@ -4,10 +4,10 @@
   "description": "ismr 3d visualizer",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "minify-html": "npx html-minifier --collapse-whitespace --remove-comments --input-dir ./src/ --output-dir ./out/ --file-ext html",
-    "sync-others": "rsync -a --exclude '*.html' --exclude '*.ts' src/ out/",
-    "compile": "npm run minify-html && tsc && npm run sync-others",
+    "compile-scss": "scss --no-cache --update src/style:out/style/",
+    "sync-others": "rsync -a --exclude '*.html' --exclude '*.ts' --exclude '*.scss' src/ out/",
+    "compile": "npm run minify-html && tsc && npm run sync-others && npm run compile-scss",
     "clean": "rm -r ./out/*"
   },
   "author": "",
