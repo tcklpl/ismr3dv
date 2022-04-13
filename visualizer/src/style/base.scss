@@ -1,6 +1,18 @@
+@import "error_screens";
+@import "loading";
+@import "huds";
+
 body {
     width: 100vw;
     height: 100vh;
+}
+
+.full-screen {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    border: 0;
+    position: fixed;
 }
 
 #ismr3dcanvas {
@@ -10,51 +22,4 @@ body {
     position: absolute;
     margin: 0;
     border: 0;
-}
-
-.error-screen {
-    width: 100vw;
-    height: 100vh;
-    z-index: 999;
-    position: fixed;
-    margin: 0;
-    border: 0;
-    background-color: rgb(255, 103, 103);
-    color: black;
-    display: none;
-}
-
-.loading-screen {
-    width: 100vw;
-    height: 100vh;
-    z-index: 10;
-    display: flex;
-    position: fixed;
-    margin: 0;
-    border: 0;
-    background-color: rgb(18, 18, 19);
-    color: rgb(212, 212, 212);
-}
-
-#loading-progress-bar-holder {
-    width: 30%;
-    min-width: 500px;
-}
-
-.config-hud {
-    z-index: 2;
-    position: fixed;
-    top: 0;
-    left: 0;
-    margin: 0 0;
-}
-
-.info-hud {
-    z-index: 2;
-    position: fixed;
-    top: 0;
-    right: 0;
-    margin: 0 0;
-    color: white;
-    padding: 10px;
 }

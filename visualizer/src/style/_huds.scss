@@ -1,0 +1,19 @@
+%hud-panel {
+    z-index: 2;
+    position: fixed;
+    margin: 0 0;
+}
+
+.config-hud {
+    @extend %hud-panel;
+    top: 0;
+    left: 0;
+}
+
+.info-hud {
+    @extend %hud-panel;
+    top: 0;
+    right: 0;
+    color: white;
+    padding: 10px;
+}
