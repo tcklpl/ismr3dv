@@ -4,7 +4,7 @@ import { Visualizer } from "../visualizer/visualizer";
 import { ConfirmationScreen } from "./confirmation_screen";
 
 enum TimelineState {
-    SELECTING_TIME_INTERVAL, FETCHING_API, STATION_LIST
+    SELECTING_TIME_INTERVAL, FETCHING_API, STATION_LIST, FETCH_ERROR
 }
 
 export class UITimeline {
@@ -65,11 +65,9 @@ export class UITimeline {
         .then(res => this.populateStationList(res))
         .catch(err => {
             console.warn(err);
+            this.state = TimelineState.FETCH_ERROR;
             this.enabled = true;
         });
-
-        $('#timeline-start-msg').removeClass('d-flex').addClass('d-none');
-        $('#timeline-fetching-api-msg').removeClass('d-none').addClass('d-flex');
     }
 
     private populateStationList(list: IStationInfo[]) {
@@ -97,8 +95,6 @@ export class UITimeline {
             $('#timeline-station-list').append(html);
         });
 
-        $('#timeline-fetching-api-msg').removeClass('d-flex').addClass('d-none');
-        $('#timeline-station-list').removeClass('d-none').addClass('d-flex');
         this.state = TimelineState.STATION_LIST;
     }
 
@@ -113,6 +109,13 @@ export class UITimeline {
             case TimelineState.FETCHING_API:
                 $('#timeline-start-msg').removeClass('d-flex').addClass('d-none');
                 $('#timeline-fetching-api-msg').removeClass('d-none').addClass('d-flex');
+                $('#timeline-station-list').removeClass('d-flex').addClass('d-none');
+                this._uiEnabled = false;
+                break;
+            case TimelineState.FETCH_ERROR:
+                $('#timeline-start-msg').removeClass('d-flex').addClass('d-none');
+                $('#timeline-error-msg').removeClass('d-none').addClass('d-flex');
+                $('#timeline-fetching-api-msg').removeClass('d-flex').addClass('d-none');
                 $('#timeline-station-list').removeClass('d-flex').addClass('d-none');
                 this._uiEnabled = false;
                 break;

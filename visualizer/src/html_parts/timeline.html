@@ -36,8 +36,12 @@
                 Please select the start and end dates.
             </div>
 
+            <div class="d-none text-secondary align-items-center justify-content-center h-100" id="timeline-error-msg">
+                <i class="bi-exclamation-circle" style="font-size: 1.5em; margin-right: 0.5em;"></i>There was an error while fetching the required data, the API may be down.
+            </div>
+
             <div class="d-none text-secondary align-items-center justify-content-center h-100" id="timeline-fetching-api-msg">
-                <div class="spinner-border" role="status"></div><label style="margin-left: 15px;">Fetching the API, this could take some time...</label>
+                <div class="spinner-border" role="status"></div><label style="margin-left: 0.5em;">Fetching the API, this could take some time...</label>
             </div>
 
             <div class="d-none h-100 row" id="timeline-station-list"></div>
