@@ -6,7 +6,7 @@
   "scripts": {
     "minify-html": "npx html-minifier --collapse-whitespace --remove-comments --input-dir ./src/ --output-dir ./out/ --file-ext html",
     "compile-scss": "scss --no-cache --update src/style:out/style/",
-    "sync-others": "rsync -a --exclude '*.html' --exclude '*.ts' --exclude '*.scss' src/ out/",
+    "sync-others": "rsync -a --exclude '*.html' --exclude '*.ts' --exclude '*.scss' --prune-empty-dirs src/ out/",
     "compile": "npm run minify-html && tsc && npm run sync-others && npm run compile-scss",
     "clean": "rm -r ./out/*"
   },
