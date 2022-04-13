@@ -23,19 +23,36 @@
 
 <body>
 
+    <!-- Connection error screen, is shown when require.js fails to load a module -->
+    <div class="full-screen connection-screen align-items-center justify-content-center h-100" id="connection-screen">
+        <i class="bi-ethernet" style="font-size: 1.5em; margin-right: 0.5em;"></i>The JS module loading timed out, are you on a really slow connection?
+    </div>
+
     <!-- Loading screen, is shown when the page is loading (fetching and constructing resources) -->
-    <div class="loading-screen text-center flex-column min-vh-100 justify-content-center align-items-center"
-        id="loading-screen">
-        <h1>Loading...</h1>
-        <div class="progress" id="loading-progress-bar-holder">
-            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0"
-                aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="loading-progress-bar"></div>
+    <div class="full-screen loading-screen align-items-center justify-content-center h-100" id="loading-screen">
+        <div class="loading-content">
+            <div class="spinner-border loading-screen-spinner" role="status"></div><br>
+            <div class="progress" id="loading-progress-bar-holder">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0"
+                    aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="loading-progress-bar"></div>
+            </div>
+            <div class="row">
+                <div class="col-6 text-start"><a id="loading-message"></a></div>
+                <div class="col-6 text-end"><a id="loading-message-percentage"></a></div>
+            </div>
         </div>
-        <a id="loading-message"></a>
     </div>    
 
     <!-- Visualizer canvas, is used with WebGL2 -->
     <canvas id="ismr3dcanvas"></canvas>
+
+    <!-- Script to show the connection screen if requirejs fails to load all the modules (probably by timeout) -->
+    <script>
+        requirejs.onError = function (err) {
+            console.log(err);
+            document.getElementById("connection-screen").style.display = "flex";
+        };
+    </script>
 
 </body>
 
