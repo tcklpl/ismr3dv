@@ -31,8 +31,12 @@ export default {
         }
 
         fetch(`https://ismrquerytool.fct.unesp.br/is/ismrtool/calc-var/service_loadStationList.php?date_begin=${dateBeginStr}&date_end=${dateEndStr}&mode=json&key=${Config.instance.apiKey}`).then(res => {
-            res.json().then(j => {
+            res.json()
+            .then(j => {
                 return response.status(200).json(j);
+            })
+            .catch(err => {
+                return response.status(500).json({"error": "API sent non-JSON data"});
             });
         })
         .catch(() => {
