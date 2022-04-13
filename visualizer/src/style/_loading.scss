@@ -1,0 +1,17 @@
+.loading-screen {
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgb(18, 18, 19);
+    color: rgb(212, 212, 212);
+}
+
+.loading-screen-spinner {
+    margin: 0 auto;
+    display: flex;
+}
+
+#loading-progress-bar-holder {
+    width: 30%;
+    min-width: 500px;
+}
