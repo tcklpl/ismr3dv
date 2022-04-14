@@ -36,6 +36,7 @@ export abstract class CacheProvider<T, K extends IStorageKey> {
     protected abstract parseKeyedString(str: string): K;
 
     protected cache(key: K, value: T[]) {
+        if (Visualizer.instance.serverInfo.showcase_mode) return;
         this._data.set(key, value);
         this.save();
     }

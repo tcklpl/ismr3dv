@@ -10,6 +10,7 @@ import { Loader } from "../loader/loader";
 import { StorageController } from "../local_storage/storage_controller";
 import { UI } from "../ui/ui";
 import { ISMRAPIConnector } from "./api/api_connector";
+import { IServerInfo } from "./api/formats/i_server_info";
 import { ISMRCacheHub } from "./cache/cache_hub";
 import { VisualizerIO } from "./io/visualizer_io";
 import { ISMRProviders } from "./providers/providers";
@@ -43,6 +44,7 @@ export class Visualizer {
     private _api = new ISMRAPIConnector();
     private _providers!: ISMRProviders;
     private _session?: ISMRSession;
+    private _serverInfo!: IServerInfo;
 
     private _pointerLocked: boolean = false;
 
@@ -55,6 +57,12 @@ export class Visualizer {
 
         this._configurationManager.loadConfiguration();
         this._configurationManager.saveConfigurations();
+
+        this._api.fetchServerInfo()
+        .then(si => this._serverInfo = si)
+        .catch(() => {
+            throw `Failed to fetch server info`;
+        });
 
         this._loader = new Loader();
         this._loader.onLoad = () => this.postLoad();
@@ -161,6 +169,10 @@ export class Visualizer {
 
     set session(s: ISMRSession | undefined) {
         this._session = s;
+    }
+
+    get serverInfo() {
+        return this._serverInfo;
     }
 
 
