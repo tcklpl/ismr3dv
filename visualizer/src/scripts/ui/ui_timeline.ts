@@ -2,10 +2,7 @@ import { IStationInfo } from "../visualizer/api/formats/i_station_info";
 import { ISMRSession } from "../visualizer/session/ismr_session";
 import { Visualizer } from "../visualizer/visualizer";
 import { ConfirmationScreen } from "./confirmation_screen";
-
-enum TimelineState {
-    SELECTING_TIME_INTERVAL, FETCHING_API, STATION_LIST, FETCH_ERROR
-}
+import { TimelineState } from "./timeline_state";
 
 export class UITimeline {
 
@@ -16,15 +13,22 @@ export class UITimeline {
     private _state: TimelineState = TimelineState.SELECTING_TIME_INTERVAL;
     private _uiEnabled: boolean = true;
 
+    private _showcaseMode!: boolean;
+
     private _session!: ISMRSession;
 
     registerEvents() {
+
+        this._showcaseMode = Visualizer.instance.serverInfo.showcase_mode;
 
         this._startDatePicker = $('#timeline-start-date');
         this._endDatePicker = $('#timeline-end-date');
         this._datePickerSubmit = $('#timeline-dateinterval-btn');
         
+        // normal station search button
         this._datePickerSubmit.on('click', () => {
+            // If it's in showcase mode the user shouldn't even be pressing this button
+            if (this._showcaseMode) return;
             
             this._startDatePicker.removeClass('border-danger');
             this._endDatePicker.removeClass('border-danger');
@@ -42,20 +46,28 @@ export class UITimeline {
             }
 
             if (!inputOk) return;
+
+            const startDate = new Date(this._startDatePicker.val() as string);
+            const endDate = new Date(this._endDatePicker.val() as string);
             
             if (Visualizer.instance.session) {
-                new ConfirmationScreen('Are you sure?', 'You are about to replace your current session.', () => this.createNewSession());
+                new ConfirmationScreen('Are you sure?', 'You are about to replace your current session.', () => this.createNewSession(startDate, endDate));
             } else {
-                this.createNewSession();
+                this.createNewSession(startDate, endDate);
             }
 
         });
+
+        // showcase station seach button
+        $('#timeline-showcase-stations-btn').on('click', () => {
+            if (!this._showcaseMode) return;
+            this.createNewSession(Visualizer.instance.serverInfo.showcase_start_date, Visualizer.instance.serverInfo.showcase_end_date);
+        });
+
+        this.updateForShowcase(Visualizer.instance.serverInfo.showcase_mode);
     }
 
-    createNewSession() {
-        const startDate = new Date(this._startDatePicker.val() as string);
-        const endDate = new Date(this._endDatePicker.val() as string);
-
+    createNewSession(startDate: Date, endDate: Date) {
         this._session = new ISMRSession(startDate, endDate);
         Visualizer.instance.session = this._session;
         
@@ -76,7 +88,7 @@ export class UITimeline {
 
         list.forEach(s => {
             const source = `
-                <div class="card" style="width: 14rem; margin-left: 10px; margin-bottom: 10px;">
+                <div class="card timeline-station-card">
                     <div class="card-body row">
                         <div class="col-4 d-flex align-items-center justify-content-center h-100">
                             <i class="bi-broadcast-pin" style="font-size: 3em;"></i>
@@ -98,38 +110,26 @@ export class UITimeline {
         this.state = TimelineState.STATION_LIST;
     }
 
+    private setVisible(element: JQuery<HTMLElement>, visible: boolean, display: string = 'flex') {
+        visible ? element.removeClass('d-none').addClass(`d-${display}`) : element.removeClass(`d-${display}`).addClass('d-none');
+    }
+
+    private updateForShowcase(showcase: boolean) {
+        this.setVisible($('#timeline-date-msg-showcase'), showcase);
+        this.setVisible($('#timeline-date-selector'), !showcase, 'block');
+    }
+
     private updateUI() {
-        switch(this._state) {
-            case TimelineState.SELECTING_TIME_INTERVAL:
-                $('#timeline-start-msg').removeClass('d-none').addClass('d-flex');
-                $('#timeline-fetching-api-msg').removeClass('d-flex').addClass('d-none');
-                $('#timeline-station-list').removeClass('d-flex').addClass('d-none');
-                this._uiEnabled = true;
-                break;
-            case TimelineState.FETCHING_API:
-                $('#timeline-start-msg').removeClass('d-flex').addClass('d-none');
-                $('#timeline-fetching-api-msg').removeClass('d-none').addClass('d-flex');
-                $('#timeline-station-list').removeClass('d-flex').addClass('d-none');
-                this._uiEnabled = false;
-                break;
-            case TimelineState.FETCH_ERROR:
-                $('#timeline-start-msg').removeClass('d-flex').addClass('d-none');
-                $('#timeline-error-msg').removeClass('d-none').addClass('d-flex');
-                $('#timeline-fetching-api-msg').removeClass('d-flex').addClass('d-none');
-                $('#timeline-station-list').removeClass('d-flex').addClass('d-none');
-                this._uiEnabled = false;
-                break;
-            case TimelineState.STATION_LIST:
-                $('#timeline-start-msg').removeClass('d-flex').addClass('d-none');
-                $('#timeline-fetching-api-msg').removeClass('d-flex').addClass('d-none');
-                $('#timeline-station-list').removeClass('d-none').addClass('d-flex');
-                this._uiEnabled = true;
-                break;
-        }
+        this._uiEnabled = !this._state.blocked;
+        this.setVisible($('#timeline-start-msg'), this._state.startMsgVisible);
+        this.setVisible($('#timeline-fetching-api-msg'), this._state.fetchMsgVisible);
+        this.setVisible($('#timeline-error-msg'), this._state.fetchErrorMsgVisible);
+        this.setVisible($('#timeline-station-list'), this._state.stationListVisible);
 
         this._startDatePicker.prop('disabled', !this._uiEnabled);
         this._endDatePicker.prop('disabled', !this._uiEnabled);
         this._datePickerSubmit.prop('disabled', !this._uiEnabled);
+        $('#timeline-showcase-stations-btn').prop('disabled', !this._uiEnabled);
     }
 
     private set enabled(value: boolean) {
