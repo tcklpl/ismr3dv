@@ -75,16 +75,12 @@ export class StorageController {
     set(type: StorageType, key: string, value: string) {
         let fullKey = `${type.toString()}-${key}`;
 
-        let oldSize = 0;
-        let alreadyPresent = localStorage.getItem(fullKey);
-        if (alreadyPresent) {
-            oldSize = alreadyPresent.length;
-        }
+        let oldSize = localStorage.getItem(fullKey)?.length ?? 0;
 
         let sizeDiff = value.length - oldSize;
         if (this.totalUsedSizeBytes + sizeDiff > this._maxSizeKb * 1000) return false;
 
-        let currentSize = this._storageUsedByCategory.get(type) as number;
+        let currentSize = this._storageUsedByCategory.get(type) ?? 0;
         this._storageUsedByCategory.set(type, currentSize + sizeDiff);
 
         localStorage.setItem(fullKey, value);
