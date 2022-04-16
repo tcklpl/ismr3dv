@@ -130,6 +130,11 @@ export class Mat4 implements IUniformable {
     }
 
     static xRotation(angle: number): Mat4 {
+        let rad = MUtils.degToRad(angle);
+        return this.xRotationRad(rad);
+    }
+
+    static xRotationRad(angle: number) {
         var c = Math.cos(angle);
         var s = Math.sin(angle);
         return new Mat4([
@@ -141,6 +146,11 @@ export class Mat4 implements IUniformable {
     }
 
     static yRotation(angle: number): Mat4 {
+        let rad = MUtils.degToRad(angle);
+        return this.yRotationRad(rad);
+    }
+
+    static yRotationRad(angle: number): Mat4 {
         var c = Math.cos(angle);
         var s = Math.sin(angle);
         return new Mat4([
@@ -152,6 +162,11 @@ export class Mat4 implements IUniformable {
     }
 
     static zRotation(angle: number): Mat4 {
+        let rad = MUtils.degToRad(angle);
+        return this.zRotationRad(rad);
+    }
+
+    static zRotationRad(angle: number): Mat4 {
         var c = Math.cos(angle);
         var s = Math.sin(angle);
         return new Mat4([

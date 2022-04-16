@@ -2,6 +2,7 @@ import { Vec3 } from "../engine/data_formats/vec/vec3";
 import { Scene } from "../engine/scenes/scene";
 import { MainCamera } from "./camera/main_camera";
 import { EarthRenderableObject } from "./objects/earth";
+import { StationRenderableObject } from "./objects/station";
 import { SunRenderableObject } from "./objects/sun";
 import { Visualizer } from "./visualizer";
 
@@ -12,6 +13,8 @@ export class UniverseScene extends Scene {
     private _earth!: EarthRenderableObject;
     private _sun!: SunRenderableObject;
 
+    private _stations: StationRenderableObject[] = [];
+
     private _mainCamera!: MainCamera;
 
     constructor(name: string) {
@@ -20,7 +23,6 @@ export class UniverseScene extends Scene {
         this._mainCamera = new MainCamera();
 
         this._earth = this._objectManager.summon("earth", EarthRenderableObject);
-        this._earth.rotate(new Vec3(-1, 23.5, 90));
         this.objects.push(this._earth);
 
         this._sun = this._objectManager.summon("sun", SunRenderableObject);
@@ -38,6 +40,16 @@ export class UniverseScene extends Scene {
 
     get mainCamera() {
         return this._mainCamera;
+    }
+
+    get stations() {
+        return this._stations;
+    }
+
+    set stations(s: StationRenderableObject[]) {
+        this.removeObjects(...this._stations);
+        this._stations = s;
+        this.objects.push(...s);
     }
 
 }
