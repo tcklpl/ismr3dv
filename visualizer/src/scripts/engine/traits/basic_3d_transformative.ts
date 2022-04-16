@@ -13,14 +13,21 @@ export class Basic3DTransformative implements IPositionable, IRotatable, IScalab
     private _translationMatrix: Mat4 = Mat4.identity();
     private _rotationMatrix: Mat4 = Mat4.identity();
     private _scaleMatrix: Mat4 = Mat4.identity();
+    private _lookAtMatrix: Mat4 = Mat4.identity();
+
+    private _usingLookAtMatrix: boolean = false;
 
     private _modelMatrix: Mat4 = Mat4.identity();
 
     private buildModelMatrix() {
         this._modelMatrix = Mat4.identity();
+        if (this._usingLookAtMatrix) {
+            this._modelMatrix.multiplyBy(this._lookAtMatrix);
+        } else {
+            this._modelMatrix.multiplyBy(this._translationMatrix);
+            this._modelMatrix.multiplyBy(this._rotationMatrix);
+        }
         this._modelMatrix.multiplyBy(this._scaleMatrix);
-        this._modelMatrix.multiplyBy(this._rotationMatrix);
-        this._modelMatrix.multiplyBy(this._translationMatrix);
     }
 
     setPosition(pos: Vec3): void {
@@ -36,13 +43,21 @@ export class Basic3DTransformative implements IPositionable, IRotatable, IScalab
     }
 
     setRotation(rotation: Vec3): void {
+        this._usingLookAtMatrix = false;
         this._rotation = rotation;
         this.buildRotationMatrix();
     }
 
     rotate(to: Vec3): void {
+        this._usingLookAtMatrix = false;
         this._rotation.add(to);
         this.buildRotationMatrix();
+    }
+
+    lookAt(to: Vec3) {
+        this._usingLookAtMatrix = true;
+        this._lookAtMatrix = Mat4.lookAt(this._translation, to, new Vec3(0, 1, 0));
+        this.buildModelMatrix();
     }
 
     private buildRotationMatrix() {

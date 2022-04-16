@@ -9,6 +9,10 @@ export class Scene {
         this._name = name;
     }
 
+    removeObjects(...objs: RenderableObject[]) {
+        this._objects = this._objects.filter(x => !objs.some(o => o.id == x.id));
+    }
+
     get name() {
         return this._name;
     }

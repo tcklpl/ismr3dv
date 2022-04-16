@@ -6,6 +6,10 @@ export class MUtils {
         return deg * Math.PI / 180;
     }
 
+    static radToDeg(rad: number) {
+        return rad * 180 / Math.PI;
+    }
+
     static clamp(min: number, max: number, value: number) {
         return (value >= max) ? max : ((value <= min) ? min : value);
     }
@@ -19,14 +23,22 @@ export class MUtils {
         return (value - min) / amplitude;
     }
 
-    static latLonToWorld(lat: number, lon: number, alt: number, radius: number) {
-        const f = 0;
-        const ls = Math.atan((1 - f) * (1 - f) * Math.tan(lat));
+    static latLongToUnitSphere(latitudeDeg: number, longitudeDeg: number) {
+        const phi = this.degToRad(90 - latitudeDeg);
+        const theta = this.degToRad(longitudeDeg + 0);
 
-        const x = radius * Math.cos(ls) * Math.cos(lon) + alt * Math.cos(lat) * Math.cos(lon);
-        const y = radius * Math.cos(ls) * Math.sin(lon) + alt * Math.cos(lat) * Math.sin(lon);
-        const z = radius * Math.sin(ls) + alt * Math.sin(lat);
+        const x = -(Math.sin(phi) * Math.cos(theta));
+        const z = Math.sin(phi) * Math.sin(theta);
+        const y = Math.cos(phi);
 
         return new Vec3(x, y, z);
+    }
+
+    static pointToAnglesToOrigin(loc: Vec3, origin: Vec3 = Vec3.fromValue(0)) {
+        const gamma = Math.atan(Math.sqrt( ( (loc.x - origin.x)**2 + (loc.y - origin.y)**2 ) / (loc.z - origin.z) ));
+        const alpha = Math.atan(Math.sqrt( ( (loc.z - origin.z)**2 + (loc.y - origin.y)**2 ) / (loc.x - origin.x) ));
+        const beta = Math.atan(Math.sqrt( ( (loc.x - origin.x)**2 + (loc.z - origin.z)**2 ) / (loc.y - origin.y) ));
+
+        return new Vec3(this.radToDeg(alpha), this.radToDeg(beta), this.radToDeg(gamma));
     }
 }
