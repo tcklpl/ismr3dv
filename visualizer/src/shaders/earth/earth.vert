@@ -25,7 +25,7 @@ void main() {
     vec4 modelCoords = u_model * vec4(a_position, 1.0);
     vec4 viewCoords = u_view * modelCoords;
 
-    vtf_texCoord = vec2(1.0 - a_uv.x, a_uv.y);
+    vtf_texCoord = vec2(a_uv.x, 1.0 - a_uv.y);
     vtf_vertPos_modelSpace = modelCoords;
     vtf_vertPos_cameraSpace = viewCoords;
     mat3 modelView3x3 = mat3(u_view * u_model);
