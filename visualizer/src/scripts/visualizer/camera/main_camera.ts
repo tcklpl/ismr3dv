@@ -16,7 +16,7 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
     private _deltaY: number = 0;
     private _deltaZ: number = 0;
 
-    private _sensibility = 10000;
+    private _sensibility = 50000;
     private _distance = 2;
 
     constructor() {
@@ -46,8 +46,8 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
 
     onMouseMoveOffset(x: number, y: number) {
         if (!Visualizer.instance.pointerLocked) return;
-        this._deltaX = x * this._sensibility;
-        this._deltaZ = y * this._sensibility;
+        this._deltaX = MUtils.clamp(-5, 5, x) * this._sensibility;
+        this._deltaZ = MUtils.clamp(-5, 5, y) * this._sensibility;
     }
 
     onMouseScroll(dy: number) {
