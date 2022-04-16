@@ -30,10 +30,11 @@ export class ISMRSession {
         this._stationList.forEach(s => {
             const instance = this._objectManager.summon("monitoring_station", StationRenderableObject);
             instance.stationId = s.station_id;
+            instance.pickable = true;
 
             const pos = MUtils.latLongToUnitSphere(s.lat_, s.long_);
             instance.setPosition(pos);
-            instance.setScale(Vec3.fromValue(0.2));
+            instance.setScale(Vec3.fromValue(0.3));
             instance.lookAt(Vec3.add(pos, pos));
 
             this._instantiatedStations.push(instance);

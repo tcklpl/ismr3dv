@@ -1,6 +1,7 @@
 import { CameraManager } from "../engine/camera/camera_manager";
 import { ConfigurationManager } from "../engine/config/configuration_manager";
 import { Engine } from "../engine/engine";
+import { InteractionManager } from "../engine/interactions/interaction_manager";
 import { MaterialManager } from "../engine/materials/material_manager";
 import { MeshManager } from "../engine/mesh_manager";
 import { ObjectManager } from "../engine/object_manager";
@@ -39,6 +40,7 @@ export class Visualizer {
     private _sceneManager = new SceneManager();
     private _storageController = new StorageController();
     private _configurationManager = new ConfigurationManager();
+    private _interactionManager!: InteractionManager;
 
     // Api
     private _api = new ISMRAPIConnector();
@@ -54,6 +56,7 @@ export class Visualizer {
     constructor(gl: WebGL2RenderingContext) {
         this._gl = gl;
         Visualizer._instance = this;
+        this._io = new VisualizerIO();
 
         this._configurationManager.loadConfiguration();
         this._configurationManager.saveConfigurations();
@@ -69,10 +72,11 @@ export class Visualizer {
     }
 
     postLoad() {
+        this._interactionManager = new InteractionManager();
+
         this._engine = new Engine();
         this._engine.adjustToWindowSize();
 
-        this._io = new VisualizerIO();
         this._cache = new ISMRCacheHub();
         this._providers = new ISMRProviders();
 
@@ -125,6 +129,10 @@ export class Visualizer {
 
     get storageController() {
         return this._storageController;
+    }
+
+    get interactionManager() {
+        return this._interactionManager;
     }
 
     get engine() {

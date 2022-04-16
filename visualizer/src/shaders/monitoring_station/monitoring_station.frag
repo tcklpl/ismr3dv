@@ -2,8 +2,6 @@
 
 precision highp float;
 
-in vec2 vtf_texCoord;
-
 layout (location = 0) out vec4 out_color;
 layout (location = 1) out vec4 out_bloom;
 
