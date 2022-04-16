@@ -192,7 +192,7 @@ export class Renderer implements IMouseListener {
 
     updatePickingProjectionMatrix(mouseX: number, mouseY: number) {
         const aspect = this._gl.canvas.clientWidth / this._gl.canvas.clientHeight;
-        const top = Math.tan(MUtils.degToRad(this._fovY) * 0.5) * 0.1;
+        const top = Math.tan(MUtils.degToRad(this._fovY) * 0.5) * this._near;
         const bottom = -top;
         const left = aspect * bottom;
         const right = aspect * top;
@@ -200,7 +200,7 @@ export class Renderer implements IMouseListener {
         const height = Math.abs(top - bottom);
 
         const pixelX = mouseX * this._gl.canvas.width / this._gl.canvas.clientWidth;
-        const pixelY = this._gl.canvas.height - mouseY * this._gl.canvas.height / this._gl.canvas.clientHeight - 1;
+        const pixelY = this._gl.canvas.height - mouseY * this._gl.canvas.height / this._gl.canvas.clientHeight - 10;
 
         const subLeft = left + pixelX * width / this._gl.canvas.width;
         const subBottom = bottom + pixelY * height / this._gl.canvas.height;
