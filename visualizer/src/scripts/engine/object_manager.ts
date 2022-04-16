@@ -9,6 +9,8 @@ export class ObjectManager extends GenericManager<IObjectSource> {
 
     private _currentId = 0;
 
+    private _instantiatedObjects: RenderableObject[] = [];
+
     private requestId() {
         return this._currentId++;
     }
@@ -17,7 +19,21 @@ export class ObjectManager extends GenericManager<IObjectSource> {
         let found = this.allRegistered.find(x => x.name == name);
         if (!found) throw `Could not find object '${name}'`;
 
-        return new type(this.requestId(), found.mesh, found.material, found.shader);
+        const ret = new type(this.requestId(), found.mesh, found.material, found.shader);
+        this._instantiatedObjects.push(ret);
+        return ret;
+    }
+
+    searchInstanceById(id: number) {
+        return this._instantiatedObjects.find(x => x.id == id);
+    }
+
+    get allInstantiatedObjects() {
+        return this._instantiatedObjects;
+    }
+
+    get allPiakcableObjects() {
+        return this._instantiatedObjects.filter(x => x.pickable);
     }
 
 }

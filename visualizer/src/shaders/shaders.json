@@ -24,6 +24,11 @@
             "name": "monitoring_station",
             "vertex": "monitoring_station/monitoring_station.vert",
             "fragment": "monitoring_station/monitoring_station.frag"
+        },
+        {
+            "name": "picking",
+            "vertex": "picking/picking.vert",
+            "fragment": "picking/picking.frag"
         }
     ]
 }
