@@ -41,4 +41,16 @@ export class MUtils {
 
         return new Vec3(this.radToDeg(alpha), this.radToDeg(beta), this.radToDeg(gamma));
     }
+
+    static gaussianKernelValueOf(x: number, width: number, center: number = 0, height: number = 1) {
+        return height * Math.exp(-((x - center)**2) / width);
+    }
+
+    static generateGaussianKernel(len: number, width: number, center: number = 0, height: number = 1) {
+        const res: number[] = [];
+        for (let i = 1; i <= len; i++) {
+            res.push(this.gaussianKernelValueOf(i, width, center, height));
+        }
+        return res;
+    }
 }
