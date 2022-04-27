@@ -25,6 +25,13 @@ export class BufferUtils {
         return tempBuf;
     }
 
+    static assertFrameBufferCompletion(gl: WebGL2RenderingContext, msg?: string) {
+        let status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        if (status != gl.FRAMEBUFFER_COMPLETE) {
+            throw `Incomplete framebuffer, aborting...\n${msg}`;
+        }
+    }
+
     static createQuadVAO(gl: WebGL2RenderingContext) {
         const quadCoords = new Float32Array([
             // positions     uvs
