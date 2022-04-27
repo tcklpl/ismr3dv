@@ -1,7 +1,6 @@
-import { UIInfo } from "../ui/ui_info";
 import { Visualizer } from "../visualizer/visualizer";
 import { ImplementationLimitations } from "./limitations";
-import { Renderer } from "./renderer";
+import { Renderer } from "./renderer/renderer";
 import { Time } from "./time";
 import { IFrameListener } from "./traits/i_frame_listener";
 
