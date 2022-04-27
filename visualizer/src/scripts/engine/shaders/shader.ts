@@ -31,11 +31,37 @@ export class Shader {
         });
 
         // get all the uniforms
-        words.filter(x => x.startsWith('u_')).forEach(uniform => {
-            let name = uniform.replace(/[^a-z0-9_]/gi, "");
-            let u = this._gl.getUniformLocation(this._program, name);
-            if (!u) throw `Failed to get uniform '${name}' at shader ${this._name}`;
-            this._uniforms.set(name, u);
+        const uniqueUniformIdentifiers: string[] = [];
+        (vertexSource + '\n' + fragmentSource).split('\n').filter(l => l.startsWith('uniform ')).forEach(uniformDeclarationLine => {
+            const uniformIdentifierMatch = /uniform \w+ (u_\w+)(\[\d+\])?;/gi.exec(uniformDeclarationLine);
+
+            // if no match groups
+            if (!uniformIdentifierMatch || uniformIdentifierMatch.length <= 1) throw `Invalid uniform identifier: '${uniformDeclarationLine}'`;
+
+            const baseName = uniformIdentifierMatch[1];
+            if (!uniqueUniformIdentifiers.includes(baseName)) {
+
+                uniqueUniformIdentifiers.push(baseName);
+                const uniformsToGet: string[] = [];
+
+                // if it's an array (contains the second match group that is '\[\d+\]')
+                if (uniformIdentifierMatch[2]) {
+                    const arrayLength = parseInt(uniformIdentifierMatch[2].replace(/[^\d]/g, ''));
+
+                    for (let i = 0; i < arrayLength; i++) {
+                        uniformsToGet.push(`${baseName}[${i}]`);
+                    }
+                } else {
+                    uniformsToGet.push(baseName);
+                }
+
+                uniformsToGet.forEach(uName => {
+                    const u = this._gl.getUniformLocation(this._program, uName);
+                    if (!u) throw `Failed to get uniform '${uName}' at shader ${this._name}`;
+                    this._uniforms.set(uName, u);
+                });
+
+            }
         });
     }
 
