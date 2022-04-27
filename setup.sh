@@ -59,7 +59,7 @@ setup_env() {
         exit
     fi
 
-    UNESP_API_KEY="NO"
+    UNESP_API_KEY=""
 
     echo -n "[?] What is your UNESP ISMR API key? (leave empty for no key): "
     read user_api_key
