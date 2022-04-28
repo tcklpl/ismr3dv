@@ -20,8 +20,8 @@ export class RenderBloomProvider implements IRenderPostProcessingProvider {
     private _gaussianUniformKernel!: WebGLUniformLocation[];
     private _gaussianUniformKernelSize!: WebGLUniformLocation;
 
-    private _bloomResolutionPasses = [1, 2, 4];
-    private _bloomBoxBlurIntensity = 2;
+    private _bloomResolutionPasses = [2, 3, 4];
+    private _bloomBoxBlurIntensity = 1;
 
     private _bloomCombineShader!: Shader;
     private _bcPass1Uniform!: WebGLUniformLocation;
