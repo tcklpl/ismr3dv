@@ -2,6 +2,7 @@
 .connection-screen {
     z-index: 999;
     background-color: rgb(218, 219, 150);
+    flex-direction: column;
     color: black;
     display: none;
 }
@@ -9,6 +10,7 @@
 .error-screen {
     z-index: 999;
     background-color: rgb(219, 141, 141);
+    flex-direction: column;
     color: black;
     display: none;
 }
