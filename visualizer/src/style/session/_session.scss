@@ -1,0 +1,10 @@
+@import "new_session";
+@import "new_session_progress_bar";
+
+.session-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(233, 233, 233);
+    z-index: 4;
+}

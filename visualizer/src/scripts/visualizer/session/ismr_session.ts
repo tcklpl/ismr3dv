@@ -6,6 +6,7 @@ import { Visualizer } from "../visualizer";
 
 export class ISMRSession {
 
+    private _name: String;
     private _creationDate: Date;
     private _startDate: Date;
     private _endDate: Date;
@@ -15,10 +16,11 @@ export class ISMRSession {
     private _stationList?: IStationInfo[];
     private _instantiatedStations: StationRenderableObject[] = [];
 
-    constructor(startDate: Date, endDate: Date, creationDate?: Date) {
+    constructor(startDate: Date, endDate: Date, name?: String, creationDate?: Date) {
         this._startDate = startDate;
         this._endDate = endDate;
         this._creationDate = creationDate ?? new Date();
+        this._name = name ?? `${this._creationDate?.toDateString()} - ${startDate.toDateString()} to ${endDate.toDateString()}`;
     }
 
     instantiateStationsAs3dObjects() {

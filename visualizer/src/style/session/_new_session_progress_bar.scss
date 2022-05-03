@@ -1,0 +1,84 @@
+#session-steps {
+    margin-bottom: 30px;
+    overflow: hidden;
+    color: lightgray;
+}
+
+#session-steps .active {
+    color: #2F8D46
+}
+
+#session-steps li {
+    list-style-type: none;
+    font-size: 15px;
+    width: 25%;
+    float: left;
+    position: relative;
+    font-weight: 400;
+    text-align: center;
+}
+
+#session-steps li::before {
+    font-family: "bootstrap-icons";
+}
+
+#session-steps #ns-pb-step1:before {
+    content: "\F64E"
+}
+  
+#session-steps #ns-pb-step2:before {
+    content: "\F646"
+}
+  
+#session-steps #ns-pb-step3:before {
+    content: "\F597"
+}
+  
+#session-steps #ns-pb-step4:before {
+    content: "\F633"
+}
+
+#session-steps li::before {
+    width: 50px;
+    height: 50px;
+    line-height: 45px;
+    display: block;
+    font-size: 20px;
+    color: #ffffff;
+    background: lightgray;
+    border-radius: 50%;
+    margin: 0 auto 10px auto;
+    padding: 2px
+}
+
+.session-step::after {
+    content: '';
+    height: 2px;
+    background: lightgray;
+    position: absolute;
+    left: 0;
+    top: 25px;
+    z-index: -1
+}
+
+#session-steps li:not(:first-child):not(:last-child)::after {
+    @extend .session-step, ::after;
+    width: 100%;
+}
+
+#session-steps li:first-child::after {
+    @extend .session-step, ::after;
+    width: 50%;
+    left: 50%;
+}
+
+#session-steps li:last-child::after {
+    @extend .session-step, ::after;
+    width: 50%;
+}
+
+#session-steps li.active:before,
+#session-steps li.active:after {
+    background: #2F8D46 !important;
+    transition: 0.5s ease;
+}
