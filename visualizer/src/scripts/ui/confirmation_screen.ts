@@ -1,4 +1,3 @@
-type bootstrap = (...args: any[]) => any;
 
 export class ConfirmationScreen {
 
