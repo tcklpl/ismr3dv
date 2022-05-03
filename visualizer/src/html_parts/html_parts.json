@@ -9,7 +9,7 @@
             "append_to": "body"
         },
         {
-            "url": "config/config_hud.html",
+            "url": "options_hud.html",
             "append_to": "body"
         },
         {
@@ -39,6 +39,30 @@
         {
             "url": "confirmation_screen.html",
             "append_to": "body"
+        },
+        {
+            "url": "message_screen.html",
+            "append_to": "body"
+        },
+        {
+            "url": "session/session_screen.html",
+            "append_to": "body"
+        },
+        {
+            "url": "session/new_session_options.html",
+            "append_to": "#session-screen-tabs"
+        },
+        {
+            "url": "session/new_session_name.html",
+            "append_to": "#session-screen-tabs"
+        },
+        {
+            "url": "session/new_session_date.html",
+            "append_to": "#session-screen-tabs"
+        },
+        {
+            "url": "session/new_session_finish.html",
+            "append_to": "#session-screen-tabs"
         }
     ]
 }

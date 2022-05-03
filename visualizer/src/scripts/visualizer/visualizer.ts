@@ -84,9 +84,7 @@ export class Visualizer {
         this._cameraManager.setActiveCamera(this._universeScene.mainCamera);
         this._sceneManager.active = this._universeScene;
 
-        this.ui.timeline.registerEvents();
-        this.ui.config.registerEvents();
-        this.ui.info.update();
+        this.ui.registerEvents();
 
         requestAnimationFrame(t => this._engine.render(t));
     }
