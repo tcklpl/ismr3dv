@@ -3,24 +3,32 @@ import { MUtils } from "../../engine/utils/math_utils";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { StationRenderableObject } from "../objects/station";
 import { Visualizer } from "../visualizer";
+import { ISessionConfig } from "./i_session.config";
+import { ISessionSave } from "./i_session_save";
 
 export class ISMRSession {
 
-    private _name: String;
+    private _name: string;
     private _creationDate: Date;
     private _startDate: Date;
     private _endDate: Date;
+
+    private _config: ISessionConfig = {
+        save_on_browser: true,
+        auto_save: true,
+        auto_save_interval_minutes: 5
+    };
 
     private _objectManager = Visualizer.instance.objectManager;
 
     private _stationList?: IStationInfo[];
     private _instantiatedStations: StationRenderableObject[] = [];
 
-    constructor(startDate: Date, endDate: Date, name?: String, creationDate?: Date) {
+    constructor(startDate: Date, endDate: Date, name?: string, creationDate?: Date) {
         this._startDate = startDate;
         this._endDate = endDate;
         this._creationDate = creationDate ?? new Date();
-        this._name = name ?? `${this._creationDate?.toDateString()} - ${startDate.toDateString()} to ${endDate.toDateString()}`;
+        this._name = name && name.length > 0 ? name : `${this._creationDate?.toDateString()} - ${startDate.toDateString()} to ${endDate.toDateString()}`;
     }
 
     instantiateStationsAs3dObjects() {
@@ -45,6 +53,14 @@ export class ISMRSession {
         Visualizer.instance.universeScene.stations = this._instantiatedStations;
     }
 
+    get name() {
+        return this._name;
+    }
+
+    get config() {
+        return this._config;
+    }
+
     get startDate() {
         return this._startDate;
     }
@@ -60,6 +76,18 @@ export class ISMRSession {
     set stations(s: IStationInfo[] | undefined) {
         this._stationList = s;
         this.instantiateStationsAs3dObjects();
+    }
+
+    get asSerializable() {
+        return <ISessionSave> {
+            name: this._name,
+            creation_date: this._creationDate,
+            start_date: this._startDate,
+            end_date: this._endDate,
+            config: this.config,
+
+            station_list: this._stationList
+        };
     }
 
 }
