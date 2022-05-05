@@ -4,25 +4,30 @@
         <hr>
         <h3>Options:</h3>
 
-        <div class="row" style="width: 100%;">
+        <div class="row" style="width: 100%; margin-bottom: 0.5em;">
             <span class="col-8">Save session locally on browser</span>
             <div class="col-4">
                 <label class="switch float-end">
-                    <input type="checkbox" checked>
+                    <input type="checkbox" checked id="ns-finish-save-on-browser">
                     <span class="slider round"></span>
                 </label>
             </div>
         </div>
 
-        <br>
-
-        <div class="row" style="width: 100%;">
+        <div class="row" style="width: 100%; margin-bottom: 0.5em;">
             <span class="col-8">Auto-Save</span>
             <div class="col-4">
                 <label class="switch float-end">
-                    <input type="checkbox" checked>
+                    <input type="checkbox" checked id="ns-finish-autosave">
                     <span class="slider round"></span>
                 </label>
+            </div>
+        </div>
+
+        <div class="row" style="width: 100%; margin-bottom: 0.5em;">
+            <span class="col-8">Auto-Save Interval (minutes)</span>
+            <div class="col-4">
+                <input type="number" class="form-control" id="ns-finish-autosave-interval" value="5" min="1">
             </div>
         </div>
         

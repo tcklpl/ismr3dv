@@ -3,8 +3,6 @@ import { ISMRSession } from "../visualizer/session/ismr_session";
 import { Visualizer } from "../visualizer/visualizer";
 import { MessageScreen } from "./message_screen";
 
-declare const bootstrap: any;
-
 export class UISession {
 
     private _serverInfo!: IServerInfo;
@@ -30,6 +28,9 @@ export class UISession {
     private _dateShowcaseFinishBtn!: JQuery<HTMLElement>;
 
     private _finishPanel!: JQuery<HTMLElement>;
+    private _finishSaveLocally!: JQuery<HTMLElement>;
+    private _finishAutosave!: JQuery<HTMLElement>;
+    private _finishAutosaveInterval!: JQuery<HTMLElement>;
 
     private newScreenChangeHovered(newSelected?: JQuery<HTMLElement>) {
         this._initialPanel.children().removeClass('text-primary').addClass('text-secondary');
@@ -72,6 +73,9 @@ export class UISession {
         this._dateShowcaseFinishBtn = $('#ns-date-showcase-btn');
 
         this._finishPanel = $('#ns-finish-panel');
+        this._finishSaveLocally = $('#ns-finish-save-on-browser');
+        this._finishAutosave = $('#ns-finish-autosave');
+        this._finishAutosaveInterval = $('#ns-finish-autosave-interval');
 
         this._newFromApi.on('mouseover', () => this.newScreenChangeHovered(this._newFromApi)).on('click', () => this.newSessionFromAPI());
         this._newFromFile.on('mouseover', () => this.newScreenChangeHovered(this._newFromFile)).on('click', () => this.newSessionLoadFromFile());
@@ -83,9 +87,30 @@ export class UISession {
         this._dateFinishBtn.on('click', () => this.fetchStationList());
         this._dateShowcaseFinishBtn.on('click', () => this.fetchStationList());
 
+        this._finishSaveLocally.on('click', () => {
+            if (Visualizer.instance.session) Visualizer.instance.session.config.save_on_browser = this._finishSaveLocally.prop('checked');
+        });
+        this._finishAutosave.on('click', () => {
+            if (Visualizer.instance.session) Visualizer.instance.session.config.auto_save = this._finishAutosave.prop('checked');
+        });
+        this._finishAutosaveInterval.on('change', () => {
+            if (Visualizer.instance.session) Visualizer.instance.session.config.auto_save_interval_minutes = this._finishAutosaveInterval.val() as number;
+        });
+
         if (this._serverInfo.showcase_mode) {
             this.switchDatePanelTab(this._datePanelTabShowcase);
         }
+    }
+
+    resetUI() {
+        this.setActivePanel(this._initialPanel);
+        this.setProgressBarCompletion(1);
+        this._nameField.val('');
+        this._dateStart.val('');
+        this._dateEnd.val('');
+        this._finishSaveLocally.prop('checked', true);
+        this._finishAutosave.prop('checked', true);
+        this._finishAutosaveInterval.val(5);
     }
 
     private newSessionFromAPI() {
@@ -138,10 +163,11 @@ export class UISession {
         Visualizer.instance.api.fetchStations(startDate, endDate)
             .then(list => {
                 if (list.length > 0) {
-                    const session = new ISMRSession(startDate, endDate, this._nameField.val() as string | undefined);
+                    const session = new ISMRSession(startDate, endDate, this._nameField.val() as string);
                     session.stations = list;
                     this.showFinalPanel();
-                    console.log(JSON.stringify(session));
+                    Visualizer.instance.session = session;
+                    Visualizer.instance.ui.optionsHud.setSessionRelatedButtonsEnabled(true);
                 } else {
                     new MessageScreen('Error', 'No available stations were found on the provided time interval');
                     this.switchDatePanelTab(this._serverInfo.showcase_mode ? this._datePanelTabShowcase : this._datePanelTabSelectors);
