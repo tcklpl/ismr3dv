@@ -54,12 +54,12 @@ export class RenderPickProvider implements IRenderProvider {
         const height = Math.abs(top - bottom);
 
         const pixelX = mouseX * this._gl.canvas.width / this._gl.canvas.clientWidth;
-        const pixelY = this._gl.canvas.height - mouseY * this._gl.canvas.height / this._gl.canvas.clientHeight - 10;
+        const pixelY = this._gl.canvas.height - mouseY * this._gl.canvas.height / this._gl.canvas.clientHeight - 1;
 
         const subLeft = left + pixelX * width / this._gl.canvas.width;
         const subBottom = bottom + pixelY * height / this._gl.canvas.height;
-        const subWidth = 1 / this._gl.canvas.width;
-        const subHeight = 1 / this._gl.canvas.height;
+        const subWidth = width / this._gl.canvas.width;
+        const subHeight = height / this._gl.canvas.height;
 
         this._pickingProjectionMat4 = Mat4.frustum(subLeft, subLeft + subWidth, subBottom, subBottom + subHeight, near, far);
     }
