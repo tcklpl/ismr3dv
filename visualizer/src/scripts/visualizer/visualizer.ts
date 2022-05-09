@@ -7,6 +7,7 @@ import { MeshManager } from "../engine/mesh_manager";
 import { ObjectManager } from "../engine/object_manager";
 import { SceneManager } from "../engine/scenes/scene_manager";
 import { ShaderManager } from "../engine/shaders/shader_manager";
+import { IDBManager } from "../indexeddb/idb_manager";
 import { Loader } from "../loader/loader";
 import { StorageController } from "../local_storage/storage_controller";
 import { UI } from "../ui/ui";
@@ -30,6 +31,7 @@ export class Visualizer {
     private _io!: VisualizerIO;
     private _ui = new UI();
     private _cache!: ISMRCacheHub;
+    private _idb = new IDBManager();
 
     // Managers
     private _materialManager = new MaterialManager();
@@ -167,6 +169,10 @@ export class Visualizer {
 
     get cache() {
         return this._cache;
+    }
+
+    get idb() {
+        return this._idb;
     }
 
     get providers() {
