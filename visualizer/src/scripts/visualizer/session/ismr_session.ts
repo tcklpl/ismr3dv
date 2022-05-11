@@ -1,5 +1,6 @@
 import { Vec3 } from "../../engine/data_formats/vec/vec3";
 import { MUtils } from "../../engine/utils/math_utils";
+import { CustomAlert } from "../../ui/custom_alert";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { StationRenderableObject } from "../objects/station";
 import { Visualizer } from "../visualizer";
@@ -13,11 +14,14 @@ export class ISMRSession {
     private _startDate: Date;
     private _endDate: Date;
 
+    private _controller = Visualizer.instance.idb.sessionController;
+
     private _config: ISessionConfig = {
         save_on_browser: true,
         auto_save: true,
         auto_save_interval_minutes: 5
     };
+    private _autoSaveTask: number = -1;
 
     private _objectManager = Visualizer.instance.objectManager;
 
@@ -51,6 +55,34 @@ export class ISMRSession {
         });
 
         Visualizer.instance.universeScene.stations = this._instantiatedStations;
+    }
+
+    autoSave() {
+        if (!this._config.save_on_browser) return;
+        this._autoSaveTask = setTimeout(() => {
+            this._autoSaveTask = -1;
+            this.save();
+            this.autoSave();
+        }, this._config.auto_save_interval_minutes * 60 * 1000);
+    }
+
+    save() {
+        if (!this._config.save_on_browser) return;
+
+        // check if an auto save task is currently running
+        if (this._autoSaveTask >= 0) {
+            clearTimeout(this._autoSaveTask);
+            this._autoSaveTask = -1;
+            this.autoSave();
+        }
+
+        this._controller.put(this.asSerializable)
+        .then(() => {
+            new CustomAlert('success', 'Session saved!', 1);
+        })
+        .catch(() => {
+            new CustomAlert('danger', 'Failed to save the session', 5);
+        });
     }
 
     get name() {

@@ -42,7 +42,7 @@ export class UIOptionsHud {
     }
 
     private saveSession() {
-        alert('Not yet implemented');
+        Visualizer.instance.session?.save();
     }
 
     private exportSession() {
