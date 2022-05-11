@@ -27,7 +27,7 @@ export class Renderer implements IMouseListener {
         far: 100,
         width: 1920,
         height: 1080,
-        fovY: 45
+        fovY: 60
     };
 
     private _quadVAO!: WebGLVertexArrayObject;
