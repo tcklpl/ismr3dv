@@ -10,14 +10,14 @@ export class IDBConnection {
             this._db = openreq.result;
             this.setupDB();
         }
-        openreq.onerror = () => this.onDBFail();
+        openreq.onerror = () => this.onDBFail(openreq.error);
         openreq.onsuccess = () => {
             this._db = openreq.result;
         }
     }
 
-    private onDBFail() {
-        throw `Failed to create indexed DB, do your browser support it?`;
+    private onDBFail(exp: DOMException | null) {
+        throw `Failed to create indexed DB, do your browser support it? ${exp?.code} : ${exp?.name} : ${exp?.stack}`;
     }
 
     private setupDB() {
