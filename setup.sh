@@ -6,13 +6,6 @@ then
     exit
 fi
 
-if ! command -v tsc > /dev/null
-then
-    echo "[!] No Typescript compiler was found, please install it using:"
-    echo "    sudo npm i -g typescript"
-    exit
-fi
-
 if ! command -v sed > /dev/null
 then
     echo "[!] sed was not found, please install it or correct your path."
