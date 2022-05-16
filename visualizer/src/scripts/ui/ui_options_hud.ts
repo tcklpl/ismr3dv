@@ -36,7 +36,7 @@ export class UIOptionsHud {
     }
 
     setSessionRelatedButtonsEnabled(state: boolean) {
-        this._saveSessionBtn.prop('disabled', !state);
+        this._saveSessionBtn.prop('disabled', !state || !Visualizer.instance.idb.isAvailable);
         this._exportSessionBtn.prop('disabled', !state);
         this._timelineBtn.prop('disabled', !state);
     }
