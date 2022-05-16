@@ -8,6 +8,8 @@ export class Mesh {
 
     private _name: string;
     private _vertices: Vertex[] = [];
+    private _filteredVertices: Vertex[] = [];
+    private _centroid: Vec3;
 
     private gl = Visualizer.instance.gl;
 
@@ -69,18 +71,17 @@ export class Mesh {
         }
 
         const filteredIndices: number[] = [];
-        const filteredVertexList: Vertex[] = [];
 
         this._vertices.forEach(v => {
-            let index = filteredVertexList.findIndex(x => x.equals(v));
+            let index = this._filteredVertices.findIndex(x => x.equals(v));
             // if not found, isnert on list
             if (index == -1) {
-                filteredVertexList.push(v);
-                index = filteredVertexList.length - 1;
+                this._filteredVertices.push(v);
+                index = this._filteredVertices.length - 1;
             } else {
                 // otherwise, average the tangents
-                filteredVertexList[index].tangent.add(v.tangent);
-                filteredVertexList[index].bitangent.add(v.bitangent);
+                this._filteredVertices[index].tangent.add(v.tangent);
+                this._filteredVertices[index].bitangent.add(v.bitangent);
             }
             filteredIndices.push(index);
         });
@@ -88,27 +89,27 @@ export class Mesh {
         // vertex position buffer
         this._bufPositions = BufferUtils.createBuffer(this.gl);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufPositions);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(filteredVertexList.flatMap(v => v.position.values)), this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.position.values)), this.gl.STATIC_DRAW);
 
         // vertex uv buffer
         this._bufUVs = BufferUtils.createBuffer(this.gl);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufUVs);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(filteredVertexList.flatMap(v => v.uv.values)), this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.uv.values)), this.gl.STATIC_DRAW);
 
         // vertex normal buffer
         this._bufNormals = BufferUtils.createBuffer(this.gl);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufNormals);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(filteredVertexList.flatMap(v => v.normal.values)), this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.normal.values)), this.gl.STATIC_DRAW);
 
         // create tangent buffer
         this._bufTangents = BufferUtils.createBuffer(this.gl);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufTangents);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(filteredVertexList.flatMap(t => t.tangent.values)), this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(t => t.tangent.values)), this.gl.STATIC_DRAW);
 
         // create bitangent buffer
         this._bufBitangents = BufferUtils.createBuffer(this.gl);
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this._bufBitangents);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(filteredVertexList.flatMap(t => t.bitangent.values)), this.gl.STATIC_DRAW);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(t => t.bitangent.values)), this.gl.STATIC_DRAW);
 
         // create VAO
         this._vao = BufferUtils.createVAO(this.gl);
@@ -145,10 +146,17 @@ export class Mesh {
         this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(filteredIndices), this.gl.STATIC_DRAW);
 
         this._indicesSize = filteredIndices.length;
+
+        // calculate centroid
+        this._centroid = Vec3.centroid(this._filteredVertices.map(x => x.position));
     }
 
-    public get name() {
+    get name() {
         return this._name;
+    }
+
+    get centroid() {
+        return this._centroid;
     }
 
     bindVAO() {

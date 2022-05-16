@@ -79,7 +79,7 @@ export class Vec3 extends Vec2 {
     }
 
     static centroid(v: Vec3[]): Vec3 {
-        let accumulated = v.reduce((accumulated, current) => Vec3.add(accumulated, current));
+        let accumulated = v.reduce((accumulated, current) => Vec3.add(accumulated, current), Vec3.fromValue(0));
         accumulated.divide(v.length);
         return accumulated;
     }
