@@ -5,17 +5,12 @@ import { MessageScreen } from "./message_screen";
 
 export class UIOptionsHud {
 
-    private _saveSessionBtn!: JQuery<HTMLElement>;
-    private _exportSessionBtn!: JQuery<HTMLElement>;
-    private _timelineBtn!: JQuery<HTMLElement>;
-    private _newSessionBtn!: JQuery<HTMLElement>;
+    private _saveSessionBtn = $('#cfg-save-btn');
+    private _exportSessionBtn = $('#cfg-export-btn');
+    private _timelineBtn = $('#cfg-timeline-btn');
+    private _newSessionBtn = $('#cfg-session-btn');
 
     registerEvents() {
-        this._saveSessionBtn = $('#cfg-save-btn');
-        this._exportSessionBtn = $('#cfg-export-btn');
-        this._timelineBtn = $('#cfg-timeline-btn');
-        this._newSessionBtn = $('#cfg-session-btn');
-
         this._saveSessionBtn.on('click', () => this.saveSession());
         this._exportSessionBtn.on('click', () => this.exportSession());
 

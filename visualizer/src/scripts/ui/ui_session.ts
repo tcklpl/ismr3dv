@@ -9,38 +9,38 @@ export class UISession {
 
     private _serverInfo!: IServerInfo;
 
-    private _tabsContainer!: JQuery<HTMLElement>;
-    private _cancelBtn!: JQuery<HTMLElement>;
+    private _tabsContainer = $('#session-screen-tabs');
+    private _cancelBtn = $('#ns-cancel-btn');
 
-    private _initialPanel!: JQuery<HTMLElement>;
-    private _newFromApi!: JQuery<HTMLElement>;
-    private _newFromFile!: JQuery<HTMLElement>;
-    private _newCustom!: JQuery<HTMLElement>;
+    private _initialPanel = $('#ns-initial-panel');
+    private _newFromApi = $('#ns-new');
+    private _newFromFile = $('#ns-load');
+    private _newCustom = $('#ns-custom');
 
-    private _namePanel!: JQuery<HTMLElement>;
-    private _nameField!: JQuery<HTMLElement>;
-    private _nameFinishBtn!: JQuery<HTMLElement>;
+    private _namePanel = $('#ns-name-panel');
+    private _nameField = $('#ns-session-name');
+    private _nameFinishBtn = $('#ns-btn-name-ok');
 
-    private _datePanel!: JQuery<HTMLElement>;
-    private _datePanelTabSelectors!: JQuery<HTMLElement>;
-    private _datePanelTabShowcase!: JQuery<HTMLElement>;
-    private _datePanelTabLoading!: JQuery<HTMLElement>;
-    private _dateStart!: JQuery<HTMLElement>;
-    private _dateEnd!: JQuery<HTMLElement>;
-    private _dateFinishBtn!: JQuery<HTMLElement>;
-    private _dateShowcaseFinishBtn!: JQuery<HTMLElement>;
+    private _datePanel = $('#ns-date-panel');
+    private _datePanelTabSelectors = $('#ns-date-normal-selector');
+    private _datePanelTabShowcase = $('#ns-date-showcase');
+    private _datePanelTabLoading = $('#ns-date-spinner');
+    private _dateStart = $('#ns-date-start');
+    private _dateEnd = $('#ns-date-end');
+    private _dateFinishBtn = $('#ns-date-finish-btn');
+    private _dateShowcaseFinishBtn = $('#ns-date-showcase-btn');
 
-    private _finishPanel!: JQuery<HTMLElement>;
-    private _finishSaveLocally!: JQuery<HTMLElement>;
-    private _finishAutosave!: JQuery<HTMLElement>;
-    private _finishAutosaveInterval!: JQuery<HTMLElement>;
-    private _finishFinalButton!: JQuery<HTMLElement>;
-    private _finishNoIDBLabel!: JQuery<HTMLElement>;
+    private _finishPanel = $('#ns-finish-panel');
+    private _finishSaveLocally = $('#ns-finish-save-on-browser');
+    private _finishAutosave = $('#ns-finish-autosave');
+    private _finishAutosaveInterval = $('#ns-finish-autosave-interval');
+    private _finishFinalButton = $('#ns-btn-return-to-visualizer');
+    private _finishNoIDBLabel = $('#ns-finish-no-idb');
 
-    private _loadPanel!: JQuery<HTMLElement>;
-    private _loadIDBError!: JQuery<HTMLElement>;
-    private _loadEmpty!: JQuery<HTMLElement>;
-    private _loadStationList!: JQuery<HTMLElement>;
+    private _loadPanel = $('#ns-load-panel');
+    private _loadIDBError = $('#ns-load-idb-error');
+    private _loadEmpty = $('#ns-load-empty');
+    private _loadStationList = $('#ns-load-station-list');
 
     private newScreenChangeHovered(newSelected?: JQuery<HTMLElement>) {
         this._initialPanel.children().removeClass('text-primary').addClass('text-secondary');
@@ -61,39 +61,6 @@ export class UISession {
 
     registerEvents() {
         this._serverInfo = Visualizer.instance.serverInfo;
-
-        this._tabsContainer = $('#session-screen-tabs');
-        this._cancelBtn = $('#ns-cancel-btn');
-
-        this._initialPanel = $('#ns-initial-panel');
-        this._newFromApi = $('#ns-new');
-        this._newFromFile = $('#ns-load');
-        this._newCustom = $('#ns-custom');
-
-        this._namePanel = $('#ns-name-panel');
-        this._nameField = $('#ns-session-name');
-        this._nameFinishBtn = $('#ns-btn-name-ok');
-
-        this._datePanel = $('#ns-date-panel');
-        this._datePanelTabSelectors = $('#ns-date-normal-selector');
-        this._datePanelTabShowcase = $('#ns-date-msg-showcase');
-        this._datePanelTabLoading = $('#ns-date-spinner');
-        this._dateStart = $('#ns-date-start');
-        this._dateEnd = $('#ns-date-end');
-        this._dateFinishBtn = $('#ns-date-finish-btn');
-        this._dateShowcaseFinishBtn = $('#ns-date-showcase-btn');
-
-        this._finishPanel = $('#ns-finish-panel');
-        this._finishSaveLocally = $('#ns-finish-save-on-browser');
-        this._finishAutosave = $('#ns-finish-autosave');
-        this._finishAutosaveInterval = $('#ns-finish-autosave-interval');
-        this._finishFinalButton = $('#ns-btn-return-to-visualizer');
-        this._finishNoIDBLabel = $('#ns-finish-no-idb');
-
-        this._loadPanel = $('#ns-load-panel');
-        this._loadIDBError = $('#ns-load-idb-error');
-        this._loadEmpty = $('#ns-load-empty');
-        this._loadStationList = $('#ns-load-station-list');
 
         this._cancelBtn.on('click', () => this.cancel());
 
@@ -118,10 +85,6 @@ export class UISession {
         });
 
         this._finishFinalButton.on('click', () => Visualizer.instance.session?.save());
-
-        if (this._serverInfo.showcase_mode) {
-            this.switchDatePanelTab(this._datePanelTabShowcase);
-        }
     }
 
     resetUI() {
