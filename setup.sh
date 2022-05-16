@@ -13,12 +13,6 @@ then
     exit
 fi
 
-if ! command -v rsync > /dev/null
-then
-    echo "[!] rsync was not found, please install it or correct your path."
-    exit
-fi
-
 if ! command -v sed > /dev/null
 then
     echo "[!] sed was not found, please install it or correct your path."

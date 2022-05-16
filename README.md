@@ -13,6 +13,7 @@ To build the project you'll need the following dependencies:
 * Typescript Compiler (TSC, I'm using 4.6.3)
 * SCSS (SASS Compiler Implementation, I'm using Ruby Sass 3.7.4)
 * Python 3 (I'm using 3.8.10)
+* PIP3 (python3-pip, I'm using 20.0.2)
 
 ## Script
 
@@ -46,7 +47,6 @@ $ cd visualizer
 $ npm install
 $ npm run compile
 ```
-> The visualizer compile script uses `rsync` to copy the source files to the `out` dir. If you don't have acess to `rsync` you can use something similar or just manually copy the files to the destination. `rsync` copies all files that are not `html` or `ts`, that means: images, css, shaders sources and so on.
 
 After this you can run the project with
 ```
