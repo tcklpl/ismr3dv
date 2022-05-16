@@ -63,6 +63,10 @@
         {
             "url": "session/new_session_finish.html",
             "append_to": "#session-screen-tabs"
+        },
+        {
+            "url": "session/load_session.html",
+            "append_to": "#session-screen-tabs"
         }
     ]
 }
