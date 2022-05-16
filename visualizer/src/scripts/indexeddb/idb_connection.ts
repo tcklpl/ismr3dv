@@ -3,6 +3,7 @@ export class IDBConnection {
 
     private _dbName = "ismr";
     private _db!: IDBDatabase;
+    private _avaialble = false;
 
     constructor() {
         const openreq = indexedDB.open(this._dbName, 1);
@@ -13,6 +14,7 @@ export class IDBConnection {
         openreq.onerror = () => this.onDBFail(openreq.error);
         openreq.onsuccess = () => {
             this._db = openreq.result;
+            this._avaialble = true;
         }
     }
 
@@ -26,5 +28,9 @@ export class IDBConnection {
 
     get db() {
         return this._db;
+    }
+
+    get available() {
+        return this._avaialble;
     }
 }
