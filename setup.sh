@@ -27,13 +27,19 @@ fi
 
 if ! command -v scss > /dev/null
 then
-    echo "[!] scss was not found, please install it or correct your path."
+    echo "[!] scss (sass) was not found, please install it or correct your path."
     exit
 fi
 
 if ! command -v python3 > /dev/null
 then
     echo "[!] Python 3 was not found, please install it or correct your path."
+    exit
+fi
+
+if ! command -v pip3 > /dev/null
+then
+    echo "[!] pip3 (python3-pip) was not found, please install it or correct your path."
     exit
 fi
 
@@ -89,7 +95,8 @@ setup_npm() {
     echo "[-] Setting up visualizer..."
     cd visualizer
     npm install
-    python3 -m pip install -r helpers/requirements.txt
+    pip3 install -r helpers/requirements.txt
+    mkdir out
     npm run compile
     cd ..
 
