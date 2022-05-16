@@ -12,6 +12,10 @@ export class IDBManager {
         this._idbSessionController = new IDBSessionController(this._idbConnection);
     }
 
+    get isAvailable() {
+        return this._idbConnection.available;
+    }
+
     get connection() {
         return this._idbConnection;
     }
