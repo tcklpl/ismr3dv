@@ -24,4 +24,8 @@ export class InteractionManager {
         if ((newObj as any).onMouseHover) (newObj as any).onMouseHover();
     }
 
+    get isHoveringOverASelectable() {
+        return this._currentId > 0;
+    }
+
 }
