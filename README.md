@@ -6,9 +6,17 @@ The project contains 2 folders: `server` and `visualizer`. `visualizer` is the a
 
 # Compiling and Running
 
+## Dependencies
+To build the project you'll need the following dependencies:
+* NodeJS (I'm using 16.13.2)
+* NPM (I'm using 8.5.0)
+* Typescript Compiler (TSC, I'm using 4.6.3)
+* SCSS (SASS Compiler Implementation, I'm using Ruby Sass 3.7.4)
+* Python 3 (I'm using 3.8.10)
+
 ## Script
 
-There is an automated script to setup the project, you can run it using
+There is an automated script to setup the project, the script will automatically check the dependencies, install the prerequisites, setup and compile the project. You can run it using
 ```
 $ ./setup.sh
 ```
@@ -24,12 +32,18 @@ You can compile the server and the visualizer on any order you like.
 To compile the server:
 ```
 $ cd server
+$ npm install
 $ npm run compile
 ```
 
-To compile the visualizer:
+To compile the visualizer, first make sure that you have the required python dependencies:
+```
+$ python3 -m pip install -r visualizer/helpers/requirements.txt
+```
+Now you can compile the visualizer pretty much the same was as the server:
 ```
 $ cd visualizer
+$ npm install
 $ npm run compile
 ```
 > The visualizer compile script uses `rsync` to copy the source files to the `out` dir. If you don't have acess to `rsync` you can use something similar or just manually copy the files to the destination. `rsync` copies all files that are not `html` or `ts`, that means: images, css, shaders sources and so on.

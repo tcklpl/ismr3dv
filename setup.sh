@@ -31,6 +31,12 @@ then
     exit
 fi
 
+if ! command -v python3 > /dev/null
+then
+    echo "[!] Python 3 was not found, please install it or correct your path."
+    exit
+fi
+
 help() {
     echo "ISMR3DV Setup utility."
     echo
@@ -83,6 +89,7 @@ setup_npm() {
     echo "[-] Setting up visualizer..."
     cd visualizer
     npm install
+    python3 -m pip install -r helpers/requirements.txt
     npm run compile
     cd ..
 
