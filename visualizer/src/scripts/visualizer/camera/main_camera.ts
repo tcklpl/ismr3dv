@@ -1,5 +1,6 @@
 import { Camera } from "../../engine/camera/camera";
 import { Mat4 } from "../../engine/data_formats/mat/mat4";
+import { Vec2 } from "../../engine/data_formats/vec/vec2";
 import { Vec3 } from "../../engine/data_formats/vec/vec3";
 import { Time } from "../../engine/time";
 import { IFrameListener } from "../../engine/traits/i_frame_listener";
@@ -18,6 +19,7 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
 
     private _sensibility = 50000;
     private _distance = 2;
+    private _distanceBounds = new Vec2(1.2, 5);
 
     constructor() {
         super(new Vec3(-2, 0, 0), new Vec3(0, 1, 0));
@@ -29,7 +31,7 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
     update(): void {
         if (this._deltaX != 0 || this._deltaY != 0 || this._deltaZ != 0) {
             if (this._deltaX != 0) this._currentRotationX = this._currentRotationX + (this._deltaX * Time.deltaTime);
-            if (this._deltaY != 0) this._distance = MUtils.clamp(2, 5, this._distance + this._deltaY * Time.deltaTime);
+            if (this._deltaY != 0) this._distance = MUtils.clamp(this._distanceBounds.x, this._distanceBounds.y, this._distance + this._deltaY * Time.deltaTime);
             if (this._deltaZ != 0) this._currentRotationZ = this._currentRotationZ + (this._deltaZ * Time.deltaTime);
 
             this.generateCameraMatrix();
@@ -52,7 +54,7 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
 
     onMouseScroll(dy: number) {
         if (!Visualizer.instance.pointerLocked) return;
-        this._deltaY = dy * 0.05;
+        this._deltaY = dy * 0.005;
     }
 
     onMouseScrollStop() {
