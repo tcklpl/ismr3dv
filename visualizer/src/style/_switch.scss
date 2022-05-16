@@ -46,6 +46,14 @@ input:checked + .slider::before {
     transform: translateX(26px);
 }
 
+input:disabled + .slider {
+    background-color: #ccc !important;
+}
+
+input:disabled + .slider::before {
+    transform: translateX(0) !important;
+}
+
 .slider.round {
     border-radius: 34px;
 }
