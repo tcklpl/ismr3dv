@@ -80,6 +80,9 @@ setup_env() {
 }
 
 setup_npm() {
+    echo "[-] Setting up tools..."
+    pip3 install -r tools/requirements.txt
+
     echo "[-] Setting up server..."
     cd server
     npm install
@@ -89,7 +92,6 @@ setup_npm() {
     echo "[-] Setting up visualizer..."
     cd visualizer
     npm install
-    pip3 install -r helpers/requirements.txt
     mkdir out
     npm run compile
     cd ..

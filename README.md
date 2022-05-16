@@ -26,9 +26,7 @@ $ ./setup.sh
 ## Manually
 
 First you'll need to configure the enviroment for the server, the model can be found at `./.env.model`. You'll need to copy this file to `./.env` and configure what is needed.
-
 You can compile the server and the visualizer on any order you like.
-> Before compiling, make sure that all required packages are installed for each project. If you just downloaded it you can install them with `npm install` on each project.
 
 To compile the server:
 ```
@@ -39,7 +37,7 @@ $ npm run compile
 
 To compile the visualizer, first make sure that you have the required python dependencies:
 ```
-$ python3 -m pip install -r visualizer/helpers/requirements.txt
+$ python3 -m pip install -r tools/requirements.txt
 ```
 Now you can compile the visualizer pretty much the same was as the server:
 ```
