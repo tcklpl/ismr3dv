@@ -122,4 +122,11 @@ export class ISMRSession {
         };
     }
 
+    static constructFromSave(save: ISessionSave) {
+        const session = new ISMRSession(save.start_date, save.end_date, save.name, save.creation_date);
+        session._config = save.config;
+        session.stations = save.station_list;
+        return session;
+    }
+
 }
