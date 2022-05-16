@@ -4,10 +4,11 @@
   "description": "ismr 3d visualizer",
   "main": "index.js",
   "scripts": {
-    "minify-html": "npx html-minifier --collapse-whitespace --remove-comments --input-dir ./src/ --output-dir ./out/ --file-ext html",
+    "join-html": "python3 helpers/join_html_files.py src/html_parts/html_parts.json src/html_parts src/index.html out/html_joined.html",
+    "minify-html": "npx html-minifier --collapse-whitespace --remove-comments out/html_joined.html -o out/index.html",
     "compile-scss": "scss --no-cache --update src/style:out/style/",
     "sync-others": "rsync -a --exclude '*.html' --exclude '*.ts' --exclude '*.scss' --prune-empty-dirs src/ out/",
-    "compile": "npm run minify-html && tsc && npm run sync-others && npm run compile-scss",
+    "compile": "npm run join-html && npm run minify-html && tsc && npm run sync-others && npm run compile-scss",
     "clean": "rm -r ./out/*"
   },
   "author": "",
