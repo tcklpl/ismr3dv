@@ -98,4 +98,7 @@ export abstract class RenderableObject extends Basic3DTransformative implements 
         this._pickable = p;
     }
 
+    get mesh() {
+        return this._mesh;
+    }
 }

@@ -43,7 +43,7 @@ export class ISMRSession {
 
         this._stationList.forEach(s => {
             const instance = this._objectManager.summon("monitoring_station", StationRenderableObject);
-            instance.stationId = s.station_id;
+            instance.stationInfo = s;
             instance.pickable = true;
 
             const pos = MUtils.latLongToUnitSphere(s.lat_, s.long_);

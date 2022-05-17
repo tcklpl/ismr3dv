@@ -1,14 +1,18 @@
+import { Mat4 } from "../../engine/data_formats/mat/mat4";
 import { Mesh } from "../../engine/data_formats/mesh/mesh";
 import { RenderableObject } from "../../engine/data_formats/renderable_object";
+import { Vec2 } from "../../engine/data_formats/vec/vec2";
 import { Vec3 } from "../../engine/data_formats/vec/vec3";
+import { Vec4 } from "../../engine/data_formats/vec/vec4";
 import { IInteractable } from "../../engine/interactions/i_interactable";
 import { Material } from "../../engine/materials/material";
 import { Shader } from "../../engine/shaders/shader";
+import { IStationInfo } from "../api/formats/i_station_info";
 import { Visualizer } from "../visualizer";
 
 export class StationRenderableObject extends RenderableObject implements IInteractable {
 
-    private _stationId!: number;
+    private _stationInfo!: IStationInfo;
     private _color: Vec3 = new Vec3(1, 1, 1);
     private _colorUniform: WebGLUniformLocation;
 
@@ -28,18 +32,27 @@ export class StationRenderableObject extends RenderableObject implements IIntera
 
     onMouseHover() {
         this._color = new Vec3(1, 0, 0);
+        
+        const pos = new Vec4(this.mesh.centroid.x, this.mesh.centroid.y, this.mesh.centroid.z, 1);
+        const model = this.modelMatrix;
+        const view = Visualizer.instance.cameraManager.activeCamera?.matrix as Mat4;
+        const projection = Visualizer.instance.engine.renderer.perspectiveProjectionMat4;
+
+        const ndc = projection.multiplyByVec4(view.multiplyByVec4(model.multiplyByVec4(pos)));
+        Visualizer.instance.ui.canvas.showStationInfoPopup(this.stationInfo, new Vec2(ndc.x / ndc.w, ndc.y / ndc.w));
     }
 
     onMouseLeave() {
         this._color = new Vec3(1, 1, 1);
+        Visualizer.instance.ui.canvas.hideStationInfoPopup();
     }
 
-    get stationId() {
-        return this._stationId;
+    get stationInfo() {
+        return this._stationInfo;
     }
 
-    set stationId(id: number) {
-        this._stationId = id;
+    set stationInfo(s: IStationInfo) {
+        this._stationInfo = s;
     }
 
     get color() {

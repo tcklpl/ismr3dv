@@ -153,4 +153,8 @@ export class Renderer implements IMouseListener {
         this._gl.bindVertexArray(null);
     }
 
+    get perspectiveProjectionMat4() {
+        return this._perspectiveProjectionMatrix;
+    }
+
 }
