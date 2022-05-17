@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "join-html": "python3 ../tools/join_html_files.py src/html_parts/html_parts.json src/html_parts src/index.html out/index.html",
-    "minify-html": "npx html-minifier --collapse-whitespace --remove-comments out/index.html -o out/index.html",
+    "minify-html": "npx html-minifier --collapse-whitespace --remove-comments --remove-tag-whitespace --minify-js true out/index.html -o out/index.html",
     "compile-scss": "scss --no-cache --update src/style:out/style/",
     "sync-others": "python3 ../tools/copy_files.py src/ out/",
     "compile": "npm run join-html && npm run minify-html && npx tsc && npm run sync-others && npm run compile-scss",
