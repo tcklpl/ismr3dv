@@ -1,6 +1,7 @@
 import { MUtils } from "../../utils/math_utils";
 import { IUniformable } from "../i_uniformable";
 import { Vec3 } from "../vec/vec3";
+import { Vec4 } from "../vec/vec4";
 
 export class Mat4 implements IUniformable {
 
@@ -100,6 +101,19 @@ export class Mat4 implements IUniformable {
             b30 * a02 + b31 * a12 + b32 * a22 + b33 * a32,
             b30 * a03 + b31 * a13 + b32 * a23 + b33 * a33,
         ];
+    }
+
+    multiplyByVec4(m: Vec4) {
+        const resVector = [];
+        for (let i = 0; i < 4; i++) {
+            resVector.push(
+                this.values[0 * 4 + i] * m.x +
+                this.values[1 * 4 + i] * m.y +
+                this.values[2 * 4 + i] * m.z +
+                this.values[3 * 4 + i] * m.w
+            );
+        }
+        return new Vec4(resVector[0], resVector[1], resVector[2], resVector[3]);
     }
 
     static identity(): Mat4 {
