@@ -67,6 +67,10 @@
         {
             "url": "session/load_session.html",
             "append_to": "#session-screen-tabs"
+        },
+        {
+            "url": "station_info_popup.html",
+            "append_to": "body"
         }
     ]
 }

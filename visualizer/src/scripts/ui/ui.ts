@@ -1,3 +1,4 @@
+import { UICanvas } from "./ui_canvas";
 import { UIConfig } from "./ui_config";
 import { UIInfo } from "./ui_info";
 import { UILoader } from "./ui_loader";
@@ -13,12 +14,14 @@ export class UI {
     private _timeline = new UITimeline();
     private _session = new UISession();
     private _optionsHud = new UIOptionsHud();
+    private _canvas = new UICanvas();
 
     registerEvents() {
         this._config.registerEvents();
         this._timeline.registerEvents();
         this._session.registerEvents();
         this._optionsHud.registerEvents();
+        this._canvas.registerEvents();
         this._info.update();
     }
 
@@ -44,6 +47,10 @@ export class UI {
 
     get optionsHud() {
         return this._optionsHud;
+    }
+
+    get canvas() {
+        return this._canvas;
     }
 
 }
