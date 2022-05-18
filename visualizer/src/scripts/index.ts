@@ -6,7 +6,8 @@ if (!context) throw `Failed to acquire WebGL2 context`;
 
 const visualizer = new Visualizer(context);
 canvas.on('click', e => {
-    document.getElementById('ismr3dcanvas')?.requestPointerLock();
+    if (!Visualizer.instance.universeScene.isHoveringOverStation)
+        document.getElementById('ismr3dcanvas')?.requestPointerLock();
 });
 
 $(window).on("resize", () => {

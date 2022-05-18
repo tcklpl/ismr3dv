@@ -18,7 +18,7 @@ export class UICanvas {
         this._sipName.html(station.name);
         this._sipLatitude.html(`${station.lat_}`);
         this._sipLongitude.html(`${station.long_}`);
-        this._stationInfoPopup.fadeIn(100);
+        this._stationInfoPopup.fadeIn(50);
         
         const contentWidth = this._stationInfoPopup.width() as number;
         const contentHeight = this._stationInfoPopup.height() as number;
@@ -36,6 +36,6 @@ export class UICanvas {
     }
 
     hideStationInfoPopup() {
-        this._stationInfoPopup.fadeOut(100);
+        this._stationInfoPopup.fadeOut(50);
     }
 }
