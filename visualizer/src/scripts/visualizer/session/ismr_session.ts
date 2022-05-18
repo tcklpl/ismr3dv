@@ -27,6 +27,7 @@ export class ISMRSession {
 
     private _stationList?: IStationInfo[];
     private _instantiatedStations: StationRenderableObject[] = [];
+    private _selectedStations: IStationInfo[] = [];
 
     constructor(startDate: Date, endDate: Date, name?: string, creationDate?: Date) {
         this._startDate = startDate;
@@ -83,6 +84,18 @@ export class ISMRSession {
         .catch(() => {
             new CustomAlert('danger', 'Failed to save the session', 5);
         });
+    }
+
+    notifyStationClick(station: StationRenderableObject) {
+        if (this._selectedStations.includes(station.stationInfo)) {
+            this._selectedStations = this._selectedStations.filter(x => x != station.stationInfo);
+            station.colorLocked = false;
+            station.color = Vec3.fromValue(1);
+        } else {
+            this._selectedStations.push(station.stationInfo);
+            station.color = new Vec3(0.3, 1, 0.3);
+            station.colorLocked = true;
+        }
     }
 
     get name() {
