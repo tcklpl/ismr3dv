@@ -121,7 +121,7 @@ export class RenderBloomProvider implements IRenderPostProcessingProvider {
         }
 
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
-        return (passes & 1) == 1 ? pingPongFb.texPing : pingPongFb.texPong;
+        return (passes & 1) == 0 ? pingPongFb.texPing : pingPongFb.texPong;
     }
 
     render(layers: IRenderLayers): void {
@@ -139,7 +139,7 @@ export class RenderBloomProvider implements IRenderPostProcessingProvider {
         // pass 3
         this._gl.viewport(0, 0, this._altResolutions[2].x, this._altResolutions[2].y);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
-        const pass3 = this.nPassGaussianBlur(layers.raw_bloom, this._gp3Buffer, this._gKernel10, 3);
+        const pass3 = this.nPassGaussianBlur(layers.raw_bloom, this._gp3Buffer, this._gKernel10, 4);
 
         // now combine all passes
         this._gl.viewport(0, 0, this._resolution.x, this._resolution.y);
