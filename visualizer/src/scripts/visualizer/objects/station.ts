@@ -14,6 +14,7 @@ export class StationRenderableObject extends RenderableObject implements IIntera
 
     private _stationInfo!: IStationInfo;
     private _color: Vec3 = new Vec3(1, 1, 1);
+    private _colorLocked = false;
     private _colorUniform: WebGLUniformLocation;
 
     constructor(id: number, mesh: Mesh, material: Material, shader: Shader) {
@@ -31,7 +32,7 @@ export class StationRenderableObject extends RenderableObject implements IIntera
     }
 
     onMouseHover() {
-        this._color = new Vec3(1, 0, 0);
+        this.color = new Vec3(1, 0, 0);
         
         const pos = new Vec4(this.mesh.centroid.x, this.mesh.centroid.y, this.mesh.centroid.z, 1);
         const model = this.modelMatrix;
@@ -44,13 +45,13 @@ export class StationRenderableObject extends RenderableObject implements IIntera
     }
 
     onMouseLeave() {
-        this._color = new Vec3(1, 1, 1);
+        this.color = new Vec3(1, 1, 1);
         Visualizer.instance.ui.canvas.hideStationInfoPopup();
         Visualizer.instance.universeScene.isHoveringOverStation = false;
     }
 
     onMouseLeftClick() {
-        alert(this._stationInfo.name);
+        Visualizer.instance.session?.notifyStationClick(this);
     }
 
     get stationInfo() {
@@ -66,7 +67,16 @@ export class StationRenderableObject extends RenderableObject implements IIntera
     }
 
     set color(c: Vec3) {
+        if (this._colorLocked) return;
         this._color = c;
+    }
+
+    get colorLocked() {
+        return this._colorLocked;
+    }
+
+    set colorLocked(locked: boolean) {
+        this._colorLocked = locked;
     }
 
 }
