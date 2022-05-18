@@ -17,6 +17,8 @@ export class UniverseScene extends Scene {
 
     private _mainCamera!: MainCamera;
 
+    private _isHoveringOverStation: boolean = false;
+
     constructor(name: string) {
         super(name);
 
@@ -50,6 +52,15 @@ export class UniverseScene extends Scene {
         this.removeObjects(...this._stations);
         this._stations = s;
         this.objects.push(...s);
+    }
+
+    get isHoveringOverStation() {
+        return this._isHoveringOverStation;
+    }
+
+    set isHoveringOverStation(val: boolean) {
+        $('#ismr3dcanvas').css('cursor', val ? 'pointer' : 'default');
+        this._isHoveringOverStation = val;
     }
 
 }

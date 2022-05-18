@@ -40,11 +40,17 @@ export class StationRenderableObject extends RenderableObject implements IIntera
 
         const ndc = projection.multiplyByVec4(view.multiplyByVec4(model.multiplyByVec4(pos)));
         Visualizer.instance.ui.canvas.showStationInfoPopup(this.stationInfo, new Vec2(ndc.x / ndc.w, ndc.y / ndc.w));
+        Visualizer.instance.universeScene.isHoveringOverStation = true;
     }
 
     onMouseLeave() {
         this._color = new Vec3(1, 1, 1);
         Visualizer.instance.ui.canvas.hideStationInfoPopup();
+        Visualizer.instance.universeScene.isHoveringOverStation = false;
+    }
+
+    onMouseLeftClick() {
+        alert(this._stationInfo.name);
     }
 
     get stationInfo() {
