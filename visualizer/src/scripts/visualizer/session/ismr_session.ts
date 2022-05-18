@@ -91,10 +91,12 @@ export class ISMRSession {
             this._selectedStations = this._selectedStations.filter(x => x != station.stationInfo);
             station.colorLocked = false;
             station.color = Vec3.fromValue(1);
+            station.applyBloom = false;
         } else {
             this._selectedStations.push(station.stationInfo);
             station.color = new Vec3(0.3, 1, 0.3);
             station.colorLocked = true;
+            station.applyBloom = true;
         }
     }
 
