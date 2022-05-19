@@ -9,13 +9,13 @@ import { IInteractable } from "../../engine/interactions/i_interactable";
 import { Material } from "../../engine/materials/material";
 import { Shader } from "../../engine/shaders/shader";
 import { IStationInfo } from "../api/formats/i_station_info";
+import { StationColors } from "../session/station_colors";
 import { Visualizer } from "../visualizer";
 
 export class StationRenderableObject extends RenderableObject implements IInteractable {
 
     private _stationInfo!: IStationInfo;
-    private _color: Vec3 = new Vec3(1, 1, 1);
-    private _applyBloom = new UBoolean(false);
+    private _color = StationColors.IDLE;
     private _colorLocked = false;
     private _colorUniform: WebGLUniformLocation;
     private _applyBloomUniform: WebGLUniformLocation;
@@ -29,15 +29,15 @@ export class StationRenderableObject extends RenderableObject implements IIntera
 
     render(uniformConfiguration: () => void): void {
         this._shader.bind();
-        this._color.bindUniform(Visualizer.instance.gl, this._colorUniform);
-        this._applyBloom.bindUniform(Visualizer.instance.gl, this._applyBloomUniform);
+        this._color.color.bindUniform(Visualizer.instance.gl, this._colorUniform);
+        this._color.bloom.bindUniform(Visualizer.instance.gl, this._applyBloomUniform);
         this.modelMatrix.bindUniform(Visualizer.instance.gl, this.u_model);
         uniformConfiguration();
         this._mesh.draw();
     }
 
     onMouseHover() {
-        this.color = new Vec3(1, 0, 0);
+        this.color = StationColors.HOVER;
         
         const pos = new Vec4(this.mesh.centroid.x, this.mesh.centroid.y, this.mesh.centroid.z, 1);
         const model = this.modelMatrix;
@@ -50,7 +50,7 @@ export class StationRenderableObject extends RenderableObject implements IIntera
     }
 
     onMouseLeave() {
-        this.color = new Vec3(1, 1, 1);
+        this.color = StationColors.IDLE;
         Visualizer.instance.ui.canvas.hideStationInfoPopup();
         Visualizer.instance.universeScene.isHoveringOverStation = false;
     }
@@ -71,7 +71,7 @@ export class StationRenderableObject extends RenderableObject implements IIntera
         return this._color;
     }
 
-    set color(c: Vec3) {
+    set color(c: StationColors) {
         if (this._colorLocked) return;
         this._color = c;
     }
@@ -82,14 +82,6 @@ export class StationRenderableObject extends RenderableObject implements IIntera
 
     set colorLocked(locked: boolean) {
         this._colorLocked = locked;
-    }
-
-    get applyBloom() {
-        return this._applyBloom.value;
-    }
-
-    set applyBloom(value: boolean) {
-        this._applyBloom.value = value;
     }
 
 }

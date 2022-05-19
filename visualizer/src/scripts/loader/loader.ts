@@ -64,10 +64,6 @@ export class Loader {
     }
 
     private loadFinished() {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
         this._ui.hideLoadingScreen();
         console.log('everything loaded!');
         if (this.onLoad)

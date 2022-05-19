@@ -183,6 +183,7 @@ export class UISession {
 
     showFinalPanel() {
         this._cancelBtn.hide();
+        Visualizer.instance.ui.stationsHud.update();
 
         const session = Visualizer.instance.session;
         if (session) {

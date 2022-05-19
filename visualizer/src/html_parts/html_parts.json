@@ -71,6 +71,10 @@
         {
             "url": "station_info_popup.html",
             "append_to": "body"
+        },
+        {
+            "url": "stations_hud.html",
+            "append_to": "body"
         }
     ]
 }
