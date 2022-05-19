@@ -6,6 +6,7 @@ import { StationRenderableObject } from "../objects/station";
 import { Visualizer } from "../visualizer";
 import { ISessionConfig } from "./i_session.config";
 import { ISessionSave } from "./i_session_save";
+import { StationColors } from "./station_colors";
 
 export class ISMRSession {
 
@@ -90,14 +91,36 @@ export class ISMRSession {
         if (this._selectedStations.includes(station.stationInfo)) {
             this._selectedStations = this._selectedStations.filter(x => x != station.stationInfo);
             station.colorLocked = false;
-            station.color = Vec3.fromValue(1);
-            station.applyBloom = false;
+            station.color = StationColors.IDLE;
         } else {
             this._selectedStations.push(station.stationInfo);
-            station.color = new Vec3(0.3, 1, 0.3);
+            station.color = StationColors.SELECTED;
             station.colorLocked = true;
-            station.applyBloom = true;
         }
+        Visualizer.instance.ui.stationsHud.update();
+    }
+
+    clearStationSelection() {
+        this._selectedStations.forEach(s => {
+            const instance = this._instantiatedStations.find(x => x.stationInfo == s);
+            if (!instance) throw `Invalid isntance station id ${s.station_id}`;
+            instance.colorLocked = false;
+            instance.color = StationColors.IDLE;
+        });
+        this._selectedStations = [];
+    }
+
+    selectAllStations() {
+        this._selectedStations = [];
+        this._stationList?.forEach(s => {
+            const instance = this._instantiatedStations.find(x => x.stationInfo == s);
+            if (!instance) throw `Invalid isntance station id ${s.station_id}`;
+
+            this._selectedStations.push(s);
+
+            instance.color = StationColors.SELECTED;
+            instance.colorLocked = true;
+        });
     }
 
     get name() {
@@ -123,6 +146,10 @@ export class ISMRSession {
     set stations(s: IStationInfo[] | undefined) {
         this._stationList = s;
         this.instantiateStationsAs3dObjects();
+    }
+
+    get selectedStations() {
+        return this._selectedStations;
     }
 
     get asSerializable() {

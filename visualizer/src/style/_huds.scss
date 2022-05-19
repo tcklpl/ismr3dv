@@ -17,3 +17,23 @@
     color: white;
     padding: 10px;
 }
+
+#stations-hud {
+    @extend %hud-panel;
+    bottom: 0;
+    right: 0;
+    color: white;
+    padding: 10px;
+    font-size: 1.1em;
+}
+
+#stations-hud > a {
+    cursor: pointer;
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+}
+
+#station-count-container {
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+}
