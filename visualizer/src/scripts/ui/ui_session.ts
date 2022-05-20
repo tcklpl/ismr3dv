@@ -3,9 +3,10 @@ import { ISMRSession } from "../visualizer/session/ismr_session";
 import { ISessionSave } from "../visualizer/session/i_session_save";
 import { Visualizer } from "../visualizer/visualizer";
 import { ConfirmationScreen } from "./confirmation_screen";
+import { IUI } from "./i_ui";
 import { MessageScreen } from "./message_screen";
 
-export class UISession {
+export class UISession implements IUI {
 
     private _serverInfo!: IServerInfo;
 

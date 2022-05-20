@@ -1,7 +1,8 @@
 import { Vec2 } from "../engine/data_formats/vec/vec2";
 import { IStationInfo } from "../visualizer/api/formats/i_station_info";
+import { IUI } from "./i_ui";
 
-export class UICanvas {
+export class UICanvas implements IUI {
 
     private _stationInfoPopup = $('#station-info-popup');
     private _sipId = $('#sip-id');

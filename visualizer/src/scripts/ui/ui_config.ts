@@ -3,8 +3,9 @@ import { IGraphicalConfiguration } from "../engine/config/graphical_configuratio
 import { StorageType } from "../local_storage/storage_type";
 import { SizeNameUtils } from "../visualizer/utils/size_name_utils";
 import { Visualizer } from "../visualizer/visualizer";
+import { IUI } from "./i_ui";
 
-export class UIConfig {
+export class UIConfig implements IUI {
 
     private _hasUnsupportedTextures: boolean = false;
 

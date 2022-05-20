@@ -1,9 +1,10 @@
 import { HTMLUtils } from "../visualizer/utils/html_utils";
 import { Visualizer } from "../visualizer/visualizer";
 import { ConfirmationScreen } from "./confirmation_screen";
+import { IUI } from "./i_ui";
 import { MessageScreen } from "./message_screen";
 
-export class UIOptionsHud {
+export class UIOptionsHud implements IUI {
 
     private _saveSessionBtn = $('#cfg-save-btn');
     private _exportSessionBtn = $('#cfg-export-btn');
