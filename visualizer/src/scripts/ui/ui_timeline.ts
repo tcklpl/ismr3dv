@@ -1,7 +1,6 @@
+import { IUI } from "./i_ui";
 
-export class UITimeline {
-
-    
+export class UITimeline implements IUI {
 
     registerEvents() {
 

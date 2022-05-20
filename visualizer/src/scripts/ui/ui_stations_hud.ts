@@ -1,6 +1,7 @@
 import { Visualizer } from "../visualizer/visualizer";
+import { IUI } from "./i_ui";
 
-export class UIStationsHud {
+export class UIStationsHud implements IUI {
 
     private _counterContainer = $('#station-count-container');
     private _textCount = $('#stations-hud-count');

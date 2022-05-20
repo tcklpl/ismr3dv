@@ -1,6 +1,11 @@
 import { SizeNameUtils } from "../visualizer/utils/size_name_utils";
+import { IUI } from "./i_ui";
 
-export class UILoader {
+export class UILoader implements IUI {
+
+    registerEvents() {
+        
+    }
 
     updateStatus(percentage: number, message: string) {
         $('#loading-progress-bar').attr('aria-valuenow', percentage).css('width', `${percentage}%`);
