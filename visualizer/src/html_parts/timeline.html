@@ -6,56 +6,7 @@
     </div>
     <div class="offcanvas-body container-fluid h-100">
 
-        <div class="row h-100">
-
-            <div class="col-4 d-flex align-items-center justify-content-center">
-
-                <div id="timeline-date-selector">
-                    <div class="form-group form-inline row align-items-center d-flex">
-                        <label class="col-sm-4" for="ctf-sun-texsize">Start Date</label>
-                        <div class="col-sm-8">
-                            <input type="datetime-local" class="form-control" id="timeline-start-date" style="margin-bottom: 10px;" required>
-                        </div>
-                    </div>
-        
-                    <div class="form-group form-inline row align-items-center">
-                        <label class="col-sm-4" for="ctf-sun-texsize">End Date</label>
-                        <div class="col-sm-8">
-                            <input type="datetime-local" class="form-control" id="timeline-end-date" style="margin-bottom: 10px;" required>
-                        </div>
-                    </div>
-        
-                    <button class="btn btn-primary float-end" id="timeline-dateinterval-btn">Search</button>
-                </div>
-    
-                <div class="d-flex align-items-center" id="timeline-date-msg-showcase" style="flex-direction: column;">
-                    <label class="text-primary"><i class="bi-info-circle" style="margin-right: 0.5em;"></i> The server is running in showcase mode.</label>
-                    <label class="text-secondary" style="font-size: 0.8em;">All the data being presented was pre-fetched between Oct 01, 2014 22:00 and Oct 01, 2014 22:05</label>
-                    <button class="btn btn-primary" id="timeline-showcase-stations-btn" style="margin-top: 0.3em;"><i class="bi-cloud-download-fill" style="margin-right: 0.3em;"></i>Fetch Stations</button>
-                </div>
-    
-            </div>
-    
-            <div class="col-8 border-start border-1 h-100 overflow-y-auto">
                 
-                <div class="d-flex text-secondary align-items-center justify-content-center h-100" id="timeline-start-msg">
-                    Please select the start and end dates.
-                </div>
-    
-                <div class="d-none text-secondary align-items-center justify-content-center h-100" id="timeline-error-msg">
-                    <i class="bi-exclamation-circle" style="font-size: 1.5em; margin-right: 0.5em;"></i>There was an error while fetching the required data, the API may be down.
-                </div>
-    
-                <div class="d-none text-secondary align-items-center justify-content-center h-100" id="timeline-fetching-api-msg">
-                    <div class="spinner-border" role="status"></div><label style="margin-left: 0.5em;">Fetching the API, this could take some time...</label>
-                </div>
-    
-                <div class="d-none h-100" id="timeline-station-list" style="flex-wrap: wrap; overflow-y: scroll; overflow-x: hidden; position: inherit;"></div>
-    
-            </div>
-
-        </div>
-        
         
     </div>
 </div>
