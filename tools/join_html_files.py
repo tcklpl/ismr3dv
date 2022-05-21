@@ -1,3 +1,13 @@
+"""
+    Script for joining .html files into one to be minified later on.
+
+    Usage:
+        join_html_files.py <html_parts.json path> <html parts folder> <index.html (main file) path> <output file>
+    
+    Example:
+        join_html_files.py src/html_parts/html_parts.json src/html_parts src/index.html out/index.html
+        (on /visualizer/package.json)
+"""
 import json, sys, pathlib
 from bs4 import BeautifulSoup
 
