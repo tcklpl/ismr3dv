@@ -6,12 +6,6 @@ then
     exit
 fi
 
-if ! command -v sed > /dev/null
-then
-    echo "[!] sed was not found, please install it or correct your path."
-    exit
-fi
-
 if ! command -v scss > /dev/null
 then
     echo "[!] scss (sass) was not found, please install it or correct your path."
@@ -65,11 +59,11 @@ setup_env() {
     if ! [[ -z "$user_api_key" ]]; then
         UNESP_API_KEY=$user_api_key
     fi
-
-    sed \
-        -e "s/<PORT>/$SERVER_PORT/g"\
-        -e "s/<UNESPKEY>/$UNESP_API_KEY/g"\
-        .env.model > .env
+    
+    python3 tools/file_string_replacer.py \
+        .env.model .env \
+        "<PORT>/$SERVER_PORT" \
+        "<UNESPKEY>/$UNESP_API_KEY"
 }
 
 setup_npm() {
