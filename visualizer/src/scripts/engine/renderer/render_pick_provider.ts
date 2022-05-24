@@ -35,7 +35,7 @@ export class RenderPickProvider implements IRenderProvider {
 
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
 
-        this._pickingShader = this._shaderManager.getByName('picking') as Shader;
+        this._pickingShader = this._shaderManager.assertGetShader('picking');
         this._pickingShaderIdUniform = this._pickingShader.assertGetUniform('u_id');
 
         this.updatePickingProjectionMatrix(0, 0, settings.fovY, settings.near, settings.far);

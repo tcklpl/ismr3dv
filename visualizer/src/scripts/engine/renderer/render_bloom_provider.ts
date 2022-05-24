@@ -54,7 +54,7 @@ export class RenderBloomProvider implements IRenderPostProcessingProvider {
         this._gp2Buffer = new PingPongFramebuffer(this._altResolutions[1]);
         this._gp3Buffer = new PingPongFramebuffer(this._altResolutions[2]);
 
-        this._gaussianShader = this._shaderManager.getByName('gaussian') as Shader;
+        this._gaussianShader = this._shaderManager.assertGetShader('gaussian');
         this._gaussianUniformImage = this._gaussianShader.assertGetUniform('u_image');
         this._gaussianUniformKernelSize = this._gaussianShader.assertGetUniform('u_kernel_size');
         this._gaussianUniformHorizontal = this._gaussianShader.assertGetUniform('u_horizontal');
@@ -63,7 +63,7 @@ export class RenderBloomProvider implements IRenderPostProcessingProvider {
             this._gaussianUniformKernel.push(this._gaussianShader.assertGetUniform(`u_kernel[${i}]`));
         }
 
-        this._bloomCombineShader = this._shaderManager.getByName('bloom_combine') as Shader;
+        this._bloomCombineShader = this._shaderManager.assertGetShader('bloom_combine');
         this._bcPass1Uniform = this._bloomCombineShader.assertGetUniform('u_bloom_pass_1');
         this._bcPass2Uniform = this._bloomCombineShader.assertGetUniform('u_bloom_pass_2');
         this._bcPass3Uniform = this._bloomCombineShader.assertGetUniform('u_bloom_pass_3');

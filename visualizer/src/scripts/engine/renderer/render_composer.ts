@@ -22,7 +22,7 @@ export class RenderComposer implements IRenderProvider {
     setup(settings: IRenderSettings): void {
         this._resolution = new Vec2(settings.width, settings.height);
 
-        this._postProcessCombineShader = this._shaderManager.getByName('post_process_combine') as Shader;
+        this._postProcessCombineShader = this._shaderManager.assertGetShader('post_process_combine');
         this._ppcsUniformColorBuffer = this._postProcessCombineShader.assertGetUniform('u_color_buffer');
         this._ppcsUniformBloomBuffer = this._postProcessCombineShader.assertGetUniform('u_bloom_buffer');
         this._ppcsUniformApplyBloom = this._postProcessCombineShader.assertGetUniform('u_bloom');
