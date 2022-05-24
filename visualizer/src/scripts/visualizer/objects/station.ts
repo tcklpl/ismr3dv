@@ -22,13 +22,13 @@ export class StationRenderableObject extends RenderableObject implements IIntera
 
     constructor(id: number, mesh: Mesh, material: Material, shader: Shader) {
         super(id, mesh, material, shader);
-        this._shader.bind();
+        this.shader.bind();
         this._colorUniform = shader.assertGetUniform('u_color');
         this._applyBloomUniform = shader.assertGetUniform('u_apply_bloom');
     }
 
     render(uniformConfiguration: () => void): void {
-        this._shader.bind();
+        this.shader.bind();
         this._color.color.bindUniform(Visualizer.instance.gl, this._colorUniform);
         this._color.bloom.bindUniform(Visualizer.instance.gl, this._applyBloomUniform);
         this.modelMatrix.bindUniform(Visualizer.instance.gl, this.u_model);

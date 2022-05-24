@@ -26,7 +26,7 @@ export class EarthRenderableObject extends RenderableObject {
     }
 
     render(uniformConfiguration: () => void): void {
-        this._shader.bind();
+        this.shader.bind();
         this._material.bind(this._materialBindPoints);
 
         const universe = Visualizer.instance.universeScene;
