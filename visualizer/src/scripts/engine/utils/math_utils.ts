@@ -80,7 +80,7 @@ export class MUtils {
     }
 
     /**
-     *  Kronecker delta for i and j.
+     *  Kronecker delta for i and j (𝛿(i,j)).
      * 
      * @param i 
      * @param j 
@@ -112,7 +112,7 @@ export class MUtils {
     /**
      *  Schmidt's quasi-normalized functions (valid for m).
      *     _______________________
-     *    /(2 - 𝛿(0,m)) _(n_-_m)!_  P(n,m)(µ)
+     * _  /(2 - 𝛿(0,m)) _(n_-_m)!_  P(n,m)(µ)
      *  \/               (n + m)!
      * 
      * @param m m.
