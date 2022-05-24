@@ -15,7 +15,7 @@
         {
             "name": "monitoring_station",
             "mesh": "pyramid",
-            "shader": "monitoring_station",
+            "shader": "solid_color",
             "material": ""
         }
     ]
