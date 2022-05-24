@@ -21,9 +21,9 @@
             "fragment": "post_process_combine/post_process_combine.frag"
         },
         {
-            "name": "monitoring_station",
-            "vertex": "monitoring_station/monitoring_station.vert",
-            "fragment": "monitoring_station/monitoring_station.frag"
+            "name": "solid_color",
+            "vertex": "solid_color/monitoring_station.vert",
+            "fragment": "solid_color/monitoring_station.frag"
         },
         {
             "name": "picking",
