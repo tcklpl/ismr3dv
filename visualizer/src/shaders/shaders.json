@@ -22,8 +22,8 @@
         },
         {
             "name": "solid_color",
-            "vertex": "solid_color/monitoring_station.vert",
-            "fragment": "solid_color/monitoring_station.frag"
+            "vertex": "solid_color/solid_color.vert",
+            "fragment": "solid_color/solid_color.frag"
         },
         {
             "name": "picking",
