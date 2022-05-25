@@ -73,7 +73,11 @@
             "append_to": "body"
         },
         {
-            "url": "stations_hud.html",
+            "url": "bottom_hud.html",
+            "append_to": "body"
+        },
+        {
+            "url": "gizmos_menu.html",
             "append_to": "body"
         }
     ]

@@ -18,7 +18,7 @@
     padding: 10px;
 }
 
-#stations-hud {
+#bottom-hud {
     @extend %hud-panel;
     bottom: 0;
     right: 0;
@@ -27,7 +27,7 @@
     font-size: 1.1em;
 }
 
-#stations-hud > a {
+#bottom-hud > a {
     cursor: pointer;
     margin-left: 0.25em;
     margin-right: 0.25em;
