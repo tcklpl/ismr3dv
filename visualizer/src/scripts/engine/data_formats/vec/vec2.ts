@@ -23,6 +23,18 @@ export class Vec2 implements IUniformable {
         this.y /= factor;
     }
 
+    multiplyByVec2(other: Vec2) {
+        this.x *= other.x;
+        this.y *= other.y;
+        return this;
+    }
+
+    multiplyByFactor(f: number) {
+        this.x *= f;
+        this.y *= f;
+        return this;
+    }
+
     add(other: Vec2) {
         this.sum(other.x, other.y);
     }
