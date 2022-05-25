@@ -1,0 +1,18 @@
+.gizmo-card {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    padding: 5px;
+    max-width: 5em;
+    margin: 0.2em;
+    text-align: center;
+    cursor: pointer;
+}
+
+.gizmo-card > img {
+    width: 5em;
+}
+
+.gizmo-enabled {
+    border: 1px solid rgb(66, 179, 71);
+    box-shadow: 0px 0px 4px #aaa;
+}

@@ -25,7 +25,7 @@ export class UIStationsHud implements IUI {
     update() {
         const session = Visualizer.instance.session;
         this._textCount.html(`${session?.selectedStations.length ?? 0}/${session?.stations?.length ?? 0}`);
-        this._counterContainer.popover('dispose')
+        this._counterContainer.popover('dispose');
         this._counterContainer.attr('data-bs-content', 
             session && session.selectedStations.length > 0 ? 
             session.selectedStations.map(s => `${s.name}<span class='text-secondary'>#${s.station_id}</span>`).join('<br>') :

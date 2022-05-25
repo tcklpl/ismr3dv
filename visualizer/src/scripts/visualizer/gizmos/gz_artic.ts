@@ -10,7 +10,7 @@ export class GizmoArticCircle extends Gizmo {
         for (let i = -180; i <= 180; i++) {
             points.push(MUtils.latLongToUnitSphere(66.5, i).multiplyByFactor(1.001));
         }
-        super('artic circle', new LineLoop(points));
+        super('Artic Circle', new LineLoop(points), 'images/icons/artic.png');
     }
 
 }

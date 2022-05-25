@@ -7,6 +7,7 @@ import { MatrixCompliant3DTransformative } from "../matrix_compliant_3d_transfor
 export class Gizmo extends MatrixCompliant3DTransformative {
     
     private _name: string;
+    private _icon?: string;
     private _enabled = false;
     private _color = new Vec3(1, 1, 1);
     private _bloom = new UBoolean(false);
@@ -16,10 +17,11 @@ export class Gizmo extends MatrixCompliant3DTransformative {
     private _uBloom: WebGLUniformLocation;
     private _gl = Visualizer.instance.gl;
 
-    constructor(name: string, line: Line) {
+    constructor(name: string, line: Line, icon?: string) {
         super(Visualizer.instance.shaderManager.assertGetShader('solid_color'));
         this._name = name;
         this._line = line;
+        this._icon = icon;
 
         this.shader.bind();
         this._uColor = this.shader.assertGetUniform('u_color');
@@ -27,6 +29,7 @@ export class Gizmo extends MatrixCompliant3DTransformative {
     }
     
     draw(uniformConfiguration: () => void) {
+        if (!this.enabled) return;
         this.shader.bind();
         this._color.bindUniform(this._gl, this._uColor);
         this._bloom.bindUniform(this._gl, this._uBloom);
@@ -61,6 +64,10 @@ export class Gizmo extends MatrixCompliant3DTransformative {
 
     set bloom(b: boolean) {
         this._bloom.value = b;
+    }
+
+    get icon() {
+        return this._icon;
     }
 
 }
