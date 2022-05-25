@@ -28,6 +28,20 @@ export class Vec3 extends Vec2 {
         this.z /= factor;
     }
 
+    multiplyByVec3(other: Vec3) {
+        this.x *= other.x;
+        this.y *= other.y;
+        this.z *= other.z;
+        return this;
+    }
+
+    multiplyByFactor(f: number) {
+        this.x *= f;
+        this.y *= f;
+        this.z *= f;
+        return this;
+    }
+
     public get z() {
         return this._values[2];
     }

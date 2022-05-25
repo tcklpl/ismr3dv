@@ -30,6 +30,22 @@ export class Vec4 extends Vec3 {
         return this.x == other.x && this.y == other.y && this.z == other.z && this.w == other.w;
     }
 
+    multiplyByVec4(other: Vec4) {
+        this.x *= other.x;
+        this.y *= other.y;
+        this.z *= other.z;
+        this.w *= other.w;
+        return this;
+    }
+
+    multiplyByFactor(f: number) {
+        this.x *= f;
+        this.y *= f;
+        this.z *= f;
+        this.w *= f;
+        return this;
+    }
+
     public get w() {
         return this._values[3];
     }
