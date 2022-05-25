@@ -10,7 +10,7 @@ export class GizmoCancer extends Gizmo {
         for (let i = -180; i <= 180; i++) {
             points.push(MUtils.latLongToUnitSphere(23.5, i).multiplyByFactor(1.001));
         }
-        super('tropic of cancer', new LineLoop(points));
+        super('Tropic of Cancer', new LineLoop(points), 'images/icons/cancer.png');
     }
 
 }

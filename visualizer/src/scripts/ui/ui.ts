@@ -1,5 +1,6 @@
 import { UICanvas } from "./ui_canvas";
 import { UIConfig } from "./ui_config";
+import { UIGizmos } from "./ui_gizmos";
 import { UIInfo } from "./ui_info";
 import { UILoader } from "./ui_loader";
 import { UIOptionsHud } from "./ui_options_hud";
@@ -17,6 +18,7 @@ export class UI {
     private _optionsHud = new UIOptionsHud();
     private _canvas = new UICanvas();
     private _stationsHud = new UIStationsHud();
+    private _gizmos = new UIGizmos();
 
     registerEvents() {
 
@@ -36,6 +38,7 @@ export class UI {
         this._optionsHud.registerEvents();
         this._canvas.registerEvents();
         this._stationsHud.registerEvents();
+        this._gizmos.registerEvents();
         this._info.update();
     }
 

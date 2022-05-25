@@ -144,6 +144,13 @@ export class Renderer implements IMouseListener {
                 this._perspectiveProjectionMatrix.bindUniform(this._gl, o.u_projection);
             });
         });
+
+        Visualizer.instance.gizmoManager.allGizmos.filter(x => x.enabled).forEach(g => {
+            g.draw(() => {
+                this._cameraManager.activeCamera?.matrix.bindUniform(this._gl, g.u_view);
+                this._perspectiveProjectionMatrix.bindUniform(this._gl, g.u_projection);
+            });
+        })
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
     }
 

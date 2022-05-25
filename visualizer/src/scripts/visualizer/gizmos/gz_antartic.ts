@@ -10,7 +10,7 @@ export class GizmoAntarticCircle extends Gizmo {
         for (let i = -180; i <= 180; i++) {
             points.push(MUtils.latLongToUnitSphere(-66.5, i).multiplyByFactor(1.001));
         }
-        super('antartic circle', new LineLoop(points));
+        super('Antartic Circle', new LineLoop(points), 'images/icons/antartic.png');
     }
 
 }

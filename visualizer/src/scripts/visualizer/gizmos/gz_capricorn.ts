@@ -10,7 +10,7 @@ export class GizmoCapricorn extends Gizmo {
         for (let i = -180; i <= 180; i++) {
             points.push(MUtils.latLongToUnitSphere(-23.5, i).multiplyByFactor(1.001));
         }
-        super('tropic of capricorn', new LineLoop(points));
+        super('Tropic of Capricorn', new LineLoop(points), 'images/icons/capricorn.png');
     }
 
 }

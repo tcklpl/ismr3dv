@@ -14,6 +14,7 @@ import { UI } from "../ui/ui";
 import { ISMRAPIConnector } from "./api/api_connector";
 import { IServerInfo } from "./api/formats/i_server_info";
 import { ISMRCacheHub } from "./cache/cache_hub";
+import { GizmoManager } from "./gizmos/gizmo_manager";
 import { VisualizerIO } from "./io/visualizer_io";
 import { ISMRProviders } from "./providers/providers";
 import { ISMRSession } from "./session/ismr_session";
@@ -43,6 +44,7 @@ export class Visualizer {
     private _storageController = new StorageController();
     private _configurationManager = new ConfigurationManager();
     private _interactionManager!: InteractionManager;
+    private _gizmoManager!: GizmoManager;
 
     // Api
     private _api = new ISMRAPIConnector();
@@ -75,6 +77,7 @@ export class Visualizer {
 
     postLoad() {
         this._interactionManager = new InteractionManager();
+        this._gizmoManager = new GizmoManager();
 
         this._engine = new Engine();
         this._engine.adjustToWindowSize();
@@ -133,6 +136,10 @@ export class Visualizer {
 
     get interactionManager() {
         return this._interactionManager;
+    }
+
+    get gizmoManager() {
+        return this._gizmoManager;
     }
 
     get engine() {

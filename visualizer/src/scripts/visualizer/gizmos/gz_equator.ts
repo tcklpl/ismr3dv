@@ -10,7 +10,7 @@ export class GizmoEquator extends Gizmo {
         for (let i = -180; i <= 180; i++) {
             points.push(MUtils.latLongToUnitSphere(0, i).multiplyByFactor(1.001));
         }
-        super('equator', new LineLoop(points));
+        super('Equator', new LineLoop(points), 'images/icons/equator.png');
     }
 
 }
