@@ -31,6 +31,7 @@ export class UISession implements IUI {
     private _dateEnd = $('#ns-date-end');
     private _dateFinishBtn = $('#ns-date-finish-btn');
     private _dateShowcaseFinishBtn = $('#ns-date-showcase-btn');
+    private _dateGoBackBtn = $('[id^=ns-load-go-back-name-]');
 
     private _finishPanel = $('#ns-finish-panel');
     private _finishSaveLocally = $('#ns-finish-save-on-browser');
@@ -43,6 +44,7 @@ export class UISession implements IUI {
     private _loadIDBError = $('#ns-load-idb-error');
     private _loadEmpty = $('#ns-load-empty');
     private _loadStationList = $('#ns-load-station-list');
+    private _loadGoBackBtn = $('[id^=ns-load-go-back-reset-]');
 
     private newScreenChangeHovered(newSelected?: JQuery<HTMLElement>) {
         this._initialPanel.children().removeClass('text-primary').addClass('text-secondary');
@@ -74,6 +76,7 @@ export class UISession implements IUI {
         this._nameFinishBtn.on('click', () => this.newSessionSelectDate());
 
         this._dateFinishBtn.on('click', () => this.fetchStationList());
+        this._dateGoBackBtn.on('click', () => this.newSessionFromAPI());
         this._dateShowcaseFinishBtn.on('click', () => this.fetchStationList());
 
         this._finishSaveLocally.on('click', () => {
@@ -87,6 +90,8 @@ export class UISession implements IUI {
         });
 
         this._finishFinalButton.on('click', () => Visualizer.instance.session?.save());
+
+        this._loadGoBackBtn.on('click', () => this.resetUI());
     }
 
     resetUI() {
