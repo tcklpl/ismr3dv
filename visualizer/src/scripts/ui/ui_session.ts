@@ -1,6 +1,7 @@
 import { IServerInfo } from "../visualizer/api/formats/i_server_info";
 import { ISMRSession } from "../visualizer/session/ismr_session";
 import { ISessionSave } from "../visualizer/session/i_session_save";
+import { RandomUtils } from "../visualizer/utils/random_utils";
 import { Visualizer } from "../visualizer/visualizer";
 import { ConfirmationScreen } from "./confirmation_screen";
 import { IUI } from "./i_ui";
@@ -209,6 +210,9 @@ export class UISession implements IUI {
                 <div>
                     <i class="bi-hdd-fill" style="font-size: 1.5em; margin-right: 0.5em; vertical-align: middle;"></i>${save.name}
                 </div>
+                <div style="color: red; cursor: pointer" id=":ERASE-SESSION-SAVE-ID">
+                    <i class="bi-trash" class="icon-left"></i>Delete
+                </div>
                 <hr>
                 <div class="row">
                     <div class="col-10 d-flex flex-column h-100">
@@ -233,16 +237,29 @@ export class UISession implements IUI {
             panel.removeClass('d-none').addClass('d-flex active show');
         };
 
-        Visualizer.instance.idb.sessionController.fetchAll().then(stations => {
-            if (stations.length > 0) {
+        Visualizer.instance.idb.sessionController.fetchAll().then(sessions => {
+            if (sessions.length > 0) {
                 this._loadStationList.empty();
-                stations.forEach(s => {
-                    const src = this.createLoadedSessionCard(s);
+                sessions.forEach(s => {
+                    const id = `seb-${RandomUtils.randomString(10)}`;
+                    const src = this.createLoadedSessionCard(s).replace(':ERASE-SESSION-SAVE-ID', id);
                     const html = $.parseHTML(src);
                     $(html).on('click', () => {
                         this.loadSession(s);
                     });
                     this._loadStationList.append(html);
+                    $(`#${id}`).on('click', () => {
+                        new ConfirmationScreen('Are you sure?', `Do you really wish to delete the session '${s.name}'? This action is irreversible.`, () => {
+                            Visualizer.instance.idb.sessionController.remove(s)
+                            .then(() => {
+                                this.constructLoadSessionPanel();
+                            })
+                            .catch(e => {
+                                new MessageScreen('Error', 'There was an error while removing the required session, you can check the console for more info.');
+                                console.error(e);
+                            });
+                        });
+                    });
                 });
                 setLoadPanel(this._loadStationList);
             } else {
