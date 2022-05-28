@@ -1,8 +1,11 @@
 <div class="fade d-flex h-100 justify-content-center flex-column" id="ns-load-panel">
 
-    <div class="d-flex flex-column">
-        <span>Load a previosly exported session:</span>
-        <input type="file" class="form-control" accept=".json">
+    <div class="d-flex flex-column justify-content-center">
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <span class="icon-left">Load a previosly exported session:</span>
+            <input class="form-control" type="file" accept=".json" style="width: auto;">
+        </div>
+        <a class="btn" id="ns-load-go-back-reset-4"><i class="bi-backspace icon-left"></i>Go back</a>
     </div>
 
     <div class="separator text-secondary">OR</div>
@@ -13,12 +16,14 @@
             <i class="bi-device-hdd-fill" style="font-size: 2em;"></i>
             <span>Your browser doesn't seem to support IndexedDB, that is used to store and auto-save sessions locally.</span>
             <span>You can still export sessions as JSON files and load them on the file selector above.</span>
+            <a class="btn" id="ns-load-go-back-reset-1"><i class="bi-backspace icon-left"></i>Go back</a>
         </div>
 
         <div class="d-none fade flex-column align-items-center justify-content-center h-100 text-secondary" id="ns-load-empty">
             <i class="bi-bookmark-x" style="font-size: 2em;"></i>
             <span>It seems like you currently have no saved sessions.</span>
             <span>A session will appear here when you save it by clicking the "save" button <i class="bi-save"></i></span>
+            <a class="btn" id="ns-load-go-back-reset-2"><i class="bi-backspace icon-left"></i>Go back</a>
         </div>
 
         <div class="d-none fade flex-row flex-wrap d-100" id="ns-load-station-list">

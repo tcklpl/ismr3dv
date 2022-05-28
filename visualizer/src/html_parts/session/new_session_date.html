@@ -9,14 +9,21 @@
         <label for="ctf-sun-texsize">End Date</label>
         <input type="datetime-local" class="form-control" id="ns-date-end" style="margin-bottom: 10px;">
 
-        <button class="btn btn-success align-self-end" id="ns-date-finish-btn"><i class="bi-cloud-download" style="margin-right: 0.3em;"></i>Fetch data</button>
+        <div class="d-flex flex-row w-100 justify-content-between">
+            <button class="btn" id="ns-load-go-back-name-1"><i class="bi-backspace icon-left"></i>Go back</button>
+            <button class="btn btn-success align-self-end" id="ns-date-finish-btn"><i class="bi-cloud-download" style="margin-right: 0.3em;"></i>Fetch data</button>
+        </div>
     </div>
 
     <!-- Showcase mode screen -->
     <div class="d-none fade flex-column align-items-center justify-content-center h-100" id="ns-date-msg-showcase" id="ns-date-showcase">
         <label class="text-primary"><i class="bi-info-circle" style="margin-right: 0.5em;"></i> The server is running in showcase mode.</label>
         <label class="text-secondary" style="font-size: 0.8em;">All the data being presented was pre-fetched between Oct 01, 2014 22:00 and Oct 01, 2014 22:05</label>
-        <button class="btn btn-primary" id="ns-date-showcase-btn" style="margin-top: 0.3em;"><i class="bi-cloud-download" style="margin-right: 0.3em;"></i>Fetch Stations</button>
+
+        <div class="d-flex flex-row w-100 justify-content-between">
+            <button class="btn" id="ns-load-go-back-name-2"><i class="bi-backspace icon-left"></i>Go back</button>
+            <button class="btn btn-primary" id="ns-date-showcase-btn" style="margin-top: 0.3em;"><i class="bi-cloud-download" style="margin-right: 0.3em;"></i>Fetch Stations</button>
+        </div>
     </div>
 
     <!-- Fetching screen -->
