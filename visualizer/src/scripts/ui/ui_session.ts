@@ -210,7 +210,7 @@ export class UISession implements IUI {
         const endDate = save.end_date.toLocaleString();
 
         return `
-        <div class="card ns-hoverable" style="cursor: pointer; margin-right: 0.5em; margin-bottom: 0.5em;">
+        <div class="card ns-hoverable flex-grow-1" style="cursor: pointer; margin-right: 0.5em; margin-bottom: 0.5em;">
             <div class="card-body h-100 container-fluid">
                 <div>
                     <i class="bi-hdd-fill" style="font-size: 1.5em; margin-right: 0.5em; vertical-align: middle;"></i>${save.name}
