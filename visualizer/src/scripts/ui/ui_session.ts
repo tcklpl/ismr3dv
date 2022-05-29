@@ -45,6 +45,7 @@ export class UISession implements IUI {
     private _loadEmpty = $('#ns-load-empty');
     private _loadStationList = $('#ns-load-station-list');
     private _loadGoBackBtn = $('[id^=ns-load-go-back-reset-]');
+    private _loadSpinner = $('#ns-load-station-list-loading');
 
     private newScreenChangeHovered(newSelected?: JQuery<HTMLElement>) {
         this._initialPanel.children().removeClass('text-primary').addClass('text-secondary');
@@ -239,8 +240,11 @@ export class UISession implements IUI {
             this._loadIDBError.removeClass('d-flex active show').addClass('d-none');
             this._loadEmpty.removeClass('d-flex active show').addClass('d-none');
             this._loadStationList.removeClass('d-flex active show').addClass('d-none');
+            this._loadSpinner.removeClass('d-flex active show').addClass('d-none');
             panel.removeClass('d-none').addClass('d-flex active show');
         };
+
+        setLoadPanel(this._loadSpinner);
 
         Visualizer.instance.idb.sessionController.fetchAll().then(sessions => {
             if (sessions.length > 0) {
