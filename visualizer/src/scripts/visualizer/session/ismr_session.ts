@@ -1,11 +1,13 @@
 import { Vec3 } from "../../engine/data_formats/vec/vec3";
 import { MUtils } from "../../engine/utils/math_utils";
 import { CustomAlert } from "../../ui/custom_alert";
+import { IIPPInfo } from "../api/formats/i_ipp_info";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { StationRenderableObject } from "../objects/station";
 import { Visualizer } from "../visualizer";
 import { ISessionConfig } from "./i_session.config";
 import { ISessionSave } from "./i_session_save";
+import { SessionTimeline } from "./session_timeline";
 import { StationColors } from "./station_colors";
 
 export class ISMRSession {
@@ -29,6 +31,8 @@ export class ISMRSession {
     private _stationList?: IStationInfo[];
     private _instantiatedStations: StationRenderableObject[] = [];
     private _selectedStations: IStationInfo[] = [];
+
+    private _timeline = new SessionTimeline();
 
     constructor(startDate: Date, endDate: Date, name?: string, creationDate?: Date) {
         this._startDate = startDate;
@@ -98,6 +102,7 @@ export class ISMRSession {
             station.colorLocked = true;
         }
         Visualizer.instance.ui.stationsHud.update();
+        Visualizer.instance.ui.timeline.updateForSelectedStations();
     }
 
     clearStationSelection() {
@@ -108,6 +113,7 @@ export class ISMRSession {
             instance.color = StationColors.IDLE;
         });
         this._selectedStations = [];
+        Visualizer.instance.ui.timeline.updateForSelectedStations();
     }
 
     selectAllStations() {
@@ -121,6 +127,11 @@ export class ISMRSession {
             instance.color = StationColors.SELECTED;
             instance.colorLocked = true;
         });
+        Visualizer.instance.ui.timeline.updateForSelectedStations();
+    }
+
+    addIPP(ipp: IIPPInfo[]) {
+        this._timeline.addIPP(ipp);
     }
 
     get name() {
@@ -160,14 +171,20 @@ export class ISMRSession {
             end_date: this._endDate,
             config: this.config,
 
-            station_list: this._stationList
+            station_list: this._stationList,
+            raw_ipp: this._timeline.ippList || []
         };
+    }
+
+    get timeline() {
+        return this._timeline;
     }
 
     static constructFromSave(save: ISessionSave) {
         const session = new ISMRSession(save.start_date, save.end_date, save.name, save.creation_date);
         session._config = save.config;
         session.stations = save.station_list;
+        session.addIPP(save.raw_ipp);
         return session;
     }
 

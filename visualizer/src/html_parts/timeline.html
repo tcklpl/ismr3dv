@@ -4,9 +4,26 @@
         <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Timeline</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body container-fluid h-100">
+    <div class="offcanvas-body d-flex container-fluid h-100 align-items-center justify-content-center" id="timeline-container">
 
-                
+        <!-- No sations screen -->
+        <div class="d-flex fade show flex-column h-100 text-secondary align-items-center justify-content-center" id="timeline-no-stations">
+            <i class="bi-slash-square" style="font-size: 1.5em;"></i>
+            <span>There are no stations selected at the moment.</span>
+        </div>
+
+        <!-- Fetch data -->
+        <div class="d-none fade flex-column h-100 text-secondary align-items-center justify-content-center" id="timeline-need-fetch">
+            <i class="bi-cloud" style="font-size: 1.5em;"></i>
+            <span>You don't have the data for all the selected stations.</span>
+            <button class="btn btn-primary" id="timeline-btn-fetch">Fetch Data</button>
+        </div>
+
+        <!-- Fetching data -->
+        <div class="d-none fade flex-column h-100 text-secondary align-items-center justify-content-center" id="timeline-fetching">
+            <div class="spinner-border" role="status"></div>
+            <span>Fetching the API, this could take some time...</span>
+        </div>
         
     </div>
 </div>

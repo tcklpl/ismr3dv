@@ -1,3 +1,4 @@
+import { IIPPInfo } from "../api/formats/i_ipp_info";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { ISessionConfig } from "./i_session.config";
 
@@ -12,4 +13,5 @@ export interface ISessionSave {
     config: ISessionConfig;
 
     station_list: IStationInfo[];
+    raw_ipp: IIPPInfo[];
 }
