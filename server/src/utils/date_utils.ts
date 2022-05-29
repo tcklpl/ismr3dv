@@ -7,7 +7,7 @@ export class DateUtils {
     });
 
     static formatToLocalISOLike(d: Date) {
-        return `${d.getFullYear()}-${this.twoDigitFormatter.format(d.getMonth())}-${this.twoDigitFormatter.format(d.getDate())}%20${this.twoDigitFormatter.format(d.getHours())}:${this.twoDigitFormatter.format(d.getMinutes())}:${this.twoDigitFormatter.format(d.getSeconds())}`;
+        return `${d.getUTCFullYear()}-${this.twoDigitFormatter.format(d.getUTCMonth())}-${this.twoDigitFormatter.format(d.getUTCDate())}%20${this.twoDigitFormatter.format(d.getUTCHours())}:${this.twoDigitFormatter.format(d.getUTCMinutes())}:${this.twoDigitFormatter.format(d.getUTCSeconds())}`;
     }
 
 }
