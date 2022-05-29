@@ -30,7 +30,7 @@ export class ISMRAPIConnector {
                 .replace(':startdate', req.startDate.toISOString())
                 .replace(':enddate', req.endDate.toISOString())
                 .replace(':sat', req.satellites)
-                .replace(':stations', req.stations)
+                .replace(':stations', req.stations.join(','))
                 .replace(':ion', `${req.ion}`)
             )
             .then(res => {
