@@ -105,6 +105,15 @@ export class ISMRSession {
         Visualizer.instance.ui.timeline.updateForSelectedStations();
     }
 
+    toggleStationById(id: number) {
+        const station = this._instantiatedStations.find(x => x.stationInfo.station_id == id);
+        if (!station) {
+            console.warn(`Could not find station '${id}'`);
+            return;
+        };
+        this.notifyStationClick(station);
+    }
+
     clearStationSelection() {
         this._selectedStations.forEach(s => {
             const instance = this._instantiatedStations.find(x => x.stationInfo == s);
@@ -172,6 +181,7 @@ export class ISMRSession {
             config: this.config,
 
             station_list: this._stationList,
+            selected_stations: this._selectedStations.map(x => x.station_id),
             raw_ipp: this._timeline.ippList || []
         };
     }
@@ -185,6 +195,7 @@ export class ISMRSession {
         session._config = save.config;
         session.stations = save.station_list;
         session.addIPP(save.raw_ipp);
+        save.selected_stations.forEach(s => session.toggleStationById(s));
         return session;
     }
 

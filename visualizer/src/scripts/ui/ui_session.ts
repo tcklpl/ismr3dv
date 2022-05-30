@@ -283,6 +283,7 @@ export class UISession implements IUI {
     private loadSession(save: ISessionSave) {
         const session = ISMRSession.constructFromSave(save);
         Visualizer.instance.session = session;
+        Visualizer.instance.ui.timeline.updateForSelectedStations();
         this.showFinalPanel();
     }
 }

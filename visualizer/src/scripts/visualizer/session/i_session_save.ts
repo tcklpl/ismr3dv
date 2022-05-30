@@ -13,5 +13,6 @@ export interface ISessionSave {
     config: ISessionConfig;
 
     station_list: IStationInfo[];
+    selected_stations: number[];
     raw_ipp: IIPPInfo[];
 }
