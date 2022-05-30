@@ -12,28 +12,33 @@
         },
         {
             "name": "gaussian",
-            "vertex": "gaussian_blur/gaussian_blur.vert",
+            "vertex": "common/basic_quad.vert",
             "fragment": "gaussian_blur/gaussian_blur.frag"
         },
         {
             "name": "post_process_combine",
-            "vertex": "post_process_combine/post_process_combine.vert",
+            "vertex": "common/basic_quad.vert",
             "fragment": "post_process_combine/post_process_combine.frag"
         },
         {
             "name": "solid_color",
-            "vertex": "solid_color/solid_color.vert",
+            "vertex": "common/basic_matrices.vert",
             "fragment": "solid_color/solid_color.frag"
         },
         {
             "name": "picking",
-            "vertex": "picking/picking.vert",
+            "vertex": "common/basic_matrices.vert",
             "fragment": "picking/picking.frag"
         },
         {
             "name": "bloom_combine",
             "vertex": "bloom/bloom_combine.vert",
             "fragment": "bloom/bloom_combine.frag"
+        },
+        {
+            "name": "ipp_batch_renderer",
+            "vertex": "common/basic_quad.vert",
+            "fragment": "ipp/ipp_batch_renderer.frag"
         }
     ]
 }
