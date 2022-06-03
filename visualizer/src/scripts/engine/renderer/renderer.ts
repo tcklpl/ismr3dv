@@ -138,7 +138,7 @@ export class Renderer implements IMouseListener {
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, this._rlFramebuffer);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
 
-        (this._sceneManager.active as Scene).objects.forEach(o => {
+        (this._sceneManager.active as Scene).opaqueObjects.forEach(o => {
             o.render(() => {
                 this._cameraManager.activeCamera?.matrix.bindUniform(this._gl, o.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(this._gl, o.u_projection);
@@ -150,7 +150,22 @@ export class Renderer implements IMouseListener {
                 this._cameraManager.activeCamera?.matrix.bindUniform(this._gl, g.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(this._gl, g.u_projection);
             });
-        })
+        });
+
+        this._gl.enable(this._gl.BLEND);
+        this._gl.blendFunc(this._gl.SRC_ALPHA, this._gl.ONE_MINUS_SRC_ALPHA);
+
+        this._gl.depthMask(false);
+        (this._sceneManager.active as Scene).transparentObjects.forEach(o => {
+            o.render(() => {
+                this._cameraManager.activeCamera?.matrix.bindUniform(this._gl, o.u_view);
+                this._perspectiveProjectionMatrix.bindUniform(this._gl, o.u_projection);
+            });
+        });
+        this._gl.depthMask(true);
+        this._gl.disable(this._gl.BLEND);
+
+
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
     }
 

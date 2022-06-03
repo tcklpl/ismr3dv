@@ -12,6 +12,7 @@ export abstract class RenderableObject extends MatrixCompliant3DTransformative i
     private _idVec4: Vec4;
     private _zeroVec4 = Vec4.fromValue(0);
     private _pickable = false;
+    private _transparent = false;
 
     protected _mesh: Mesh;
     protected _material: Material;
@@ -73,6 +74,14 @@ export abstract class RenderableObject extends MatrixCompliant3DTransformative i
 
     set pickable(p: boolean) {
         this._pickable = p;
+    }
+
+    get transparent() {
+        return this._transparent;
+    }
+
+    set transparent(v: boolean) {
+        this._transparent = v;
     }
 
     get mesh() {

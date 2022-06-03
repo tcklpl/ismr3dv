@@ -21,4 +21,12 @@ export class Scene {
         return this._objects;
     }
 
+    get opaqueObjects() {
+        return this._objects.filter(x => !x.transparent);
+    }
+
+    get transparentObjects() {
+        return this._objects.filter(x => x.transparent);
+    }
+
 }
