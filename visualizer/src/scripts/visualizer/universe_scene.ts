@@ -2,6 +2,7 @@ import { Vec3 } from "../engine/data_formats/vec/vec3";
 import { Scene } from "../engine/scenes/scene";
 import { MainCamera } from "./camera/main_camera";
 import { EarthRenderableObject } from "./objects/earth";
+import { IPPRenderableObject } from "./objects/ipp_renderer";
 import { StationRenderableObject } from "./objects/station";
 import { SunRenderableObject } from "./objects/sun";
 import { Visualizer } from "./visualizer";
@@ -12,6 +13,7 @@ export class UniverseScene extends Scene {
 
     private _earth!: EarthRenderableObject;
     private _sun!: SunRenderableObject;
+    private _ipp!: IPPRenderableObject;
 
     private _stations: StationRenderableObject[] = [];
 
@@ -30,6 +32,10 @@ export class UniverseScene extends Scene {
         this._sun = this._objectManager.summon("sun", SunRenderableObject);
         this._sun.translate(new Vec3(8, 0, 8));
         this.objects.push(this._sun);
+
+        this._ipp = this._objectManager.summon("ipp_sphere", IPPRenderableObject);
+        this._ipp.scale(new Vec3(0.02, 0.02, 0.02));
+        this.objects.push(this._ipp);
     }
 
     get earth() {
@@ -38,6 +44,10 @@ export class UniverseScene extends Scene {
 
     get sun() {
         return this._sun;
+    }
+
+    get ippSphere() {
+        return this._ipp;
     }
 
     get mainCamera() {
