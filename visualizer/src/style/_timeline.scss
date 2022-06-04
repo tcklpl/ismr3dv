@@ -1,6 +1,78 @@
+@import "colors";
 
-.timeline-station-card {
-    width: 14rem;
-    margin-right: 10px;
-    margin-bottom: 10px;
+#timeline-keyframes {
+    width: 100%;
+    overflow-x: auto;
+    padding: 10px;
+    white-space: nowrap;
+}
+
+#timeline-keyframes li {
+    list-style-type: none;
+    font-size: 1em;
+    width: 1.8em;
+    position: relative;
+    font-weight: 400;
+    text-align: center;
+    transition: 0.5s ease;
+    display: inline-block;
+}
+
+#timeline-keyframes li::before {
+    width: 1.2em;
+    height: 1.8em;
+    display: block;
+    font-size: 20px;
+    color: #ffffff;
+    background: $color-normal-inactive-moment;
+    border-radius: 10%;
+    margin: 0 auto 10px auto;
+    padding: 2px;
+    font-family: "bootstrap-icons";
+    content: "\F341";
+    transition: 0.5s ease;
+    cursor: pointer;
+}
+
+#timeline-keyframes li::after {
+    content: "";
+    height: 2px;
+    background: $color-normal-inactive-moment;
+    position: absolute;
+    left: 0;
+    top: 1em;
+    z-index: -1;
+    width: 100%;
+    transition: 0.5s ease;
+}
+
+#timeline-keyframes li.active::before,
+#timeline-keyframes li.active::after {
+    background: $color-active-moment !important;
+}
+
+#timeline-keyframes li.buffered::before,
+#timeline-keyframes li.buffered::after {
+    background: $color-buffered-moment !important;
+}
+
+#timeline-keyframes li.same-buffer::before,
+#timeline-keyframes li.same-buffer::after {
+    background: $color-buffered-same-img-moment !important;
+}
+
+#timeline-keyframes li:nth-child(4n-3)::before {
+    background: $color-every4-inactive-moment;
+}
+
+#timeline-keyframes li.active::before {
+    content: "\F33E";
+}
+
+#tl-cur-number {
+    max-width: 5em;
+    border: 0;
+    border-bottom: 1px solid lightgray;
+    margin-right: 0.4em;
+    text-align: center;
 }

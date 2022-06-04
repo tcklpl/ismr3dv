@@ -24,6 +24,31 @@
             <div class="spinner-border" role="status"></div>
             <span>Fetching the API, this could take some time...</span>
         </div>
+
+        <!-- Actual timeline -->
+        <div class="d-none fade flex-column w-100 h-100 align-items-start text-secondary justify-content-start" id="timeline-panel">
+            
+            <!-- Timeline controls -->
+            <div class="d-flex flex-row w-100 justify-content-center align-items-center">
+                <button id="tl-btn-first" class="btn"><i class="bi-chevron-double-left"></i></button>
+                <button id="tl-btn-prev" class="btn"><i class="bi-chevron-left"></i></button>
+                <div class="d-flex flex-column justify-content-center align-items-center" style="width: 12em;">
+                    <span id="tl-cur-name">Nome atual</span>
+                    <div class="d-flex flex-row">
+                        <input type="number" id="tl-cur-number" min="1"><span id="tl-max-number">/??</span>
+                    </div>
+                </div>
+                <button id="tl-btn-next" class="btn"><i class="bi-chevron-right"></i></button>
+                <button id="tl-btn-last" class="btn"><i class="bi-chevron-double-right"></i></button>
+            </div>
+
+            <!-- Timeline moment frames -->
+            <div id="timeline-keyframe-container" class="w-100">
+                <ul id="timeline-keyframes">
+                    
+                </ul>
+            </div>
+        </div>
         
     </div>
 </div>
