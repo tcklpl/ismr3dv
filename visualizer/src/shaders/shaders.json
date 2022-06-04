@@ -39,6 +39,11 @@
             "name": "ipp_batch_renderer",
             "vertex": "common/basic_quad.vert",
             "fragment": "ipp/ipp_batch_renderer.frag"
+        },
+        {
+            "name": "ipp_visualizer_color",
+            "vertex": "common/basic_matrices.vert",
+            "fragment": "ipp/ipp_visualizer_color.frag"
         }
     ]
 }
