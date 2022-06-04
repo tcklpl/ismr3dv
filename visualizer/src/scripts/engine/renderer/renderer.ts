@@ -125,7 +125,7 @@ export class Renderer implements IMouseListener {
             return;
         }
 
-        const pickingId = this._picking.renderAndPickIdUnderMouse(this._sceneManager.active.objects);
+        const pickingId = this._picking.renderAndPickIdUnderMouse(this._sceneManager.active.opaqueObjects);
         Visualizer.instance.interactionManager.updateIdUnderMouse(pickingId);
 
         this._gl.viewport(0, 0, this._renderSettings.width, this._renderSettings.height);
