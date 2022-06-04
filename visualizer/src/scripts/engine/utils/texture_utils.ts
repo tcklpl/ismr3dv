@@ -5,15 +5,15 @@ export class TextureUtils {
         let tempTex = gl.createTexture();
         if (!tempTex) throw `Failed to create texture`;
         gl.bindTexture(gl.TEXTURE_2D, tempTex);
-        this.setDefaultTexturePreoperties(gl);
+        this.setTexturePreoperties(gl);
         return tempTex;
     }
 
-    static setDefaultTexturePreoperties(gl: WebGL2RenderingContext) {
+    static setTexturePreoperties(gl: WebGL2RenderingContext, filter = gl.LINEAR) {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter);
     }
 
     static createTextureFromImage(gl: WebGL2RenderingContext, image: HTMLImageElement) {
@@ -26,6 +26,14 @@ export class TextureUtils {
         const tex = this.createWebGLTexture(gl);
         gl.bindTexture(gl.TEXTURE_2D, tex);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        return tex;
+    }
+
+    static create1DVec3TextureFromBuffer(gl: WebGL2RenderingContext, buf: Float32Array) {
+        const tex = this.createWebGLTexture(gl);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        this.setTexturePreoperties(gl, gl.NEAREST);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB32F, buf.length / 3, 1, 0, gl.RGB, gl.FLOAT, buf);
         return tex;
     }
 
