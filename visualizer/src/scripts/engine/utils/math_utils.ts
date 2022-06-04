@@ -1,3 +1,4 @@
+import { Vec2 } from "../data_formats/vec/vec2";
 import { Vec3 } from "../data_formats/vec/vec3";
 
 export class MUtils {
@@ -40,6 +41,12 @@ export class MUtils {
         const beta = Math.atan(Math.sqrt( ( (loc.x - origin.x)**2 + (loc.z - origin.z)**2 ) / (loc.y - origin.y) ));
 
         return new Vec3(this.radToDeg(alpha), this.radToDeg(beta), this.radToDeg(gamma));
+    }
+
+    static normalizedLatLong(lat: number, long: number) {
+        lat = (-lat + 90) / 180;
+        long = (long + 180) / 360;
+        return new Vec2(lat, long);
     }
 
     static gaussianKernelValueOf(x: number, width: number, center: number = 0, height: number = 1) {
