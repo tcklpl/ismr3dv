@@ -11,7 +11,7 @@ canvas.on('click', e => {
 });
 
 $(window).on("resize", () => {
-    Visualizer.instance.engine.adjustToWindowSize();
+    Visualizer.instance?.engine?.adjustToWindowSize();
 });
 
 window.onerror = (e, source) => {
