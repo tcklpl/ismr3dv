@@ -205,19 +205,22 @@ export class UISession implements IUI {
         Visualizer.instance.ui.optionsHud.setSessionRelatedButtonsEnabled(true);
     }
 
-    private createLoadedSessionCard(save: ISessionSave) {
+    private createLoadedSessionCard(save: ISessionSave, loadSessionId: string, deleteSessionId: string) {
         const creationDate = save.creation_date.toLocaleString();
         const startDate = save.start_date.toLocaleString();
         const endDate = save.end_date.toLocaleString();
 
         return `
-        <div class="card ns-hoverable flex-grow-1" style="cursor: pointer; margin-right: 0.5em; margin-bottom: 0.5em;">
+        <div class="card ns-hoverable flex-grow-1" style="margin-right: 0.5em; margin-bottom: 0.5em;">
             <div class="card-body h-100 container-fluid">
                 <div>
                     <i class="bi-hdd-fill" style="font-size: 1.5em; margin-right: 0.5em; vertical-align: middle;"></i>${save.name}
                 </div>
-                <div style="color: red; cursor: pointer" id=":ERASE-SESSION-SAVE-ID">
-                    <i class="bi-trash" class="icon-left"></i>Delete
+                <div style="cursor: pointer" class="text-primary session-card-hover" id="${loadSessionId}">
+                    <i class="bi-box-arrow-right icon-left"></i><span>Load</span>
+                </div>
+                <div style="color: red; cursor: pointer" class="session-card-hover" id="${deleteSessionId}">
+                    <i class="bi-trash icon-left"></i><span>Delete</span>
                 </div>
                 <hr>
                 <div class="row">
@@ -250,14 +253,15 @@ export class UISession implements IUI {
             if (sessions.length > 0) {
                 this._loadStationList.empty();
                 sessions.forEach(s => {
-                    const id = `seb-${RandomUtils.randomString(10)}`;
-                    const src = this.createLoadedSessionCard(s).replace(':ERASE-SESSION-SAVE-ID', id);
+                    const loadId = `seb-${RandomUtils.randomString(10)}`;
+                    const deleteId = `seb-${RandomUtils.randomString(10)}`;
+                    const src = this.createLoadedSessionCard(s, loadId, deleteId);
                     const html = $.parseHTML(src);
-                    $(html).on('click', () => {
+                    this._loadStationList.append(html);
+                    $(`#${loadId}`).on('click', () => {
                         this.loadSession(s);
                     });
-                    this._loadStationList.append(html);
-                    $(`#${id}`).on('click', () => {
+                    $(`#${deleteId}`).on('click', () => {
                         new ConfirmationScreen('Are you sure?', `Do you really wish to delete the session '${s.name}'? This action is irreversible.`, () => {
                             Visualizer.instance.idb.sessionController.remove(s)
                             .then(() => {
