@@ -81,7 +81,7 @@ export class UITimeline implements IUI {
         .then(t => {
             session.addIPP(t.map(ipp => {
                 ipp.id = parseInt(`${ipp.id}`);
-                ipp.value = parseInt(`${ipp.value}`);
+                ipp.value = parseFloat(`${ipp.value}`);
                 return ipp;
             }));
             this.updateForSelectedStations();
