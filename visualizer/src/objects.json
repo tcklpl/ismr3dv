@@ -17,6 +17,12 @@
             "mesh": "pyramid",
             "shader": "solid_color",
             "material": ""
+        },
+        {
+            "name": "ipp_sphere",
+            "mesh": "sphere",
+            "shader": "ipp_visualizer_color",
+            "material": ""
         }
     ]
 }
