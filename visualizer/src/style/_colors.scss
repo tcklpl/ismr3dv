@@ -7,3 +7,19 @@ $color-every4-inactive-moment: #a9a9a9;
 $color-active-moment: $color-active-green;
 $color-buffered-moment: #8da9c4;
 $color-buffered-same-img-moment: #9052a8;
+
+.text-color-active {
+    color: $color-active-green;
+}
+
+.text-color-buffered {
+    color: $color-buffered-moment;
+}
+
+.text-color-buffered-same-moment {
+    color: $color-buffered-same-img-moment;
+}
+
+.text-color-inactive {
+    color: $color-normal-inactive-moment;
+}
