@@ -2,7 +2,11 @@
     id="offcanvas-timeline" aria-labelledby="offcanvasScrollingLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Timeline</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div>
+            <i class="bi-question-lg" style="font-size: 1.2em;" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="hover focus" 
+            data-bs-placement="top" data-bs-content="<span class='text-color-active'><i class='bi-circle-fill icon-left'></i>Active</span><br><span class='text-color-buffered'><i class='bi-circle-fill icon-left'></i>Buffered</span><br><span class='text-color-buffered-same-moment'><i class='bi-circle-fill icon-left'></i>Same buffer</span><br><span class='text-color-inactive'><i class='bi-circle-fill icon-left'></i>Unbuffered</span>"></i>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
     </div>
     <div class="offcanvas-body d-flex container-fluid h-100 align-items-center justify-content-center" id="timeline-container">
 
