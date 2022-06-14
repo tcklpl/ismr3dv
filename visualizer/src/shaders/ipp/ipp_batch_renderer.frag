@@ -13,21 +13,48 @@ uniform int u_buffer_r_length;
 uniform int u_buffer_g_length;
 uniform int u_buffer_b_length;
 uniform int u_buffer_a_length;
-uniform float u_distance_threshold;
 uniform int u_available_buffers;
 
-bool isFragmentInRange(vec2 target) {
+uniform float u_distance_threshold;
+uniform int u_fragment_importance_method;
+
+#define FRAGMENT_METHOD_BINARY 0
+#define FRAGMENT_METHOD_LINEAR 1
+#define FRAGMENT_METHOD_QUADRATIC 2
+
+float getFragmentDistance(vec2 target) {
     float dx = (target.x - vtf_texCoords.x) * 2.0;
     float dy = target.y - vtf_texCoords.y;
-    return sqrt(dx * dx + dy * dy) <= u_distance_threshold;
+    return sqrt(dx * dx + dy * dy);
+}
+
+float fragmentImportanceLinear(float value, float d) {
+    return value * (1.0 - d);
+}
+
+float fragmentImportanceQuadratic(float value, float d) {
+    return value * (1.0 - d) * (1.0 - d);
 }
 
 float getFragmentImportance(sampler2D targetBuffer, int bufferSize) {
     float importance = 0.0;
+    float distanceMultiplier = 1.0 / u_distance_threshold;
     for (int i = 0; i < bufferSize; i++) {
         vec3 bufferInfo = texelFetch(targetBuffer, ivec2(i, 0), 0).xyz;
-        if (isFragmentInRange(bufferInfo.xy)) {
-            importance += bufferInfo.z;
+        float d = getFragmentDistance(bufferInfo.xy);
+        if (d <= u_distance_threshold) {
+            switch (u_fragment_importance_method) {
+                case FRAGMENT_METHOD_BINARY:
+                    importance += bufferInfo.z;
+                    break;
+                case FRAGMENT_METHOD_LINEAR:
+                    importance += fragmentImportanceLinear(bufferInfo.z, d * distanceMultiplier);
+                    break;
+                case FRAGMENT_METHOD_QUADRATIC:
+                    importance += fragmentImportanceQuadratic(bufferInfo.z, d * distanceMultiplier);
+                default:
+                    break;
+            }
         }
     }
     return importance;
