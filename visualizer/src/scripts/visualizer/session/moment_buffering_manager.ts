@@ -15,6 +15,7 @@ interface IIPPShaderUniformCollection {
     a: IIPPShaderChannel;
     threshold: WebGLUniformLocation;
     available_buffers: WebGLUniformLocation;
+    fragment_importance_method: WebGLUniformLocation;
 }
 
 export class MomentBufferingManager {
@@ -56,7 +57,8 @@ export class MomentBufferingManager {
                 length: this._shader.assertGetUniform('u_buffer_a_length')
             },
             threshold: this._shader.assertGetUniform('u_distance_threshold'),
-            available_buffers: this._shader.assertGetUniform('u_available_buffers')
+            available_buffers: this._shader.assertGetUniform('u_available_buffers'),
+            fragment_importance_method: this._shader.assertGetUniform('u_fragment_importance_method')
         };
     }
 
@@ -89,6 +91,7 @@ export class MomentBufferingManager {
         const buf = this._texBuffers.getOffsettedBuffer(offset);
 
         this._shader.bind();
+        this._gl.uniform1i(this._uniforms.fragment_importance_method, 2);
         this._gl.uniform1f(this._uniforms.threshold, this._ippThreshold);
 
         const indexToUniforms = (index: number) => {

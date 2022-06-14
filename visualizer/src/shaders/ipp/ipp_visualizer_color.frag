@@ -21,6 +21,6 @@ void main() {
         ippSample.a;
     
     // out_color = vec4(vec3(0.0 + ippSample.r + ippSample.g + ippSample.b + ippSample.a), 1.0);
-    out_color = vec4(vec3(incidence), incidence > 0.0 ? 0.5 : 0.0);
+    out_color = vec4(vec3(incidence), incidence > 0.0 ? 1.0 : 0.0);
     out_bloom = vec4(0.0);
 }
