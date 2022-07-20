@@ -1,9 +1,10 @@
+import { EngineError } from "../errors/engine_error";
 
 export class TextureUtils {
 
     static createWebGLTexture(gl: WebGL2RenderingContext) {
         let tempTex = gl.createTexture();
-        if (!tempTex) throw `Failed to create texture`;
+        if (!tempTex) throw new TextureUtilsError('Failed to create texture');
         gl.bindTexture(gl.TEXTURE_2D, tempTex);
         this.setTexturePreoperties(gl);
         return tempTex;
@@ -37,4 +38,10 @@ export class TextureUtils {
         return tex;
     }
 
+}
+
+class TextureUtilsError extends EngineError {
+    constructor(description: string) {
+        super('Texture Utils', description);
+    }
 }

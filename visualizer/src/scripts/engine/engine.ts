@@ -7,6 +7,7 @@ import { IFrameListener } from "./traits/i_frame_listener";
 export class Engine {
 
     private _renderer = new Renderer();
+    private _shouldRender = true;
 
     private _lastFrame: number = 0;
     private _gl = Visualizer.instance.gl;
@@ -28,7 +29,7 @@ export class Engine {
 
         this._renderer.renderActive();
 
-        requestAnimationFrame(t => this.render(t));
+        if (this._shouldRender) requestAnimationFrame(t => this.render(t));
     }
 
     adjustToWindowSize() {
@@ -39,6 +40,10 @@ export class Engine {
 
     registerFrameListener(l: IFrameListener) {
         this._frameListeners.push(l);
+    }
+
+    haltExecution() {
+        this._shouldRender = false;
     }
 
     get renderer() {

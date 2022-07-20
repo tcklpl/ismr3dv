@@ -138,6 +138,7 @@ export class Renderer implements IMouseListener {
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, this._rlFramebuffer);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
 
+        // first render all opaque objects
         (this._sceneManager.active as Scene).opaqueObjects.forEach(o => {
             o.render(() => {
                 this._cameraManager.activeCamera?.matrix.bindUniform(this._gl, o.u_view);
@@ -145,6 +146,7 @@ export class Renderer implements IMouseListener {
             });
         });
 
+        // then render all gizmos
         Visualizer.instance.gizmoManager.allGizmos.filter(x => x.enabled).forEach(g => {
             g.draw(() => {
                 this._cameraManager.activeCamera?.matrix.bindUniform(this._gl, g.u_view);
@@ -152,6 +154,8 @@ export class Renderer implements IMouseListener {
             });
         });
 
+        // then render transparent objects
+        // this is a really simple implementation but it's ok for it's purpose
         this._gl.enable(this._gl.BLEND);
         this._gl.blendFunc(this._gl.SRC_ALPHA, this._gl.ONE_MINUS_SRC_ALPHA);
 
@@ -165,7 +169,7 @@ export class Renderer implements IMouseListener {
         this._gl.depthMask(true);
         this._gl.disable(this._gl.BLEND);
 
-
+        // free the framebuffer
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
     }
 
