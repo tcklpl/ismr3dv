@@ -8,7 +8,8 @@
     "minify-html": "npx html-minifier --collapse-whitespace --remove-comments --remove-tag-whitespace --minify-js true out/index.html -o out/index.html",
     "compile-scss": "scss --no-cache --update src/style:out/style/",
     "sync-others": "python3 ../tools/copy_files.py src/ out/",
-    "compile": "npm run join-html && npm run minify-html && npx tsc && npm run sync-others && npm run compile-scss",
+    "compile": "npm run join-html && npx tsc && npm run sync-others && npm run compile-scss",
+    "deploy": "npm run compile && npm run minify-html",
     "clean": "rm -r ./out/*"
   },
   "author": "",
