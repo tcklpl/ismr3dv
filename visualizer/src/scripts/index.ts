@@ -1,3 +1,4 @@
+import { EngineError } from "./engine/errors/engine_error";
 import { Visualizer } from "./visualizer/visualizer";
 
 const canvas = $('#ismr3dcanvas');
@@ -14,9 +15,11 @@ $(window).on("resize", () => {
     Visualizer.instance?.engine?.adjustToWindowSize();
 });
 
-window.onerror = (e, source) => {
-    $('#crash-motive').html(`'${e}' @ ${source}`);
-    $('#error-screen').css('display', 'flex');
+window.onerror = (e, source, lineno, colno, error) => {
+    if (error && error instanceof EngineError) {
+        Visualizer.instance.ui.fatal.showScreen(error, source || 'Not identified');
+        Visualizer.instance.engine.haltExecution();
+    }
 }
 
 document.addEventListener('pointerlockchange', e => {

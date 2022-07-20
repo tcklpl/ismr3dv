@@ -1,0 +1,21 @@
+#fatal {
+    z-index: 999;
+    position: fixed;
+}
+
+.fatal-header {
+    background: repeating-linear-gradient(-45deg, #ce645c, #ce645c 10px, #ca4040 10px, #ca4040 20px);
+    height: 10%;
+}
+
+.fatal-content {
+    background-color: #eb9393;
+}
+
+.fatal-table {
+    tr {
+        td:first-child {
+            text-align: end;
+        }
+    }
+}

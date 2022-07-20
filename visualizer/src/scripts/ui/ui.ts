@@ -1,5 +1,6 @@
 import { UICanvas } from "./ui_canvas";
 import { UIConfig } from "./ui_config";
+import { UIFatal } from "./ui_fatal";
 import { UIGizmos } from "./ui_gizmos";
 import { UIInfo } from "./ui_info";
 import { UILoader } from "./ui_loader";
@@ -19,6 +20,7 @@ export class UI {
     private _canvas = new UICanvas();
     private _stationsHud = new UIStationsHud();
     private _gizmos = new UIGizmos();
+    private _fatal = new UIFatal();
 
     registerEvents() {
 
@@ -72,6 +74,10 @@ export class UI {
 
     get stationsHud() {
         return this._stationsHud;
+    }
+
+    get fatal() {
+        return this._fatal;
     }
 
 }

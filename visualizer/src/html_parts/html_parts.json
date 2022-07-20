@@ -5,6 +5,10 @@
             "append_to": "body"
         },
         {
+            "url": "fatal.html",
+            "append_to": "body"
+        },
+        {
             "url": "info_hud.html",
             "append_to": "body"
         },
