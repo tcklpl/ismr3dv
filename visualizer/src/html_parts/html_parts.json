@@ -1,10 +1,6 @@
 {
     "html_parts": [
         {
-            "url": "error_screen.html",
-            "append_to": "body"
-        },
-        {
             "url": "fatal.html",
             "append_to": "body"
         },
