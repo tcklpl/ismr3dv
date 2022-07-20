@@ -10,9 +10,6 @@ export class Vertex {
     private _tangent!: Vec3;
     private _bitangent!: Vec3;
 
-    private _tangentsToAverage: Vec3[] = [];
-    private _bitangentsToAverage: Vec3[] = [];
-
     constructor(position: Vec3, uv: Vec2, normal: Vec3) {
         this._position = position;
         this._uv = uv;
