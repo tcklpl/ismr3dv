@@ -1,0 +1,37 @@
+<div class="full-screen fatal d-none flex-column" id="fatal">
+    <div class="fatal-header align-items-center justify-content-center"></div>
+    <div class="fatal-content flex-grow-1 d-flex flex-column align-items-center justify-content-center">
+        <h1>The visualizer threw a fatal error</h1>
+        <h3>This probably was due to some limitation of your system</h3>
+        If you got this message after altering any configuration you can reverse it below:
+        <span data-bs-toggle="tooltip" data-bs-placement="right" data-bs-trigger="hover" title="Config">
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#config-modal"
+                id="cfg-graphical-btn" style="color: black">
+                <i class="bi-gear" style="font-size: 2em;"></i>
+            </button><br>      
+        </span>
+        <div>
+            <table class="fatal-table">
+                <tr>
+                    <th colspan="2" style="text-align: center;">Error Info</th>
+                </tr>
+                <tr>
+                    <td><b>Threw By:</b></td>
+                    <td id="fatal-by"></td>
+                </tr>
+                <tr>
+                    <td><b>Description:</b></td>
+                    <td id="fatal-desc"></td>
+                </tr>
+                <tr>
+                    <td><b>At:</b></td>
+                    <td id="fatal-at"></td>
+                </tr>
+                <tr>
+                    <td><b>Time:</b></td>
+                    <td id="fatal-time"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
