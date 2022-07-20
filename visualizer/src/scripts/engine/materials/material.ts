@@ -1,4 +1,5 @@
 import { Visualizer } from "../../visualizer/visualizer";
+import { EngineError } from "../errors/engine_error";
 
 export class Material {
     
@@ -26,7 +27,7 @@ export class Material {
         map.forEach((v, k) => {
 
             let texture = this._maps.get(k);
-            if (!texture) throw `Failed to get texture '${k}' from material '${this._name}'`;
+            if (!texture) throw new EngineError('Material', `Failed to get texture '${k}' from material '${this._name}'`);
 
             toSet.set(v, texture);
         });

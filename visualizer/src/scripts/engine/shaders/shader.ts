@@ -1,4 +1,5 @@
 import { Visualizer } from "../../visualizer/visualizer";
+import { EngineError } from "../errors/engine_error";
 import { ShaderUtils } from "../utils/shader_utils";
 
 export class Shader {
@@ -36,7 +37,7 @@ export class Shader {
             const uniformIdentifierMatch = /uniform \w+ (u_\w+)(\[\d+\])?;/gi.exec(uniformDeclarationLine);
 
             // if no match groups
-            if (!uniformIdentifierMatch || uniformIdentifierMatch.length <= 1) throw `Invalid uniform identifier: '${uniformDeclarationLine}'`;
+            if (!uniformIdentifierMatch || uniformIdentifierMatch.length <= 1) throw new ShaderError(`Invalid uniform identifier: '${uniformDeclarationLine}'`);
 
             const baseName = uniformIdentifierMatch[1];
             if (!uniqueUniformIdentifiers.includes(baseName)) {
@@ -57,7 +58,7 @@ export class Shader {
 
                 uniformsToGet.forEach(uName => {
                     const u = this._gl.getUniformLocation(this._program, uName);
-                    if (!u) throw `Failed to get uniform '${uName}' at shader ${this._name}`;
+                    if (!u) throw new ShaderError(`Failed to get uniform '${uName}' at shader ${this._name}`);
                     this._uniforms.set(uName, u);
                 });
 
@@ -75,7 +76,7 @@ export class Shader {
 
     assertGetUniform(name: string) {
         const res = this.getUniform(name);
-        if (!res) throw `Failed to get uniform ${name} from shader ${this._name}\nAvailable (${this._uniforms.size}):\n${[...this._uniforms.keys()]}`;
+        if (!res) throw new ShaderError(`Failed to get uniform ${name} from shader ${this._name}\nAvailable (${this._uniforms.size}):\n${[...this._uniforms.keys()]}`);
         return res;
     }
 
@@ -83,4 +84,10 @@ export class Shader {
         return this._name;
     }
 
+}
+
+class ShaderError extends EngineError {
+    constructor(description: string) {
+        super('Shader', description);
+    }
 }

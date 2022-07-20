@@ -1,3 +1,4 @@
+import { EngineError } from "../errors/engine_error";
 
 export class ShaderUtils {
 
@@ -21,7 +22,8 @@ export class ShaderUtils {
 
         let error = gl.getShaderInfoLog(shader);
         gl.deleteShader(shader);
-        throw `Failed to compile shader: \n\n${source}\n\n${error}`;
+        console.error(`Failed to compile shader: \n\n${source}\n\n${error}`);
+        throw new ShaderUtilsError(`Failed to compile shader, error code '${error}'`);
     }
 
     /**
@@ -44,7 +46,14 @@ export class ShaderUtils {
             return program;
 
         gl.deleteProgram(program);
-        throw `Failed to link shader program with shaders: \n\n${vertexShader}\n\n and \n\n${fragmentShader}\n\nError: ${gl.getError()}`
+        console.error(`Failed to link shader program with shaders: \n\n${vertexShader}\n\n and \n\n${fragmentShader}\n\nError: ${gl.getError()}`);
+        throw new ShaderUtilsError(`Failed to link shader program, error code '${gl.getError()}'`);
     }
 
+}
+
+class ShaderUtilsError extends EngineError {
+    constructor(description: string) {
+        super('Shader Utils', description);
+    }
 }

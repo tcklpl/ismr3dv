@@ -1,34 +1,35 @@
+import { EngineError } from "../errors/engine_error";
 
 export class BufferUtils {
 
     static createBuffer(gl: WebGL2RenderingContext) {
         let tmpBuffer = gl.createBuffer();
-        if (!tmpBuffer) throw `Failed to create buffer`;
+        if (!tmpBuffer) throw new BufferUtilsError(`Failed to create buffer`);
         return tmpBuffer;
     }
 
     static createVAO(gl: WebGL2RenderingContext) {
         let tmpVao = gl.createVertexArray();
-        if (!tmpVao) throw `Failed to create VAO`;
+        if (!tmpVao) throw new BufferUtilsError(`Failed to create VAO`);
         return tmpVao;
     }
 
     static createFramebuffer(gl: WebGL2RenderingContext) {
         let tempBuf = gl.createFramebuffer();
-        if (!tempBuf) throw `Failed to create framebuffer`;
+        if (!tempBuf) throw new BufferUtilsError(`Failed to create framebuffer`);
         return tempBuf;
     }
 
     static createRenderbuffer(gl: WebGL2RenderingContext) {
         let tempBuf = gl.createRenderbuffer();
-        if (!tempBuf) throw `Failed to create framebuffer`;
+        if (!tempBuf) throw new BufferUtilsError(`Failed to create renderbuffer`);
         return tempBuf;
     }
 
     static assertFrameBufferCompletion(gl: WebGL2RenderingContext, msg?: string) {
         let status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
         if (status != gl.FRAMEBUFFER_COMPLETE) {
-            throw `Incomplete framebuffer, aborting...\n${msg}`;
+            throw new BufferUtilsError(`Incomplete framebuffer. ${msg}`);
         }
     }
 
@@ -57,4 +58,10 @@ export class BufferUtils {
         return vao;
     }
 
+}
+
+class BufferUtilsError extends EngineError {
+    constructor(description: string) {
+        super('Buffer Utils', description);
+    }
 }
