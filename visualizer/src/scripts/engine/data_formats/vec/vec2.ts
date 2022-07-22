@@ -23,6 +23,11 @@ export class Vec2 implements IUniformable {
         this.y /= factor;
     }
 
+    divideAndFloor(factor: number) {
+        this.x = Math.floor(this.x / factor);
+        this.y = Math.floor(this.y / factor);
+    }
+
     multiplyByVec2(other: Vec2) {
         this.x *= other.x;
         this.y *= other.y;
@@ -41,6 +46,10 @@ export class Vec2 implements IUniformable {
 
     equals(other: Vec2) {
         return this.x == other.x && this.y == other.y;
+    }
+
+    clone() {
+        return new Vec2(this.x, this.y);
     }
 
     public get values() {
