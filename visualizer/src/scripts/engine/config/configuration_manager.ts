@@ -29,6 +29,7 @@ export class ConfigurationManager {
             this._graphical = JSON.parse(graphicalStorage) as IGraphicalConfiguration;
         } catch (e) {
             this._graphical = {
+                resolution_scale: 1,
                 bloom: true,
                 earth_texture_size: "2k",
                 sun_texture_size: "2k"

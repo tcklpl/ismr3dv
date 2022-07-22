@@ -29,6 +29,7 @@ export class UIConfig implements IUI {
 
         $('#cfg-exposure').on('input', () => $('#cfg-exposure-label').html(`${$('#cfg-exposure').val()}`));
         $('#cfg-gamma').on('input', () => $('#cfg-gamma-label').html(`${$('#cfg-gamma').val()}`));
+        $('#cfg-resolution-scale').on('input', () => $('#cfg-resolution-scale-label').html(`${(($('#cfg-resolution-scale').val() as number) * 100).toFixed(0)}%`));
     }
 
     loadCurrent() {
@@ -77,12 +78,17 @@ export class UIConfig implements IUI {
         if (this._hasUnsupportedTextures) {
             $('#cfg-warn-textures').show();
         }
+
+        $('#cfg-resolution-scale').val(graphicalConfig.resolution_scale);
+        $('#cfg-resolution-scale-label').html(`${(graphicalConfig.resolution_scale * 100).toFixed(0)}%`);
     }
 
     private saveGraphical(graphicalConfig: IGraphicalConfiguration) {
         graphicalConfig.bloom = $('#cfg-bloom').is(':checked');
         graphicalConfig.earth_texture_size = $('#ctf-earth-texsize').val() as string;
         graphicalConfig.sun_texture_size = $('#ctf-sun-texsize').val() as string;
+        graphicalConfig.resolution_scale = $('#cfg-resolution-scale').val() as number;
+        Visualizer.instance.engine.adjustToWindowSize();
     }
 
     private setupStorage() {

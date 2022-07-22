@@ -71,12 +71,12 @@ export class Renderer implements IMouseListener {
     }
 
     resize(width: number, height: number) {
-        this._renderSettings.width = width;
-        this._renderSettings.height = height;
+        this._renderSettings.width = Math.floor(width * this._config.resolution_scale);
+        this._renderSettings.height = Math.floor(height * this._config.resolution_scale);
         this.constructPerspectiveProjectionMatrix();
 
         this.setupLayerBuffers();
-        this._bloom.updateForResolution(width, height);
+        this._bloom.updateForResolution(this._renderSettings.width, this._renderSettings.height);
         this._compositor.updateForResolution(width, height);
     }
 
