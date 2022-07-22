@@ -22,6 +22,10 @@ export class UI {
     private _gizmos = new UIGizmos();
     private _fatal = new UIFatal();
 
+    registerEssential() {
+        this._config.registerEvents();
+    }
+
     registerEvents() {
 
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
@@ -34,7 +38,6 @@ export class UI {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
 
-        this._config.registerEvents();
         this._timeline.registerEvents();
         this._session.registerEvents();
         this._optionsHud.registerEvents();

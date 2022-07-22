@@ -121,7 +121,7 @@ export class UIConfig implements IUI {
     }
 
     private checkForTextureSizeSupport(elementValue: string) {
-        const bigger = parseInt(elementValue.replace(/[^0-9]/gi, "")) * 1024 > Visualizer.instance.engine.limitations.maxTextureSize;
+        const bigger = parseInt(elementValue.replace(/[^0-9]/gi, "")) * 1024 > Visualizer.instance.limitations.maxTextureSize;
         if (bigger) {
             this._hasUnsupportedTextures = true;
         }

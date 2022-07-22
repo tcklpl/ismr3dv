@@ -2,6 +2,7 @@ import { CameraManager } from "../engine/camera/camera_manager";
 import { ConfigurationManager } from "../engine/config/configuration_manager";
 import { Engine } from "../engine/engine";
 import { InteractionManager } from "../engine/interactions/interaction_manager";
+import { ImplementationLimitations } from "../engine/limitations";
 import { MaterialManager } from "../engine/materials/material_manager";
 import { MeshManager } from "../engine/mesh_manager";
 import { ObjectManager } from "../engine/object_manager";
@@ -33,6 +34,7 @@ export class Visualizer {
     private _ui = new UI();
     private _cache!: ISMRCacheHub;
     private _idb = new IDBManager();
+    private _limitations!: ImplementationLimitations;
 
     // Managers
     private _materialManager = new MaterialManager();
@@ -64,6 +66,9 @@ export class Visualizer {
 
         this._configurationManager.loadConfiguration();
         this._configurationManager.saveConfigurations();
+
+        this._limitations = new ImplementationLimitations();
+        this.ui.registerEssential();
 
         this._api.fetchServerInfo()
         .then(si => this._serverInfo = si)
@@ -192,6 +197,10 @@ export class Visualizer {
 
     get serverInfo() {
         return this._serverInfo;
+    }
+
+    get limitations() {
+        return this._limitations;
     }
 
 

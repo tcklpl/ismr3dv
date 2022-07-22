@@ -11,7 +11,6 @@ export class Engine {
 
     private _lastFrame: number = 0;
     private _gl = Visualizer.instance.gl;
-    private _limitations = new ImplementationLimitations();
     private _config = Visualizer.instance.configurationManager;
 
     private _frameListeners: IFrameListener[] = [];
@@ -48,10 +47,6 @@ export class Engine {
 
     get renderer() {
         return this._renderer;
-    }
-
-    get limitations() {
-        return this._limitations;
     }
 
 }
