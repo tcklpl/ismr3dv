@@ -29,7 +29,7 @@ export class BufferUtils {
     static assertFrameBufferCompletion(gl: WebGL2RenderingContext, msg?: string) {
         let status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
         if (status != gl.FRAMEBUFFER_COMPLETE) {
-            throw new BufferUtilsError(`Incomplete framebuffer. ${msg}`);
+            throw new BufferUtilsError(`Incomplete framebuffer (status '${status}'). ${msg}`);
         }
     }
 
