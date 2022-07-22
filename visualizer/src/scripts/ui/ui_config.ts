@@ -1,3 +1,4 @@
+import { IDisplayConfiguration } from "../engine/config/display_configuration";
 import { IGeneralConfiguration } from "../engine/config/general_configuration";
 import { IGraphicalConfiguration } from "../engine/config/graphical_configuration";
 import { StorageType } from "../local_storage/storage_type";
@@ -11,18 +12,31 @@ export class UIConfig implements IUI {
 
     registerEvents() {
         const configManager = Visualizer.instance.configurationManager;
-
+        
         $('#cfg-graphical-btn').on('click', () => {
-            this.setupGeneral(configManager.general);
-            this.setupGraphical(configManager.graphical);
-            this.setupStorage();
+            this.loadCurrent();
         });
 
         $('#cfg-btn-save').on('click', () => {
             this.saveGeneral(configManager.general);
+            this.saveDisplay(configManager.display);
             this.saveGraphical(configManager.graphical);
             configManager.saveConfigurations();
+            Visualizer.instance.engine.renderer.compositor.updateSettings();
         });
+
+        this.loadCurrent();
+
+        $('#cfg-exposure').on('input', () => $('#cfg-exposure-label').html(`${$('#cfg-exposure').val()}`));
+        $('#cfg-gamma').on('input', () => $('#cfg-gamma-label').html(`${$('#cfg-gamma').val()}`));
+    }
+
+    loadCurrent() {
+        const configManager = Visualizer.instance.configurationManager;
+        this.setupGeneral(configManager.general);
+        this.setupDisplay(configManager.display);
+        this.setupGraphical(configManager.graphical);
+        this.setupStorage();
     }
 
     private setupGeneral(generalConfig: IGeneralConfiguration) {
@@ -32,6 +46,19 @@ export class UIConfig implements IUI {
     private saveGeneral(generalConfig: IGeneralConfiguration) {
         generalConfig.show_fps = $('#cfg-fps').is(':checked');
         Visualizer.instance.ui.info.update();
+    }
+
+    private setupDisplay(displayConfig: IDisplayConfiguration) {
+        console.log(displayConfig);
+        $('#cfg-exposure').val(displayConfig.exposure);
+        $('#cfg-gamma').val(displayConfig.gamma);
+        $('#cfg-exposure-label').html(`${displayConfig.exposure}`);
+        $('#cfg-gamma-label').html(`${displayConfig.gamma}`);
+    }
+
+    private saveDisplay(displayConfig: IDisplayConfiguration) {
+        displayConfig.exposure = $('#cfg-exposure').val() as number;
+        displayConfig.gamma = $('#cfg-gamma').val() as number;
     }
 
     private setupGraphical(graphicalConfig: IGraphicalConfiguration) {

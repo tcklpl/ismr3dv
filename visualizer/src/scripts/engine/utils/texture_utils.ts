@@ -30,6 +30,14 @@ export class TextureUtils {
         return tex;
     }
 
+    static createHDRBufferTexture(gl: WebGL2RenderingContext, width: number, height: number) {
+        const tex = this.createWebGLTexture(gl);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, width, height, 0, gl.RGBA, gl.FLOAT, null);
+        this.setTexturePreoperties(gl);
+        return tex;
+    }
+
     static create1DVec3TextureFromBuffer(gl: WebGL2RenderingContext, buf: Float32Array) {
         const tex = this.createWebGLTexture(gl);
         gl.bindTexture(gl.TEXTURE_2D, tex);

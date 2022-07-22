@@ -13,6 +13,7 @@ void main() {
 
     vec4 diffuseSample = texture(u_map_diffuse, vtf_texCoord);   
 
-    out_color = vec4(diffuseSample.rgb, 1.0);
+    // Inverse gamma correction, as this texture is already gamma corrected
+    out_color = vec4(pow(diffuseSample.rgb, vec3(2.2)) * 2.0, 1.0);
     out_bloom = out_color;
 }
