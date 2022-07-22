@@ -9,6 +9,8 @@ export class Engine {
     private _shouldRender = true;
 
     private _lastFrame: number = 0;
+    private _lastSecond: number = 0;
+    private _framesRendered: number = 0;
     private _gl = Visualizer.instance.gl;
     private _config = Visualizer.instance.configurationManager;
 
@@ -19,13 +21,16 @@ export class Engine {
         Time.deltaTime = msDiff / 1000;
         this._lastFrame = time;
 
-        if (this._config.general.show_fps) {
-            Visualizer.instance.ui.info.setFPS(1 / Time.deltaTime);
+        if (time - this._lastSecond >= 1000) {
+            this._lastSecond = time;
+            if (this._config.general.show_fps) Visualizer.instance.ui.info.setFPS(this._framesRendered);
+            this._framesRendered = 0;
         }
 
         this._frameListeners.forEach(f => f.update());
 
         this._renderer.renderActive();
+        this._framesRendered++;
 
         if (this._shouldRender) requestAnimationFrame(t => this.render(t));
     }
