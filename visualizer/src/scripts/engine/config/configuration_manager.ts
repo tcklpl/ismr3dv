@@ -1,6 +1,7 @@
 import { StorageController } from "../../local_storage/storage_controller";
 import { StorageType } from "../../local_storage/storage_type";
 import { Visualizer } from "../../visualizer/visualizer";
+import { IDisplayConfiguration } from "./display_configuration";
 import { IGeneralConfiguration } from "./general_configuration";
 import { IGraphicalConfiguration } from "./graphical_configuration";
 
@@ -10,15 +11,18 @@ export class ConfigurationManager {
 
     private _graphical!: IGraphicalConfiguration;
     private _general!: IGeneralConfiguration;
+    private _display!: IDisplayConfiguration;
 
     private _keyGraphical = 'graphical-configuration';
     private _keyGeneral = 'general-configuration';
+    private _keyDisplay = 'display-configuration';
 
     loadConfiguration() {
         this._storage = Visualizer.instance.storageController;
 
         const graphicalStorage = this._storage.get(StorageType.CONFIG, this._keyGraphical);
         const generalStorage = this._storage.get(StorageType.CONFIG, this._keyGeneral);
+        const displayStorage = this._storage.get(StorageType.CONFIG, this._keyDisplay);
 
         try {
             if (!graphicalStorage) throw `No graphical storage`;
@@ -39,11 +43,22 @@ export class ConfigurationManager {
                 show_fps: false
             };
         }
+
+        try {
+            if (!displayStorage) throw `No display storage`;
+            this._display = JSON.parse(displayStorage) as IDisplayConfiguration;
+        } catch (e) {
+            this._display = {
+                exposure: 1.0,
+                gamma: 1.0
+            };
+        }
     }
 
     saveConfigurations() {
         this._storage.set(StorageType.CONFIG, this._keyGraphical, JSON.stringify(this._graphical));
         this._storage.set(StorageType.CONFIG, this._keyGeneral, JSON.stringify(this._general));
+        this._storage.set(StorageType.CONFIG, this._keyDisplay, JSON.stringify(this._display));
     }
 
     get graphical() {
@@ -52,6 +67,10 @@ export class ConfigurationManager {
 
     get general() {
         return this._general;
+    }
+
+    get display() {
+        return this._display;
     }
 
 }

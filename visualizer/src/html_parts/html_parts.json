@@ -25,6 +25,10 @@
             "append_to": "#config-modal-body-content"
         },
         {
+            "url": "config/display_configuration.html",
+            "append_to": "#config-modal-body-content"
+        },
+        {
             "url": "config/graphical_configuration.html",
             "append_to": "#config-modal-body-content"
         },

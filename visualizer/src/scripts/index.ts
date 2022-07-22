@@ -2,10 +2,19 @@ import { EngineError } from "./engine/errors/engine_error";
 import { Visualizer } from "./visualizer/visualizer";
 
 const canvas = $('#ismr3dcanvas');
-const context = (canvas.get(0) as HTMLCanvasElement).getContext('webgl2');
-if (!context) throw `Failed to acquire WebGL2 context`;
+const gl = (canvas.get(0) as HTMLCanvasElement).getContext('webgl2');
+if (!gl) throw new EngineError('Engine', `Failed to acquire WebGL2 context`);
 
-const visualizer = new Visualizer(context);
+new Visualizer(gl);
+
+/*
+    Make sure we have both EXT_color_buffer_float and OES_texture_float_linear extensions in order to have HDR rendering.
+*/
+if (!gl.getExtension("EXT_color_buffer_float")) 
+    throw new EngineError('Engine', 'Extension EXT_color_buffer_float is not supported by your system');
+if (!gl.getExtension("OES_texture_float_linear")) 
+    throw new EngineError('Engine', 'Extension OES_texture_float_linear is not supported by your system');
+
 canvas.on('click', e => {
     if (!Visualizer.instance.universeScene.isHoveringOverStation)
         document.getElementById('ismr3dcanvas')?.requestPointerLock();

@@ -7,8 +7,8 @@ import { MUtils } from "../utils/math_utils";
 import { TextureUtils } from "../utils/texture_utils";
 import { IRenderLayers } from "./i_render_layers";
 import { IRenderSettings } from "./i_render_settings";
-import { RenderBloomProvider } from "./render_bloom_provider";
-import { RenderComposer } from "./render_composer";
+import { RenderBloomProvider } from "./bloom/render_bloom_provider";
+import { RenderComposer } from "./compositor/render_compositor";
 import { RenderPickProvider } from "./render_pick_provider";
 
 export class Renderer implements IMouseListener {
@@ -34,7 +34,7 @@ export class Renderer implements IMouseListener {
 
     private _picking = new RenderPickProvider();
     private _bloom = new RenderBloomProvider();
-    private _composer = new RenderComposer();
+    private _compositor = new RenderComposer();
 
     private _rlRenderbuffer!: WebGLRenderbuffer;
     private _rlFramebuffer!: WebGLFramebuffer;
@@ -57,7 +57,7 @@ export class Renderer implements IMouseListener {
 
         this._picking.setup(this._renderSettings);
         this._bloom.setup(this._renderSettings);
-        this._composer.setup(this._renderSettings);
+        this._compositor.setup(this._renderSettings);
         this.resize(this._gl.canvas.clientWidth, this._gl.canvas.clientHeight);
     }
 
@@ -77,7 +77,7 @@ export class Renderer implements IMouseListener {
 
         this.setupLayerBuffers();
         this._bloom.updateForResolution(width, height);
-        this._composer.updateForResolution(width, height);
+        this._compositor.updateForResolution(width, height);
     }
 
     private deleteLayerBuffers() {
@@ -93,12 +93,13 @@ export class Renderer implements IMouseListener {
         this._rlFramebuffer = BufferUtils.createFramebuffer(this._gl);
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, this._rlFramebuffer);
 
-        const colorBuffer = TextureUtils.createBufferTexture(this._gl, this._renderSettings.width, this._renderSettings.height);
-        const bloomBuffer = TextureUtils.createBufferTexture(this._gl, this._renderSettings.width, this._renderSettings.height);
+        const colorBuffer = TextureUtils.createHDRBufferTexture(this._gl, this._renderSettings.width, this._renderSettings.height);
+        const bloomBuffer = TextureUtils.createHDRBufferTexture(this._gl, this._renderSettings.width, this._renderSettings.height);
 
         this._gl.framebufferTexture2D(this._gl.FRAMEBUFFER, this._gl.COLOR_ATTACHMENT0, this._gl.TEXTURE_2D, colorBuffer, 0);
         this._gl.framebufferTexture2D(this._gl.FRAMEBUFFER, this._gl.COLOR_ATTACHMENT1, this._gl.TEXTURE_2D, bloomBuffer, 0);
 
+        // renderbuffer used for depth testing
         this._rlRenderbuffer = BufferUtils.createRenderbuffer(this._gl);
         this._gl.bindRenderbuffer(this._gl.RENDERBUFFER, this._rlRenderbuffer);
         this._gl.renderbufferStorage(this._gl.RENDERBUFFER, this._gl.DEPTH_COMPONENT32F, this._renderSettings.width, this._renderSettings.height);
@@ -131,7 +132,7 @@ export class Renderer implements IMouseListener {
         this._gl.viewport(0, 0, this._renderSettings.width, this._renderSettings.height);
         this.renderSceneIntoLayerbuffers();
         if (this._config.bloom) this._bloom.render(this._layers);
-        this._composer.compose(this._layers);
+        this._compositor.compose(this._layers);
     }
 
     private renderSceneIntoLayerbuffers() {
@@ -181,6 +182,10 @@ export class Renderer implements IMouseListener {
 
     get perspectiveProjectionMat4() {
         return this._perspectiveProjectionMatrix;
+    }
+
+    get compositor() {
+        return this._compositor;
     }
 
 }

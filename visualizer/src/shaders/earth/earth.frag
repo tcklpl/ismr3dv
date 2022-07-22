@@ -23,15 +23,17 @@ uniform sampler2D u_map_specular;
 uniform vec3 u_sun_position;
 uniform mat4 u_view;
 
-vec3 calculateNormal(vec4 normalSample) {
-    vec3 normalRaw = normalize(normalSample.rgb * 2.0 - 1.0);
-
+/*
+    Calculate the fragment's normal vector in model space
+*/
+vec3 calculateNormal() {
+    vec4 normalMapTexel = texture(u_map_normal, vtf_texCoord);
+    vec3 normalRaw = normalize(normalMapTexel.rgb * 2.0 - 1.0);
     mat3 tbn = mat3(
         vtf_tangent_modelSpace,
         vtf_bitangent_modelSpace,
         vtf_normal_modelSpace
     );
-
     return normalize(tbn * normalRaw);
 }
 
@@ -46,40 +48,56 @@ float calculateSpecularIntensity(vec3 lightDirectionUnit, float lightIncidence, 
     return cosAngle * lightIncidence * specularMapValue * multiplier;
 }
 
-void main() {
-
-    vec4 dayMapSample = texture(u_map_day, vtf_texCoord);
-    vec4 nightMapSample = texture(u_map_night, vtf_texCoord);
-    vec4 cloudMapSample = texture(u_map_clouds, vtf_texCoord);
-    vec4 normalMapSample = texture(u_map_normal, vtf_texCoord);
-    vec4 specularMapSample = texture(u_map_specular, vtf_texCoord);
-
-    vec3 normal = calculateNormal(normalMapSample);
-
-    vec3 lightDirection = u_sun_position - vtf_vertPos_modelSpace.xyz;
-    vec3 lightDirectionUnit = normalize(lightDirection);
-
-    float incidence = dot(normal, lightDirectionUnit);
-
-    vec4 dayNight = mix(vec4(dayMapSample.rgb, 1.0), vec4(nightMapSample.rgb, 1.0), 1.0 - clamp(incidence * 2.0, 0.0, 1.0));
-    
-    float cloudIntensity = incidence / 2.0;
-    vec4 clouds = vec4(cloudMapSample.rgb, cloudIntensity);
-
+vec3 calculateSpecular(float lightIncidence, vec4 specularMapTexel, vec3 color) {
     vec3 t = (u_view * vec4(u_sun_position, 1.0)).xyz;
     vec3 l2 = normalize(t - vtf_vertPos_cameraSpace.xyz);
-    vec3 specularColor = calculateSpecularIntensity(l2, incidence, specularMapSample.r, 0.7) * vec3(1.0);
+    return calculateSpecularIntensity(l2, lightIncidence, specularMapTexel.r, 0.7) * color;
+}
 
+float calculateFresnel() {
     vec3 fragmentToCamera = normalize(-vtf_vertPos_cameraSpace.xyz);
     float facingCamera = dot(normalize(vtf_normal_cameraSpace), fragmentToCamera);
-    float ringPower = (1.0 - facingCamera);
-    float ringIntensity = ringPower <= 0.75 ? 0.0 : (ringPower - 0.75 ) * 5.0;
+    return 1.0 - facingCamera;
+}
+
+void main() {
+
+    // Current texel from all the textures
+    vec4 dayMapTexel = texture(u_map_day, vtf_texCoord);
+    vec4 nightMapTexel = texture(u_map_night, vtf_texCoord);
+    vec4 cloudMapTexel = texture(u_map_clouds, vtf_texCoord);
+    vec4 specularMapTexel = texture(u_map_specular, vtf_texCoord);
+
+    vec3 normal = calculateNormal();
+
+    // Calculate the light incidence based on the sun
+    vec3 lightDirection = u_sun_position - vtf_vertPos_modelSpace.xyz;
+    vec3 lightDirectionUnit = normalize(lightDirection);
+    float incidence = dot(normal, lightDirectionUnit);
+
+    // Mix day and night map based on light incidence
+    vec4 dayNight = mix(vec4(dayMapTexel.rgb, 1.0), vec4(nightMapTexel.rgb, 1.0), 1.0 - clamp(incidence * 2.0, 0.0, 1.0));
+    
+    float cloudIntensity = incidence / 2.0;
+    vec4 clouds = vec4(cloudMapTexel.rgb, cloudIntensity);
+
+    vec3 specular = calculateSpecular(incidence, specularMapTexel, vec3(2.0, 2.0, 1.0));
+
+    float fresnel = calculateFresnel();
+    float ringIntensity = fresnel <= 0.75 ? 0.0 : (fresnel - 0.75 ) * 5.0;
 
     vec3 ringDayColor = vec3(0.55, 0.78, 1.0);
     vec3 ringNightColor = vec3(0.25, 0.34, 0.43);
 
     vec3 ringColor = mix(ringNightColor, ringDayColor, incidence);
 
-    out_color = dayNight + (clouds * clouds.w) + vec4(specularColor, 1.0) + vec4(ringColor * ringIntensity, 1.0);
-    out_bloom = vec4(ringColor * ringIntensity * 0.1, 1.0);
+    out_color = dayNight;
+    out_color += vec4(ringColor * ringIntensity * 2.0, 1.0);
+    out_color += (clouds * clouds.w);
+    out_color += vec4(specular, 1.0);
+
+    // Inverse gamma correction, as this texture is already gamma corrected
+    out_color = vec4(pow(out_color.rgb, vec3(2.2)), 1.0);
+
+    out_bloom = vec4(ringColor * ringIntensity * 0.3, 1.0);
 }
