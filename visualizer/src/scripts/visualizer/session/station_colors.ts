@@ -3,9 +3,9 @@ import { Vec3 } from "../../engine/data_formats/vec/vec3";
 
 export class StationColors {
 
-    static IDLE = new StationColors(new Vec3(0.0, 1, 0.78), false);
-    static HOVER = new StationColors(new Vec3(0.5, 0.8, 0.0), true);
-    static SELECTED = new StationColors(new Vec3(0.3, 1, 0.3), true);
+    static IDLE = new StationColors(new Vec3(0, 0.5, 1), false);
+    static HOVER = new StationColors(new Vec3(1, 0.5, 0), true);
+    static SELECTED = new StationColors(new Vec3(0, 1, 0), true);
 
     private _color: Vec3;
     private _bloom: UBoolean;
