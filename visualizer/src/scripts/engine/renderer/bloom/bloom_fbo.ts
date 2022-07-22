@@ -25,9 +25,9 @@ export class BloomFBO {
 
         if (width < 0 || width > Number.MAX_SAFE_INTEGER || height < 0 || height > Number.MAX_SAFE_INTEGER)
             throw new EngineError('Bloom FBO', `Failed to create a bloom FBO with dimensions ${width}x${height}`);
-        
-        this.destroy();
 
+        this.destroy();
+        
         this._fbo = BufferUtils.createFramebuffer(this._gl);
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, this._fbo);
 
@@ -69,6 +69,7 @@ export class BloomFBO {
 
     destroy() {
         this._mipChain.forEach(m => this._gl.deleteTexture(m.texture));
+        this._mipChain = [];
         this._gl.deleteFramebuffer(this._fbo);
     }
 
