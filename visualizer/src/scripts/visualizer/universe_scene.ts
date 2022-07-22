@@ -27,15 +27,14 @@ export class UniverseScene extends Scene {
         this._mainCamera = new MainCamera();
 
         this._earth = this._objectManager.summon("earth", EarthRenderableObject);
-        this.objects.push(this._earth);
 
         this._sun = this._objectManager.summon("sun", SunRenderableObject);
         this._sun.translate(new Vec3(8, 0, 8));
-        this.objects.push(this._sun);
 
         this._ipp = this._objectManager.summon("ipp_sphere", IPPRenderableObject);
         this._ipp.scale(new Vec3(0.02, 0.02, 0.02));
-        this.objects.push(this._ipp);
+
+        this.addObjects(this._earth, this._sun, this._ipp);
     }
 
     get earth() {
@@ -61,7 +60,7 @@ export class UniverseScene extends Scene {
     set stations(s: StationRenderableObject[]) {
         this.removeObjects(...this._stations);
         this._stations = s;
-        this.objects.push(...s);
+        this.addObjects(...s);
     }
 
     get isHoveringOverStation() {
