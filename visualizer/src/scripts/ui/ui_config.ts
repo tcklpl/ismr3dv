@@ -13,7 +13,7 @@ export class UIConfig implements IUI {
     registerEvents() {
         const configManager = Visualizer.instance.configurationManager;
         
-        $('#cfg-graphical-btn').on('click', () => {
+        $('[id^=cfg-graphical-btn-]').on('click', () => {
             this.loadCurrent();
         });
 
