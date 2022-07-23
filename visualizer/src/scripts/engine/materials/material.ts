@@ -1,22 +1,41 @@
 import { Visualizer } from "../../visualizer/visualizer";
 import { EngineError } from "../errors/engine_error";
+import { TextureUtils } from "../utils/texture_utils";
 
 export class Material {
     
     private _name: string;
     protected _maps: Map<string, WebGLTexture>;
+    private _cubemap: boolean;
 
-    constructor(name: string, textureMaps: Map<string, WebGLTexture>) {
+    private _gl = Visualizer.instance.gl;
+
+    constructor(name: string, textureMaps: Map<string, HTMLImageElement>, cubemap: boolean) {
         this._name = name;
-        this._maps = textureMaps;
+        this._cubemap = cubemap;
+
+        this._maps = new Map();
+        if (cubemap) {
+            const maps: HTMLImageElement[] = [];
+            textureMaps.forEach(v => maps.push(v));
+            
+            this._maps.set('diffuse', TextureUtils.createCubemap(this._gl, maps));
+        } else {
+            textureMaps.forEach((v, k) => this._maps.set(k, TextureUtils.createTextureFromImage(this._gl, v)));
+        }
+
     }
 
-    public get name() {
+    get name() {
         return this._name;
     }
 
-    public get maps() {
+    get maps() {
         return this._maps;
+    }
+
+    get isCubemap() {
+        return this._cubemap;
     }
 
     bind(map: Map<string, WebGLUniformLocation>) {
@@ -36,7 +55,7 @@ export class Material {
         toSet.forEach((v, k) => {
             gl.uniform1i(k, i);
             gl.activeTexture(gl.TEXTURE0 + i);
-            gl.bindTexture(gl.TEXTURE_2D, v);
+            gl.bindTexture(this._cubemap ? gl.TEXTURE_CUBE_MAP : gl.TEXTURE_2D, v);
             i++;
         })
     }

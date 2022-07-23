@@ -4,11 +4,13 @@ import { Visualizer } from "../visualizer/visualizer";
 import { GenericLoader } from "./generic_loader";
 import { MaterialLoadlist } from "./material_loadlist";
 import { Material } from "../engine/materials/material";
+import { EngineError } from "../engine/errors/engine_error";
 
 interface MaterialSource {
     name: string;
     maps: Map<string, HTMLImageElement>;
     totalToLoad: number;
+    cubemap: boolean;
 }
 
 export class MaterialLoader extends GenericLoader {
@@ -47,7 +49,8 @@ export class MaterialLoader extends GenericLoader {
             let source = <MaterialSource>{
                 name: mat.name,
                 maps: new Map(),
-                totalToLoad: mat.maps.length
+                totalToLoad: mat.maps.length,
+                cubemap: mat.cube_map
             }
             this._sources.push(source);
 
@@ -82,11 +85,16 @@ export class MaterialLoader extends GenericLoader {
      */
     construct() {
         this._sources.forEach(s => {
-            const finalMap = new Map<string, WebGLTexture>();
-            s.maps.forEach((value, key) => {
-                finalMap.set(key, TextureUtils.createTextureFromImage(this._gl, value));
-            });
-            this._materialManager.register(new Material(s.name, finalMap));
+            // validate cubemaps
+            const orderedCubemapMaps: Map<string, HTMLImageElement> = new Map();
+            if (s.cubemap) {
+                const requirements = ['pos_x', 'neg_x', 'pos_y', 'neg_y', 'pos_z', 'neg_z'];
+                requirements.forEach(r => {
+                    if (!s.maps.has(r)) throw new EngineError('Material Loader', `Incomplete cubemap: '${s.name}'`);
+                    orderedCubemapMaps.set(r, s.maps.get(r) as HTMLImageElement);
+                });
+            }
+            this._materialManager.register(new Material(s.name, s.cubemap ? orderedCubemapMaps : s.maps, s.cubemap));
         });
         this.onConstruct();
     }

@@ -29,7 +29,7 @@ export class ObjectLoader extends GenericLoader {
            let shader = this._shaderManager.getByName(o.shader);
            if (!shader) throw `Invalid shader when creating object ${o.name}`;
 
-           let material = o.material ? this._materialManager.getByName(o.material) : new Material("none", new Map());
+           let material = o.material ? this._materialManager.getByName(o.material) : new Material("none", new Map(), false);
            if (!material) throw `Invalid material when creating object ${o.name}`;
 
             this._sources.push({
