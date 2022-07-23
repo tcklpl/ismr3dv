@@ -84,32 +84,32 @@ export class Mesh {
         });
 
         // vertex position buffer
-        this._bufPositions = BufferUtils.createBuffer(gl);
+        this._bufPositions = BufferUtils.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this._bufPositions);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.position.values)), gl.STATIC_DRAW);
 
         // vertex uv buffer
-        this._bufUVs = BufferUtils.createBuffer(gl);
+        this._bufUVs = BufferUtils.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this._bufUVs);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.uv.values)), gl.STATIC_DRAW);
 
         // vertex normal buffer
-        this._bufNormals = BufferUtils.createBuffer(gl);
+        this._bufNormals = BufferUtils.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this._bufNormals);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.normal.values)), gl.STATIC_DRAW);
 
         // create tangent buffer
-        this._bufTangents = BufferUtils.createBuffer(gl);
+        this._bufTangents = BufferUtils.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this._bufTangents);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(t => t.tangent.values)), gl.STATIC_DRAW);
 
         // create bitangent buffer
-        this._bufBitangents = BufferUtils.createBuffer(gl);
+        this._bufBitangents = BufferUtils.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this._bufBitangents);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(t => t.bitangent.values)), gl.STATIC_DRAW);
 
         // create VAO
-        this._vao = BufferUtils.createVAO(gl);
+        this._vao = BufferUtils.createVAO();
         gl.bindVertexArray(this._vao);
 
         // bind positions to VAO
@@ -138,7 +138,7 @@ export class Mesh {
         gl.enableVertexAttribArray(4);
 
         // create index buffer
-        this._bufIndices = BufferUtils.createBuffer(gl);
+        this._bufIndices = BufferUtils.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._bufIndices);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(filteredIndices), gl.STATIC_DRAW);
 

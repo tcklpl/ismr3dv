@@ -26,7 +26,7 @@ export class BloomFBO {
 
         this.destroy();
         
-        this._fbo = BufferUtils.createFramebuffer(gl);
+        this._fbo = BufferUtils.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._fbo);
 
         const size = new Vec2(width, height);
@@ -40,7 +40,7 @@ export class BloomFBO {
             // We cannot make a texture with less than 1 pixel
             if (size.x < 1 || size.y < 1) break;
 
-            const texture = TextureUtils.createWebGLTexture(gl);
+            const texture = TextureUtils.createWebGLTexture();
             // I's possible to use GL_R11F_G11F_B10F because of the extensions EXT_color_buffer_float and OES_texture_float_linear
             // Reference: https://webgl2fundamentals.org/webgl/lessons/webgl-data-textures.html
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.R11F_G11F_B10F, 
@@ -57,7 +57,7 @@ export class BloomFBO {
 
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this._mipChain[0].texture, 0);
 
-        BufferUtils.assertFrameBufferCompletion(gl, 'Bloom FBO not complete');
+        BufferUtils.assertFrameBufferCompletion('Bloom FBO not complete');
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 

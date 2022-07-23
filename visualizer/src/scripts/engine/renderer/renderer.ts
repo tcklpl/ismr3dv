@@ -52,8 +52,8 @@ export class Renderer implements IMouseListener {
         gl.enable(gl.CULL_FACE);
         gl.depthFunc(gl.LEQUAL);
 
-        this._quadVAO = BufferUtils.createQuadVAO(gl);
-        this._skyboxVAO = BufferUtils.createSkyboxVAO(gl);
+        this._quadVAO = BufferUtils.createQuadVAO();
+        this._skyboxVAO = BufferUtils.createSkyboxVAO();
 
         this._picking.setup(this._renderSettings);
         this._bloom.setup(this._renderSettings);
@@ -90,24 +90,24 @@ export class Renderer implements IMouseListener {
     private setupLayerBuffers() {
         if (this._layers) this.deleteLayerBuffers();
 
-        this._rlFramebuffer = BufferUtils.createFramebuffer(gl);
+        this._rlFramebuffer = BufferUtils.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._rlFramebuffer);
 
-        const colorBuffer = TextureUtils.createHDRBufferTexture(gl, this._renderSettings.width, this._renderSettings.height);
-        const bloomBuffer = TextureUtils.createHDRBufferTexture(gl, this._renderSettings.width, this._renderSettings.height);
+        const colorBuffer = TextureUtils.createHDRBufferTexture(this._renderSettings.width, this._renderSettings.height);
+        const bloomBuffer = TextureUtils.createHDRBufferTexture(this._renderSettings.width, this._renderSettings.height);
 
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, colorBuffer, 0);
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT1, gl.TEXTURE_2D, bloomBuffer, 0);
 
         // renderbuffer used for depth testing
-        this._rlRenderbuffer = BufferUtils.createRenderbuffer(gl);
+        this._rlRenderbuffer = BufferUtils.createRenderbuffer();
         gl.bindRenderbuffer(gl.RENDERBUFFER, this._rlRenderbuffer);
         gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT32F, this._renderSettings.width, this._renderSettings.height);
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this._rlRenderbuffer);
 
         gl.drawBuffers([ gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1 ]);
 
-        BufferUtils.assertFrameBufferCompletion(gl, 'Failed to create render layer buffers');
+        BufferUtils.assertFrameBufferCompletion('Failed to create render layer buffers');
         this._layers = {
             raw_color: colorBuffer,
             raw_bloom: bloomBuffer

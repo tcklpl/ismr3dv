@@ -12,11 +12,11 @@ export class Line {
         this._points = points;
         drawMode = drawMode ?? gl.STATIC_DRAW;
 
-        this._bufPoints = BufferUtils.createBuffer(gl);
+        this._bufPoints = BufferUtils.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this._bufPoints);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._points.flatMap(p => p.values)), drawMode);
 
-        this._vao = BufferUtils.createVAO(gl);
+        this._vao = BufferUtils.createVAO();
         gl.bindVertexArray(this._vao);
         
         gl.bindBuffer(gl.ARRAY_BUFFER, this._bufPoints);

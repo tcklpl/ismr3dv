@@ -20,7 +20,7 @@ export class Moment {
             const ll = MUtils.normalizedLatLong(x.lat, x.long);
             return [ll.y, ll.x, x.value];
         }));
-        this._buffer = TextureUtils.create1DVec3TextureFromBuffer(gl, buf);
+        this._buffer = TextureUtils.create1DVec3TextureFromBuffer(buf);
     }
 
     freeBuffer() {
