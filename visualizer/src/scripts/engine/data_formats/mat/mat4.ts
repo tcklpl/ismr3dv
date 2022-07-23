@@ -2,6 +2,7 @@ import { MUtils } from "../../utils/math_utils";
 import { IUniformable } from "../i_uniformable";
 import { Vec3 } from "../vec/vec3";
 import { Vec4 } from "../vec/vec4";
+import { Mat3 } from "./mat3";
 
 export class Mat4 implements IUniformable {
 
@@ -14,6 +15,20 @@ export class Mat4 implements IUniformable {
 
     duplicate() {
         return new Mat4(this.values);
+    }
+
+    topLeftCornerTo3x3() {
+        return new Mat3([
+            this.values[0 * 4 + 0],
+            this.values[0 * 4 + 1],
+            this.values[0 * 4 + 2],
+            this.values[1 * 4 + 0],
+            this.values[1 * 4 + 1],
+            this.values[1 * 4 + 2],
+            this.values[2 * 4 + 0],
+            this.values[2 * 4 + 1],
+            this.values[2 * 4 + 2]
+        ]);
     }
 
     bindUniform(gl: WebGL2RenderingContext, to: WebGLUniformLocation): void {
