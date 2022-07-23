@@ -48,6 +48,26 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "stars",
+            "maps": [ "pos_x", "neg_x", "pos_y", "neg_y", "pos_z", "neg_z" ],
+            "resolutions": [ "2k" ],
+            "default_resolution": "2k",
+            "cube_map": true,
+            "images": [
+                {
+                    "resolution": "2k",
+                    "maps": {
+                        "pos_x": "stars/2k_left.png",
+                        "neg_x": "stars/2k_right.png",
+                        "pos_y": "stars/2k_up.png",
+                        "neg_y": "stars/2k_down.png",
+                        "pos_z": "stars/2k_front.png",
+                        "neg_z": "stars/2k_back.png"
+                    }
+                }
+            ]
         }
     ]
 }
