@@ -1,9 +1,11 @@
+import { SkyboxRenderableObject } from "../../visualizer/objects/skybox";
 import { RenderableObject } from "../data_formats/renderable_object";
 
 export class Scene {
 
     private _name: string;
     private _objects: RenderableObject[] = [];
+    protected _skybox?: SkyboxRenderableObject;
 
     private _cachedOpaqueObjects: RenderableObject[] = [];
     private _cachedTransparentObjects: RenderableObject[] = [];
@@ -41,6 +43,10 @@ export class Scene {
 
     get transparentObjects() {
         return this._cachedTransparentObjects;
+    }
+
+    get skybox() {
+        return this._skybox;
     }
 
 }

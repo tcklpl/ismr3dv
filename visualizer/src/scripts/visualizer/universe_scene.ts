@@ -3,6 +3,7 @@ import { Scene } from "../engine/scenes/scene";
 import { MainCamera } from "./camera/main_camera";
 import { EarthRenderableObject } from "./objects/earth";
 import { IPPRenderableObject } from "./objects/ipp_renderer";
+import { SkyboxRenderableObject } from "./objects/skybox";
 import { StationRenderableObject } from "./objects/station";
 import { SunRenderableObject } from "./objects/sun";
 import { Visualizer } from "./visualizer";
@@ -10,6 +11,8 @@ import { Visualizer } from "./visualizer";
 export class UniverseScene extends Scene {
 
     private _objectManager = Visualizer.instance.objectManager;
+    private _materialManager = Visualizer.instance.materialManager;
+    private _shaderManager = Visualizer.instance.shaderManager;
 
     private _earth!: EarthRenderableObject;
     private _sun!: SunRenderableObject;
@@ -33,6 +36,8 @@ export class UniverseScene extends Scene {
 
         this._ipp = this._objectManager.summon("ipp_sphere", IPPRenderableObject);
         this._ipp.scale(new Vec3(0.02, 0.02, 0.02));
+
+        this._skybox = new SkyboxRenderableObject(this._materialManager.assertGetByName('stars'), this._shaderManager.assertGetShader('skybox'));
 
         this.addObjects(this._earth, this._sun, this._ipp);
     }
