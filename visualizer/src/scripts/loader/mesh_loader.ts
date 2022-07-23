@@ -1,6 +1,5 @@
 import { AsyncUtils } from "../engine/utils/async_utils";
 import { OBJUtils } from "../engine/utils/obj_utils";
-import { Visualizer } from "../visualizer/visualizer";
 import { GenericLoader } from "./generic_loader";
 import { IMeshLoadlist } from "./mesh_loadlist";
 
@@ -13,7 +12,7 @@ export class MeshLoader extends GenericLoader {
     
     private _loadlist!: IMeshLoadlist;
     private _meshSources: IMeshSource[] = [];
-    private _meshManager = Visualizer.instance.meshManager;
+    private _meshManager = visualizer.meshManager;
 
     protected initialize(): void {
         this._loadlist = this._source as IMeshLoadlist;

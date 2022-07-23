@@ -1,6 +1,5 @@
 import { StorageController } from "../../local_storage/storage_controller";
 import { StorageType } from "../../local_storage/storage_type";
-import { Visualizer } from "../../visualizer/visualizer";
 import { IDisplayConfiguration } from "./display_configuration";
 import { IGeneralConfiguration } from "./general_configuration";
 import { IGraphicalConfiguration } from "./graphical_configuration";
@@ -18,7 +17,7 @@ export class ConfigurationManager {
     private _keyDisplay = 'display-configuration';
 
     loadConfiguration() {
-        this._storage = Visualizer.instance.storageController;
+        this._storage = visualizer.storageController;
 
         const graphicalStorage = this._storage.get(StorageType.CONFIG, this._keyGraphical);
         const generalStorage = this._storage.get(StorageType.CONFIG, this._keyGeneral);

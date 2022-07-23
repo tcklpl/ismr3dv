@@ -1,5 +1,4 @@
 import { IMouseListener } from "../../visualizer/io/i_mouse_listener";
-import { Visualizer } from "../../visualizer/visualizer";
 import { Mat4 } from "../data_formats/mat/mat4";
 import { Scene } from "../scenes/scene";
 import { BufferUtils } from "../utils/buffer_utils";
@@ -14,10 +13,10 @@ import { SkyboxRenderableObject } from "../../visualizer/objects/skybox";
 
 export class Renderer implements IMouseListener {
 
-    private _cameraManager = Visualizer.instance.cameraManager;
-    private _sceneManager = Visualizer.instance.sceneManager;
+    private _cameraManager = visualizer.cameraManager;
+    private _sceneManager = visualizer.sceneManager;
 
-    private _config = Visualizer.instance.configurationManager.graphical;
+    private _config = visualizer.configurationManager.graphical;
 
     private _perspectiveProjectionMatrix!: Mat4;
 
@@ -43,7 +42,7 @@ export class Renderer implements IMouseListener {
     constructor() {
         this.setupGl();
         this.constructPerspectiveProjectionMatrix();
-        Visualizer.instance.io.mouse.registerListener(this);
+        visualizer.io.mouse.registerListener(this);
     }
 
     private setupGl() {
@@ -128,7 +127,7 @@ export class Renderer implements IMouseListener {
         }
 
         const pickingId = this._picking.renderAndPickIdUnderMouse(this._sceneManager.active.opaqueObjects);
-        Visualizer.instance.interactionManager.updateIdUnderMouse(pickingId);
+        visualizer.interactionManager.updateIdUnderMouse(pickingId);
 
         gl.viewport(0, 0, this._renderSettings.width, this._renderSettings.height);
         this.renderSceneIntoLayerbuffers();
@@ -151,7 +150,7 @@ export class Renderer implements IMouseListener {
         });
 
         // then render all gizmos
-        Visualizer.instance.gizmoManager.allGizmos.filter(x => x.enabled).forEach(g => {
+        visualizer.gizmoManager.allGizmos.filter(x => x.enabled).forEach(g => {
             g.draw(() => {
                 this._cameraManager.activeCamera?.matrix.bindUniform(gl, g.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(gl, g.u_projection);

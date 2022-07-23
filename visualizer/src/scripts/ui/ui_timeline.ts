@@ -1,6 +1,5 @@
 import { ISMRSession } from "../visualizer/session/ismr_session";
 import { RandomUtils } from "../visualizer/utils/random_utils";
-import { Visualizer } from "../visualizer/visualizer";
 import { IUI } from "./i_ui";
 import { MessageScreen } from "./message_screen";
 
@@ -47,7 +46,7 @@ export class UITimeline implements IUI {
     }
 
     updateForSelectedStations() {
-        const session = Visualizer.instance.session;
+        const session = visualizer.session;
         if (!session) return;
         
         if (session.selectedStations.length == 0) {
@@ -68,10 +67,10 @@ export class UITimeline implements IUI {
     }
 
     fetchIPP() {
-        const session = Visualizer.instance.session;
+        const session = visualizer.session;
         if (!session) return;
 
-        Visualizer.instance.api.fetchIPP({
+        visualizer.api.fetchIPP({
             startDate: session.startDate,
             endDate: session.endDate,
             ion: 350,
@@ -161,11 +160,11 @@ export class UITimeline implements IUI {
     }
 
     private get session() {
-        return Visualizer.instance.session as ISMRSession;
+        return visualizer.session as ISMRSession;
     }
 
     private get ippSphere() {
-        return Visualizer.instance.universeScene.ippSphere;
+        return visualizer.universeScene.ippSphere;
     }
 
 }

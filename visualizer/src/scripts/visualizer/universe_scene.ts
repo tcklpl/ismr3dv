@@ -6,13 +6,12 @@ import { IPPRenderableObject } from "./objects/ipp_renderer";
 import { SkyboxRenderableObject } from "./objects/skybox";
 import { StationRenderableObject } from "./objects/station";
 import { SunRenderableObject } from "./objects/sun";
-import { Visualizer } from "./visualizer";
 
 export class UniverseScene extends Scene {
 
-    private _objectManager = Visualizer.instance.objectManager;
-    private _materialManager = Visualizer.instance.materialManager;
-    private _shaderManager = Visualizer.instance.shaderManager;
+    private _objectManager = visualizer.objectManager;
+    private _materialManager = visualizer.materialManager;
+    private _shaderManager = visualizer.shaderManager;
 
     private _earth!: EarthRenderableObject;
     private _sun!: SunRenderableObject;

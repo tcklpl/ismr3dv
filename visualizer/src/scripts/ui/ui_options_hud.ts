@@ -1,5 +1,4 @@
 import { HTMLUtils } from "../visualizer/utils/html_utils";
-import { Visualizer } from "../visualizer/visualizer";
 import { ConfirmationScreen } from "./confirmation_screen";
 import { IUI } from "./i_ui";
 import { MessageScreen } from "./message_screen";
@@ -16,8 +15,8 @@ export class UIOptionsHud implements IUI {
         this._exportSessionBtn.on('click', () => this.exportSession());
 
         this._newSessionBtn.on('click', () => {
-            Visualizer.instance.ui.session.resetUI();
-            if (Visualizer.instance.session) {
+            visualizer.ui.session.resetUI();
+            if (visualizer.session) {
                 new ConfirmationScreen(
                     'Are you sure?', 
                     `<b>You are about to create a new session overwriting your current one, any unsaved changes will be lost.</b><br>
@@ -32,21 +31,21 @@ export class UIOptionsHud implements IUI {
     }
 
     setSessionRelatedButtonsEnabled(state: boolean) {
-        this._saveSessionBtn.prop('disabled', !state || !Visualizer.instance.idb.isAvailable);
+        this._saveSessionBtn.prop('disabled', !state || !visualizer.idb.isAvailable);
         this._exportSessionBtn.prop('disabled', !state);
         this._timelineBtn.prop('disabled', !state);
     }
 
     private saveSession() {
-        Visualizer.instance.session?.save();
+        visualizer.session?.save();
     }
 
     private exportSession() {
-        if (!Visualizer.instance.session) {
+        if (!visualizer.session) {
             new MessageScreen('Error', 'You are not currently in a session');
             return;
         }
-        const sess = Visualizer.instance.session;
+        const sess = visualizer.session;
         HTMLUtils.downloadObjectAsFile(sess.asSerializable, sess.name + '.json');
     }
 }

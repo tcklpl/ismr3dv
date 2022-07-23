@@ -1,6 +1,5 @@
 import { Material } from "../../engine/materials/material";
 import { Shader } from "../../engine/shaders/shader";
-import { Visualizer } from "../visualizer";
 
 export class SkyboxRenderableObject {
 
@@ -24,7 +23,7 @@ export class SkyboxRenderableObject {
         this._shader.bind();
         this._material.bind(this._materialBindPoints);
         uniformConfiguration();
-        Visualizer.instance.engine.renderer.renderSkybox();
+        visualizer.engine.renderer.renderSkybox();
     }
 
     get u_view() {

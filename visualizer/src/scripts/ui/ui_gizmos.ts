@@ -1,14 +1,12 @@
-import { Gizmo } from "../engine/data_formats/gizmos/gizmo";
 import { Vec3 } from "../engine/data_formats/vec/vec3";
 import { RandomUtils } from "../visualizer/utils/random_utils";
-import { Visualizer } from "../visualizer/visualizer";
 import { IUI } from "./i_ui";
 
 export class UIGizmos implements IUI {
 
     registerEvents(): void {
         
-        Visualizer.instance.gizmoManager.allGizmos.forEach(g => {
+        visualizer.gizmoManager.allGizmos.forEach(g => {
             let str = '<div class="accordion-item">';
             const headerId = `gzh-${RandomUtils.randomString(10)}`;
             const collapseId = `gzc-${RandomUtils.randomString(10)}`;

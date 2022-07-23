@@ -6,7 +6,6 @@ import { Time } from "../../engine/time";
 import { IFrameListener } from "../../engine/traits/i_frame_listener";
 import { MUtils } from "../../engine/utils/math_utils";
 import { IMouseListener } from "../io/i_mouse_listener";
-import { Visualizer } from "../visualizer";
 
 export class MainCamera extends Camera implements IMouseListener, IFrameListener {
 
@@ -23,8 +22,8 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
 
     constructor() {
         super(new Vec3(-2, 0, 0), new Vec3(0, 1, 0));
-        Visualizer.instance.engine.registerFrameListener(this);
-        Visualizer.instance.io.mouse.registerListener(this);
+        visualizer.engine.registerFrameListener(this);
+        visualizer.io.mouse.registerListener(this);
         this.generateCameraMatrix();
     }
 
@@ -48,13 +47,13 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
     }
 
     onMouseMoveOffset(x: number, y: number) {
-        if (!Visualizer.instance.pointerLocked) return;
+        if (!visualizer.pointerLocked) return;
         this._deltaX = MUtils.clamp(-5, 5, x) * this._sensibility;
         this._deltaZ = MUtils.clamp(-5, 5, y) * this._sensibility;
     }
 
     onMouseScroll(dy: number) {
-        if (!Visualizer.instance.pointerLocked) return;
+        if (!visualizer.pointerLocked) return;
         this._deltaY = dy * 0.005;
     }
 

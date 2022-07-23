@@ -1,6 +1,5 @@
 import { Line } from "../mesh/line";
 import { Vec3 } from "../vec/vec3";
-import { Visualizer } from "../../../visualizer/visualizer";
 import { UBoolean } from "../uniformable_basics/u_boolean";
 import { MatrixCompliant3DTransformative } from "../matrix_compliant_3d_transformative";
 
@@ -17,7 +16,7 @@ export class Gizmo extends MatrixCompliant3DTransformative {
     private _uBloom: WebGLUniformLocation;
 
     constructor(name: string, line: Line, icon?: string) {
-        super(Visualizer.instance.shaderManager.assertGetShader('solid_color'));
+        super(visualizer.shaderManager.assertGetShader('solid_color'));
         this._name = name;
         this._line = line;
         this._icon = icon;

@@ -1,4 +1,3 @@
-import { Visualizer } from "../visualizer/visualizer";
 import { IUI } from "./i_ui";
 
 export class UIStationsHud implements IUI {
@@ -13,17 +12,17 @@ export class UIStationsHud implements IUI {
         this.update();
 
         this._selectNoneBtn.on('click', () => {
-            Visualizer.instance.session?.clearStationSelection();
+            visualizer.session?.clearStationSelection();
             this.update();
         });
         this._selectAllBtn.on('click', () => {
-            Visualizer.instance.session?.selectAllStations()
+            visualizer.session?.selectAllStations()
             this.update();
         });
     }
 
     update() {
-        const session = Visualizer.instance.session;
+        const session = visualizer.session;
         this._textCount.html(`${session?.selectedStations.length ?? 0}/${session?.stations?.length ?? 0}`);
         this._counterContainer.popover('dispose');
         this._counterContainer.attr('data-bs-content', 

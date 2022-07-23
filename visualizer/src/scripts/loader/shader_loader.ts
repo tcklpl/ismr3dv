@@ -1,6 +1,5 @@
 import { Shader } from "../engine/shaders/shader";
 import { AsyncUtils } from "../engine/utils/async_utils";
-import { Visualizer } from "../visualizer/visualizer";
 import { GenericLoader } from "./generic_loader";
 import { IShaderLoadlist } from "./shader_loadlist";
 
@@ -13,7 +12,7 @@ interface IShaderSource {
 export class ShaderLoader extends GenericLoader {
 
     private _loadlist!: IShaderLoadlist;
-    private _shaderManager = Visualizer.instance.shaderManager;
+    private _shaderManager = visualizer.shaderManager;
     private _sources: IShaderSource[] = [];
 
     protected initialize(): void {

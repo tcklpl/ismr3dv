@@ -3,7 +3,6 @@ import { IGeneralConfiguration } from "../engine/config/general_configuration";
 import { IGraphicalConfiguration } from "../engine/config/graphical_configuration";
 import { StorageType } from "../local_storage/storage_type";
 import { SizeNameUtils } from "../visualizer/utils/size_name_utils";
-import { Visualizer } from "../visualizer/visualizer";
 import { IUI } from "./i_ui";
 
 export class UIConfig implements IUI {
@@ -11,7 +10,7 @@ export class UIConfig implements IUI {
     private _hasUnsupportedTextures: boolean = false;
 
     registerEvents() {
-        const configManager = Visualizer.instance.configurationManager;
+        const configManager = visualizer.configurationManager;
         
         $('[id^=cfg-graphical-btn-]').on('click', () => {
             this.loadCurrent();
@@ -22,7 +21,7 @@ export class UIConfig implements IUI {
             this.saveDisplay(configManager.display);
             this.saveGraphical(configManager.graphical);
             configManager.saveConfigurations();
-            Visualizer.instance.engine.renderer.compositor.updateSettings();
+            visualizer.engine.renderer.compositor.updateSettings();
         });
 
         this.loadCurrent();
@@ -33,7 +32,7 @@ export class UIConfig implements IUI {
     }
 
     loadCurrent() {
-        const configManager = Visualizer.instance.configurationManager;
+        const configManager = visualizer.configurationManager;
         this.setupGeneral(configManager.general);
         this.setupDisplay(configManager.display);
         this.setupGraphical(configManager.graphical);
@@ -46,7 +45,7 @@ export class UIConfig implements IUI {
 
     private saveGeneral(generalConfig: IGeneralConfiguration) {
         generalConfig.show_fps = $('#cfg-fps').is(':checked');
-        Visualizer.instance.ui.info.update();
+        visualizer.ui.info.update();
     }
 
     private setupDisplay(displayConfig: IDisplayConfiguration) {
@@ -87,11 +86,11 @@ export class UIConfig implements IUI {
         graphicalConfig.earth_texture_size = $('#ctf-earth-texsize').val() as string;
         graphicalConfig.sun_texture_size = $('#ctf-sun-texsize').val() as string;
         graphicalConfig.resolution_scale = $('#cfg-resolution-scale').val() as number;
-        Visualizer.instance.engine.adjustToWindowSize();
+        visualizer.engine.adjustToWindowSize();
     }
 
     private setupStorage() {
-        const storage = Visualizer.instance.storageController;
+        const storage = visualizer.storageController;
 
         const totalSize = storage.maxSizeKb * 1000;
 
@@ -120,13 +119,13 @@ export class UIConfig implements IUI {
 
         $('#btn-clear-storage-cache').prop('disabled', cacheSize <= 0 ? 'disabled': '');
         $('#btn-clear-storage-cache').on('click', () => {
-            Visualizer.instance.cache.nuke();
+            visualizer.cache.nuke();
             this.setupStorage();
         });
     }
 
     private checkForTextureSizeSupport(elementValue: string) {
-        const bigger = parseInt(elementValue.replace(/[^0-9]/gi, "")) * 1024 > Visualizer.instance.limitations.maxTextureSize;
+        const bigger = parseInt(elementValue.replace(/[^0-9]/gi, "")) * 1024 > visualizer.limitations.maxTextureSize;
         if (bigger) {
             this._hasUnsupportedTextures = true;
         }

@@ -1,15 +1,14 @@
 import { IMouseListener } from "../../visualizer/io/i_mouse_listener";
-import { Visualizer } from "../../visualizer/visualizer";
 
 export class InteractionManager implements IMouseListener {
 
-    private _objManager = Visualizer.instance.objectManager;
+    private _objManager = visualizer.objectManager;
 
     private _currentId: number = -1;
     private _currentSelectable: any;
 
     constructor() {
-        Visualizer.instance.io.mouse.registerListener(this);
+        visualizer.io.mouse.registerListener(this);
     }
     
     updateIdUnderMouse(newId: number) {

@@ -1,4 +1,3 @@
-import { Visualizer } from "../../../visualizer/visualizer";
 import { Vec2 } from "../../data_formats/vec/vec2";
 import { Shader } from "../../shaders/shader";
 import { IRenderPostProcessingProvider } from "../i_prender_post_processing_provider";
@@ -8,7 +7,7 @@ import { BloomFBO } from "./bloom_fbo";
 
 export class RenderBloomProvider implements IRenderPostProcessingProvider {
 
-    private _shaderManager = Visualizer.instance.shaderManager;
+    private _shaderManager = visualizer.shaderManager;
 
     private _resolution!: Vec2;
     private _bloomMips = 5;
@@ -73,7 +72,7 @@ export class RenderBloomProvider implements IRenderPostProcessingProvider {
             gl.viewport(0, 0, mip.size.x, mip.size.y);
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, mip.texture, 0);
 
-            Visualizer.instance.engine.renderer.renderQuad();
+            visualizer.engine.renderer.renderQuad();
 
             // Set current resolution as srcResolution for the next iteration
             mip.size.bindUniform(gl, this._downsampleUniformResolution);
@@ -103,7 +102,7 @@ export class RenderBloomProvider implements IRenderPostProcessingProvider {
             gl.viewport(0, 0, nextMip.size.x, nextMip.size.y);
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, nextMip.texture, 0);
 
-            Visualizer.instance.engine.renderer.renderQuad();
+            visualizer.engine.renderer.renderQuad();
         }
 
         gl.disable(gl.BLEND);

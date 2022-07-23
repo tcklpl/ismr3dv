@@ -22,9 +22,6 @@ import { ISMRSession } from "./session/ismr_session";
 import { UniverseScene } from "./universe_scene";
 
 export class Visualizer {
-    
-    // Singleton
-    private static _instance: Visualizer;
 
     // Main parts
     private _loader: Loader;
@@ -59,7 +56,7 @@ export class Visualizer {
     private _universeScene!: UniverseScene;
 
     constructor() {
-        Visualizer._instance = this;
+        globalThis.visualizer = this;
         this._io = new VisualizerIO();
 
         this._configurationManager.loadConfiguration();
@@ -95,10 +92,6 @@ export class Visualizer {
         this.ui.registerEvents();
 
         requestAnimationFrame(t => this._engine.render(t));
-    }
-
-    public static get instance() {
-        return this._instance;
     }
 
     get materialManager() {

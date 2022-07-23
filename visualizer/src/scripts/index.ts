@@ -17,21 +17,21 @@ if (!gl.getExtension("OES_texture_float_linear"))
     throw new EngineError('Engine', 'Extension OES_texture_float_linear is not supported by your system');
 
 canvas.on('click', e => {
-    if (!Visualizer.instance.universeScene.isHoveringOverStation)
+    if (!visualizer.universeScene.isHoveringOverStation)
         document.getElementById('ismr3dcanvas')?.requestPointerLock();
 });
 
 $(window).on("resize", () => {
-    Visualizer.instance?.engine?.adjustToWindowSize();
+    visualizer?.engine?.adjustToWindowSize();
 });
 
 window.onerror = (e, source, lineno, colno, error) => {
     if (error && error instanceof EngineError) {
-        Visualizer.instance.ui.fatal.showScreen(error, source || 'Not identified');
-        Visualizer.instance.engine.haltExecution();
+        visualizer.ui.fatal.showScreen(error, source || 'Not identified');
+        visualizer.engine.haltExecution();
     }
 }
 
 document.addEventListener('pointerlockchange', e => {
-    Visualizer.instance.pointerLocked = document.pointerLockElement === document.getElementById('ismr3dcanvas');
+    visualizer.pointerLocked = document.pointerLockElement === document.getElementById('ismr3dcanvas');
 }, false);
