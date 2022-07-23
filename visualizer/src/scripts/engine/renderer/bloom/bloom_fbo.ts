@@ -1,4 +1,3 @@
-import { Visualizer } from "../../../visualizer/visualizer";
 import { Vec2 } from "../../data_formats/vec/vec2";
 import { EngineError } from "../../errors/engine_error";
 import { BufferUtils } from "../../utils/buffer_utils";
@@ -12,7 +11,6 @@ interface BloomMip {
 
 export class BloomFBO {
 
-    private _gl = Visualizer.instance.gl;
     private _fbo!: WebGLFramebuffer;
 
     private _mipChain: BloomMip[] = [];
@@ -28,8 +26,8 @@ export class BloomFBO {
 
         this.destroy();
         
-        this._fbo = BufferUtils.createFramebuffer(this._gl);
-        this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, this._fbo);
+        this._fbo = BufferUtils.createFramebuffer(gl);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this._fbo);
 
         const size = new Vec2(width, height);
         const intSize = new Vec2(width, height);
@@ -42,11 +40,11 @@ export class BloomFBO {
             // We cannot make a texture with less than 1 pixel
             if (size.x < 1 || size.y < 1) break;
 
-            const texture = TextureUtils.createWebGLTexture(this._gl);
+            const texture = TextureUtils.createWebGLTexture(gl);
             // I's possible to use GL_R11F_G11F_B10F because of the extensions EXT_color_buffer_float and OES_texture_float_linear
             // Reference: https://webgl2fundamentals.org/webgl/lessons/webgl-data-textures.html
-            this._gl.texImage2D(this._gl.TEXTURE_2D, 0, this._gl.R11F_G11F_B10F, 
-                intSize.x, intSize.y, 0, this._gl.RGB, this._gl.FLOAT, null);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.R11F_G11F_B10F, 
+                intSize.x, intSize.y, 0, gl.RGB, gl.FLOAT, null);
             
             const mip = <BloomMip>{
                 size: size.clone(),
@@ -57,20 +55,20 @@ export class BloomFBO {
             this._mipChain.push(mip);
         }
 
-        this._gl.framebufferTexture2D(this._gl.FRAMEBUFFER, this._gl.COLOR_ATTACHMENT0, this._gl.TEXTURE_2D, this._mipChain[0].texture, 0);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this._mipChain[0].texture, 0);
 
-        BufferUtils.assertFrameBufferCompletion(this._gl, 'Bloom FBO not complete');
-        this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
+        BufferUtils.assertFrameBufferCompletion(gl, 'Bloom FBO not complete');
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 
     bind() {
-        this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, this._fbo);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this._fbo);
     }
 
     destroy() {
-        this._mipChain.forEach(m => this._gl.deleteTexture(m.texture));
+        this._mipChain.forEach(m => gl.deleteTexture(m.texture));
         this._mipChain = [];
-        this._gl.deleteFramebuffer(this._fbo);
+        gl.deleteFramebuffer(this._fbo);
     }
 
     get mipChain() {

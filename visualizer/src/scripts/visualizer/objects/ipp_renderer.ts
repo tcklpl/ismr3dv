@@ -2,7 +2,6 @@ import { Mesh } from "../../engine/data_formats/mesh/mesh";
 import { RenderableObject } from "../../engine/data_formats/renderable_object";
 import { Material } from "../../engine/materials/material";
 import { Shader } from "../../engine/shaders/shader";
-import { Visualizer } from "../visualizer";
 
 export class IPPRenderableObject extends RenderableObject {
 
@@ -24,8 +23,6 @@ export class IPPRenderableObject extends RenderableObject {
     render(uniformConfiguration: () => void): void {
         // don't render if no texture is active
         if (!this.currentTexture) return;
-
-        const gl = Visualizer.instance.gl;
 
         this.shader.bind();
         gl.activeTexture(gl.TEXTURE0);

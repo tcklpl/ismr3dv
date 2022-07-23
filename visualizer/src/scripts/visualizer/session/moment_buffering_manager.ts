@@ -26,7 +26,6 @@ export class MomentBufferingManager {
     private _texBuffers: TimelineImageBuffers;
 
     private _ippThreshold: number;
-    private _gl = Visualizer.instance.gl;
 
     private _currentIndex: number;
     private _shader: Shader;
@@ -91,8 +90,8 @@ export class MomentBufferingManager {
         const buf = this._texBuffers.getOffsettedBuffer(offset);
 
         this._shader.bind();
-        this._gl.uniform1i(this._uniforms.fragment_importance_method, 2);
-        this._gl.uniform1f(this._uniforms.threshold, this._ippThreshold);
+        gl.uniform1i(this._uniforms.fragment_importance_method, 2);
+        gl.uniform1f(this._uniforms.threshold, this._ippThreshold);
 
         const indexToUniforms = (index: number) => {
             switch (index) {
@@ -107,19 +106,19 @@ export class MomentBufferingManager {
         for (let i = 0; i < moments.length; i++) {
             const uniforms = indexToUniforms(i);
 
-            this._gl.uniform1i(uniforms.buffer, i);
-            this._gl.activeTexture(this._gl.TEXTURE0 + i);
-            this._gl.bindTexture(this._gl.TEXTURE_2D, moments[i].buffer);
+            gl.uniform1i(uniforms.buffer, i);
+            gl.activeTexture(gl.TEXTURE0 + i);
+            gl.bindTexture(gl.TEXTURE_2D, moments[i].buffer);
 
-            this._gl.uniform1i(uniforms.length, moments[i].data.length);
+            gl.uniform1i(uniforms.length, moments[i].data.length);
         }
 
-        this._gl.uniform1i(this._uniforms.available_buffers, moments.length);
+        gl.uniform1i(this._uniforms.available_buffers, moments.length);
 
-        this._gl.viewport(0, 0, this._texBuffers.resolution.x, this._texBuffers.resolution.y);
-        this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, buf.fb);
+        gl.viewport(0, 0, this._texBuffers.resolution.x, this._texBuffers.resolution.y);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, buf.fb);
         Visualizer.instance.engine.renderer.renderQuad();
-        this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 
     nextMoment() {

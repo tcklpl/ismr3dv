@@ -15,7 +15,6 @@ export class Gizmo extends MatrixCompliant3DTransformative {
 
     private _uColor: WebGLUniformLocation;
     private _uBloom: WebGLUniformLocation;
-    private _gl = Visualizer.instance.gl;
 
     constructor(name: string, line: Line, icon?: string) {
         super(Visualizer.instance.shaderManager.assertGetShader('solid_color'));
@@ -31,9 +30,9 @@ export class Gizmo extends MatrixCompliant3DTransformative {
     draw(uniformConfiguration: () => void) {
         if (!this.enabled) return;
         this.shader.bind();
-        this._color.bindUniform(this._gl, this._uColor);
-        this._bloom.bindUniform(this._gl, this._uBloom);
-        this.modelMatrix.bindUniform(this._gl, this.u_model);
+        this._color.bindUniform(gl, this._uColor);
+        this._bloom.bindUniform(gl, this._uBloom);
+        this.modelMatrix.bindUniform(gl, this.u_model);
         uniformConfiguration();
         this._line.draw();
     }

@@ -1,4 +1,3 @@
-import { Visualizer } from "../../visualizer/visualizer";
 import { Material } from "../materials/material";
 import { Shader } from "../shaders/shader";
 import { IIdentifiable } from "../traits/i_identifiable";
@@ -42,8 +41,8 @@ export abstract class RenderableObject extends MatrixCompliant3DTransformative i
             this._hasPickingSetup = true;
         }
 
-        this.modelMatrix.bindUniform(Visualizer.instance.gl, this._pickingModelMat4Uniform);
-        (this._pickable ? this._idVec4 : this._zeroVec4).bindUniform(Visualizer.instance.gl, idUniform);
+        this.modelMatrix.bindUniform(gl, this._pickingModelMat4Uniform);
+        (this._pickable ? this._idVec4 : this._zeroVec4).bindUniform(gl, idUniform);
         uniformConfiguration();
         this._mesh.draw();
     }

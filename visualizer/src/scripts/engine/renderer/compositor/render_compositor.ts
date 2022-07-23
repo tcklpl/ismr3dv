@@ -8,7 +8,6 @@ import { IRenderSettings } from "../i_render_settings";
 
 export class RenderComposer implements IRenderProvider {
 
-    private _gl = Visualizer.instance.gl;
     private _shaderManager = Visualizer.instance.shaderManager;
     private _config = Visualizer.instance.configurationManager;
 
@@ -45,26 +44,26 @@ export class RenderComposer implements IRenderProvider {
     }
 
     updateSettings() {
-        this._gl.uniform1f(this._uniformExposure, this._config.display.exposure);
-        this._gl.uniform1f(this._uniformGamma, this._config.display.gamma);
-        this._gl.uniform1f(this._uniformBloomStrength, 0.04);
+        gl.uniform1f(this._uniformExposure, this._config.display.exposure);
+        gl.uniform1f(this._uniformGamma, this._config.display.gamma);
+        gl.uniform1f(this._uniformBloomStrength, 0.04);
     }
 
     compose(layers: IRenderLayers) {
-        this._gl.viewport(0, 0, this._resolution.x, this._resolution.y);
+        gl.viewport(0, 0, this._resolution.x, this._resolution.y);
 
-        this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         this._combineShader.bind();
 
-        this._gl.uniform1i(this._uniformColorBuffer, 0);
-        this._gl.activeTexture(this._gl.TEXTURE0);
-        this._gl.bindTexture(this._gl.TEXTURE_2D, layers.raw_color);
+        gl.uniform1i(this._uniformColorBuffer, 0);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, layers.raw_color);
 
-        this._gl.uniform1i(this._uniformBloomBuffer, 1);
-        this._gl.activeTexture(this._gl.TEXTURE1);
-        this._gl.bindTexture(this._gl.TEXTURE_2D, layers.pfx_bloom ?? null);
+        gl.uniform1i(this._uniformBloomBuffer, 1);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, layers.pfx_bloom ?? null);
 
-        new UBoolean(this._config.graphical.bloom).bindUniform(this._gl, this._uniformApplyBloom);
+        new UBoolean(this._config.graphical.bloom).bindUniform(gl, this._uniformApplyBloom);
         Visualizer.instance.engine.renderer.renderQuad();
     }
 };
