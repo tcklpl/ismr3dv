@@ -46,6 +46,28 @@ export class TextureUtils {
         return tex;
     }
 
+    static createCubemap(gl: WebGL2RenderingContext, images: HTMLImageElement[]) {
+        let tex = gl.createTexture();
+        if (!tex) throw new TextureUtilsError('Failed to create cubemap texture');
+        gl.bindTexture(gl.TEXTURE_CUBE_MAP, tex);
+
+        for (let i = 0; i < 6; i++) {
+            // TEXTURE_CUBE_MAP_POSITIVE_X is the first one and all the other faces are increments
+            gl.texImage2D(
+                gl.TEXTURE_CUBE_MAP_POSITIVE_X + i,
+                0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, images[i]
+            );
+        }
+
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
+
+        return tex;
+    }
+
 }
 
 class TextureUtilsError extends EngineError {
