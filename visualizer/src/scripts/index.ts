@@ -16,9 +16,13 @@ if (!gl.getExtension("EXT_color_buffer_float"))
 if (!gl.getExtension("OES_texture_float_linear")) 
     throw new EngineError('Engine', 'Extension OES_texture_float_linear is not supported by your system');
 
-canvas.on('click', e => {
+canvas.on('mousedown', e => {
     if (!visualizer.universeScene.isHoveringOverStation)
         document.getElementById('ismr3dcanvas')?.requestPointerLock();
+});
+
+canvas.on('mouseup', e => {
+    document.exitPointerLock();
 });
 
 $(window).on("resize", () => {
