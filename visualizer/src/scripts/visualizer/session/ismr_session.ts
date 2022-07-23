@@ -4,7 +4,6 @@ import { CustomAlert } from "../../ui/custom_alert";
 import { IIPPInfo } from "../api/formats/i_ipp_info";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { StationRenderableObject } from "../objects/station";
-import { Visualizer } from "../visualizer";
 import { ISessionConfig } from "./i_session.config";
 import { ISessionSave } from "./i_session_save";
 import { SessionTimeline } from "./session_timeline";
@@ -17,7 +16,7 @@ export class ISMRSession {
     private _startDate: Date;
     private _endDate: Date;
 
-    private _controller = Visualizer.instance.idb.sessionController;
+    private _controller = visualizer.idb.sessionController;
 
     private _config: ISessionConfig = {
         save_on_browser: true,
@@ -26,7 +25,7 @@ export class ISMRSession {
     };
     private _autoSaveTask: number = -1;
 
-    private _objectManager = Visualizer.instance.objectManager;
+    private _objectManager = visualizer.objectManager;
 
     private _stationList?: IStationInfo[];
     private _instantiatedStations: StationRenderableObject[] = [];
@@ -60,7 +59,7 @@ export class ISMRSession {
             this._instantiatedStations.push(instance);
         });
 
-        Visualizer.instance.universeScene.stations = this._instantiatedStations;
+        visualizer.universeScene.stations = this._instantiatedStations;
     }
 
     autoSave() {
@@ -101,8 +100,8 @@ export class ISMRSession {
             station.color = StationColors.SELECTED;
             station.colorLocked = true;
         }
-        Visualizer.instance.ui.stationsHud.update();
-        Visualizer.instance.ui.timeline.updateForSelectedStations();
+        visualizer.ui.stationsHud.update();
+        visualizer.ui.timeline.updateForSelectedStations();
     }
 
     toggleStationById(id: number) {
@@ -122,7 +121,7 @@ export class ISMRSession {
             instance.color = StationColors.IDLE;
         });
         this._selectedStations = [];
-        Visualizer.instance.ui.timeline.updateForSelectedStations();
+        visualizer.ui.timeline.updateForSelectedStations();
     }
 
     selectAllStations() {
@@ -136,7 +135,7 @@ export class ISMRSession {
             instance.color = StationColors.SELECTED;
             instance.colorLocked = true;
         });
-        Visualizer.instance.ui.timeline.updateForSelectedStations();
+        visualizer.ui.timeline.updateForSelectedStations();
     }
 
     addIPP(ipp: IIPPInfo[]) {

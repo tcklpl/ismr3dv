@@ -1,4 +1,3 @@
-import { Visualizer } from "../../../visualizer/visualizer";
 import { UBoolean } from "../../data_formats/uniformable_basics/u_boolean";
 import { Vec2 } from "../../data_formats/vec/vec2";
 import { Shader } from "../../shaders/shader";
@@ -8,8 +7,8 @@ import { IRenderSettings } from "../i_render_settings";
 
 export class RenderComposer implements IRenderProvider {
 
-    private _shaderManager = Visualizer.instance.shaderManager;
-    private _config = Visualizer.instance.configurationManager;
+    private _shaderManager = visualizer.shaderManager;
+    private _config = visualizer.configurationManager;
 
     private _resolution!: Vec2;
 
@@ -64,6 +63,6 @@ export class RenderComposer implements IRenderProvider {
         gl.bindTexture(gl.TEXTURE_2D, layers.pfx_bloom ?? null);
 
         new UBoolean(this._config.graphical.bloom).bindUniform(gl, this._uniformApplyBloom);
-        Visualizer.instance.engine.renderer.renderQuad();
+        visualizer.engine.renderer.renderQuad();
     }
 };

@@ -1,5 +1,4 @@
 import { AsyncUtils } from "../engine/utils/async_utils";
-import { Visualizer } from "../visualizer/visualizer";
 import { ILoadList } from "./loadlist";
 import { LoadState } from "./load_states";
 import { MaterialLoader } from "./material_loader";
@@ -21,7 +20,7 @@ export class Loader {
     private _loadedSources: number = 0;
     private _sourcesToLoad!: number;
 
-    private _ui = Visualizer.instance.ui.loader;
+    private _ui = visualizer.ui.loader;
 
     private _loadState: LoadState = LoadState.FETCHING_MAIN_LOADLIST;
 

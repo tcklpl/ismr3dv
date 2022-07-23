@@ -1,6 +1,5 @@
 import { IObjectSource } from "../engine/data_formats/i_source_object";
 import { Material } from "../engine/materials/material";
-import { Visualizer } from "../visualizer/visualizer";
 import { GenericLoader } from "./generic_loader";
 import { IObjectLoadlist } from "./object_loadlist";
 
@@ -8,10 +7,10 @@ export class ObjectLoader extends GenericLoader {
 
     private _loadlist!: IObjectLoadlist;
 
-    private _meshManager = Visualizer.instance.meshManager;
-    private _shaderManager = Visualizer.instance.shaderManager;
-    private _materialManager = Visualizer.instance.materialManager;
-    private _objectManager = Visualizer.instance.objectManager;
+    private _meshManager = visualizer.meshManager;
+    private _shaderManager = visualizer.shaderManager;
+    private _materialManager = visualizer.materialManager;
+    private _objectManager = visualizer.objectManager;
 
     private _sources: IObjectSource[] = [];
 

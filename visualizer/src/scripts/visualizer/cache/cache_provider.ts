@@ -1,10 +1,9 @@
 import { StorageType } from "../../local_storage/storage_type";
-import { Visualizer } from "../visualizer";
 import { IStorageKey } from "./i_storage_key";
 
 export abstract class CacheProvider<T, K extends IStorageKey> {
 
-    private _storage = Visualizer.instance.storageController;
+    private _storage = visualizer.storageController;
     private _storageKey: string;
 
     private _data: Map<K, T[]> = new Map();
@@ -36,7 +35,7 @@ export abstract class CacheProvider<T, K extends IStorageKey> {
     protected abstract parseKeyedString(str: string): K;
 
     protected cache(key: K, value: T[]) {
-        if (Visualizer.instance.serverInfo.showcase_mode) return;
+        if (visualizer.serverInfo.showcase_mode) return;
         this._data.set(key, value);
         this.save();
     }

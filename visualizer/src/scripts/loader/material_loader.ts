@@ -1,5 +1,4 @@
 import { AsyncUtils } from "../engine/utils/async_utils";
-import { Visualizer } from "../visualizer/visualizer";
 import { GenericLoader } from "./generic_loader";
 import { MaterialLoadlist } from "./material_loadlist";
 import { Material } from "../engine/materials/material";
@@ -16,9 +15,9 @@ export class MaterialLoader extends GenericLoader {
 
     private _loadList!: MaterialLoadlist;
     private _sources: MaterialSource[] = [];
-    private _config = Visualizer.instance.configurationManager.graphical;
+    private _config = visualizer.configurationManager.graphical;
 
-    private _materialManager = Visualizer.instance.materialManager;
+    private _materialManager = visualizer.materialManager;
 
     protected initialize() {
         this._loadList = this._source as MaterialLoadlist;

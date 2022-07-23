@@ -1,4 +1,3 @@
-import { Visualizer } from "../visualizer/visualizer";
 import { IUI } from "./i_ui";
 
 export class UIInfo implements IUI {
@@ -15,7 +14,7 @@ export class UIInfo implements IUI {
     }
 
     update() {
-        this.setFPSVisisble(Visualizer.instance.configurationManager.general.show_fps);
+        this.setFPSVisisble(visualizer.configurationManager.general.show_fps);
     }
 
 }

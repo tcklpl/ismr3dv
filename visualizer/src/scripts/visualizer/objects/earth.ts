@@ -2,7 +2,6 @@ import { Mesh } from "../../engine/data_formats/mesh/mesh";
 import { RenderableObject } from "../../engine/data_formats/renderable_object";
 import { Material } from "../../engine/materials/material";
 import { Shader } from "../../engine/shaders/shader";
-import { Visualizer } from "../visualizer";
 
 export class EarthRenderableObject extends RenderableObject {
 
@@ -27,7 +26,7 @@ export class EarthRenderableObject extends RenderableObject {
         this.shader.bind();
         this._material.bind(this._materialBindPoints);
 
-        const universe = Visualizer.instance.universeScene;
+        const universe = visualizer.universeScene;
 
         universe.sun.position.bindUniform(gl, this._uSunPos);
 

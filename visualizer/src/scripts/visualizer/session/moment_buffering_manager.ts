@@ -1,5 +1,4 @@
 import { Shader } from "../../engine/shaders/shader";
-import { Visualizer } from "../visualizer";
 import { Moment } from "./moment";
 import { TimelineImageBuffers } from "./timeline_image_buffers";
 
@@ -36,7 +35,7 @@ export class MomentBufferingManager {
         this._currentIndex = currentIndex;
         this._ippThreshold = ippThreshold;
 
-        this._shader = Visualizer.instance.shaderManager.assertGetShader('ipp_batch_renderer');
+        this._shader = visualizer.shaderManager.assertGetShader('ipp_batch_renderer');
         this._shader.bind();
         this._uniforms = {
             r: {
@@ -117,7 +116,7 @@ export class MomentBufferingManager {
 
         gl.viewport(0, 0, this._texBuffers.resolution.x, this._texBuffers.resolution.y);
         gl.bindFramebuffer(gl.FRAMEBUFFER, buf.fb);
-        Visualizer.instance.engine.renderer.renderQuad();
+        visualizer.engine.renderer.renderQuad();
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 

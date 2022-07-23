@@ -8,7 +8,6 @@ import { Material } from "../../engine/materials/material";
 import { Shader } from "../../engine/shaders/shader";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { StationColors } from "../session/station_colors";
-import { Visualizer } from "../visualizer";
 
 export class StationRenderableObject extends RenderableObject implements IInteractable {
 
@@ -39,22 +38,22 @@ export class StationRenderableObject extends RenderableObject implements IIntera
         
         const pos = new Vec4(this.mesh.centroid.x, this.mesh.centroid.y, this.mesh.centroid.z, 1);
         const model = this.modelMatrix;
-        const view = Visualizer.instance.cameraManager.activeCamera?.matrix as Mat4;
-        const projection = Visualizer.instance.engine.renderer.perspectiveProjectionMat4;
+        const view = visualizer.cameraManager.activeCamera?.matrix as Mat4;
+        const projection = visualizer.engine.renderer.perspectiveProjectionMat4;
 
         const ndc = projection.multiplyByVec4(view.multiplyByVec4(model.multiplyByVec4(pos)));
-        Visualizer.instance.ui.canvas.showStationInfoPopup(this.stationInfo, new Vec2(ndc.x / ndc.w, ndc.y / ndc.w));
-        Visualizer.instance.universeScene.isHoveringOverStation = true;
+        visualizer.ui.canvas.showStationInfoPopup(this.stationInfo, new Vec2(ndc.x / ndc.w, ndc.y / ndc.w));
+        visualizer.universeScene.isHoveringOverStation = true;
     }
 
     onMouseLeave() {
         this.color = StationColors.IDLE;
-        Visualizer.instance.ui.canvas.hideStationInfoPopup();
-        Visualizer.instance.universeScene.isHoveringOverStation = false;
+        visualizer.ui.canvas.hideStationInfoPopup();
+        visualizer.universeScene.isHoveringOverStation = false;
     }
 
     onMouseLeftClick() {
-        Visualizer.instance.session?.notifyStationClick(this);
+        visualizer.session?.notifyStationClick(this);
     }
 
     get stationInfo() {

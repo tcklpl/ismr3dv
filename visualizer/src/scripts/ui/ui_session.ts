@@ -2,7 +2,6 @@ import { IServerInfo } from "../visualizer/api/formats/i_server_info";
 import { ISMRSession } from "../visualizer/session/ismr_session";
 import { ISessionSave } from "../visualizer/session/i_session_save";
 import { RandomUtils } from "../visualizer/utils/random_utils";
-import { Visualizer } from "../visualizer/visualizer";
 import { ConfirmationScreen } from "./confirmation_screen";
 import { IUI } from "./i_ui";
 import { MessageScreen } from "./message_screen";
@@ -65,7 +64,7 @@ export class UISession implements IUI {
     }
 
     registerEvents() {
-        this._serverInfo = Visualizer.instance.serverInfo;
+        this._serverInfo = visualizer.serverInfo;
 
         this._cancelBtn.on('click', () => this.cancel());
 
@@ -81,16 +80,16 @@ export class UISession implements IUI {
         this._dateShowcaseFinishBtn.on('click', () => this.fetchStationList());
 
         this._finishSaveLocally.on('click', () => {
-            if (Visualizer.instance.session) Visualizer.instance.session.config.save_on_browser = this._finishSaveLocally.prop('checked');
+            if (visualizer.session) visualizer.session.config.save_on_browser = this._finishSaveLocally.prop('checked');
         });
         this._finishAutosave.on('click', () => {
-            if (Visualizer.instance.session) Visualizer.instance.session.config.auto_save = this._finishAutosave.prop('checked');
+            if (visualizer.session) visualizer.session.config.auto_save = this._finishAutosave.prop('checked');
         });
         this._finishAutosaveInterval.on('change', () => {
-            if (Visualizer.instance.session) Visualizer.instance.session.config.auto_save_interval_minutes = this._finishAutosaveInterval.val() as number;
+            if (visualizer.session) visualizer.session.config.auto_save_interval_minutes = this._finishAutosaveInterval.val() as number;
         });
 
-        this._finishFinalButton.on('click', () => Visualizer.instance.session?.save());
+        this._finishFinalButton.on('click', () => visualizer.session?.save());
 
         this._loadGoBackBtn.on('click', () => this.resetUI());
     }
@@ -106,7 +105,7 @@ export class UISession implements IUI {
         this._finishAutosaveInterval.val(5);
         this._cancelBtn.show();
 
-        if (!Visualizer.instance.idb.isAvailable) {
+        if (!visualizer.idb.isAvailable) {
             this._finishSaveLocally.removeAttr('checked');
             this._finishSaveLocally.prop('disabled', true);
             this._finishAutosave.removeAttr('checked');
@@ -171,12 +170,12 @@ export class UISession implements IUI {
             [startDate, endDate] = dates;
         }
         this.switchDatePanelTab(this._datePanelTabLoading);
-        Visualizer.instance.api.fetchStations(startDate, endDate)
+        visualizer.api.fetchStations(startDate, endDate)
             .then(list => {
                 if (list.length > 0) {
                     const session = new ISMRSession(startDate, endDate, this._nameField.val() as string);
                     session.stations = list;
-                    Visualizer.instance.session = session;
+                    visualizer.session = session;
                     this.showFinalPanel();
                 } else {
                     new MessageScreen('Error', 'No available stations were found on the provided time interval');
@@ -191,9 +190,9 @@ export class UISession implements IUI {
 
     showFinalPanel() {
         this._cancelBtn.hide();
-        Visualizer.instance.ui.stationsHud.update();
+        visualizer.ui.stationsHud.update();
 
-        const session = Visualizer.instance.session;
+        const session = visualizer.session;
         if (session) {
             this._finishSaveLocally.prop('checked', session.config.save_on_browser);
             this._finishAutosave.prop('checked', session.config.auto_save);
@@ -202,7 +201,7 @@ export class UISession implements IUI {
 
         this.setProgressBarCompletion(4);
         this.setActivePanel(this._finishPanel);
-        Visualizer.instance.ui.optionsHud.setSessionRelatedButtonsEnabled(true);
+        visualizer.ui.optionsHud.setSessionRelatedButtonsEnabled(true);
     }
 
     private createLoadedSessionCard(save: ISessionSave, loadSessionId: string, deleteSessionId: string) {
@@ -249,7 +248,7 @@ export class UISession implements IUI {
 
         setLoadPanel(this._loadSpinner);
 
-        Visualizer.instance.idb.sessionController.fetchAll().then(sessions => {
+        visualizer.idb.sessionController.fetchAll().then(sessions => {
             if (sessions.length > 0) {
                 this._loadStationList.empty();
                 sessions.forEach(s => {
@@ -263,7 +262,7 @@ export class UISession implements IUI {
                     });
                     $(`#${deleteId}`).on('click', () => {
                         new ConfirmationScreen('Are you sure?', `Do you really wish to delete the session '${s.name}'? This action is irreversible.`, () => {
-                            Visualizer.instance.idb.sessionController.remove(s)
+                            visualizer.idb.sessionController.remove(s)
                             .then(() => {
                                 this.constructLoadSessionPanel();
                             })
@@ -286,8 +285,8 @@ export class UISession implements IUI {
 
     private loadSession(save: ISessionSave) {
         const session = ISMRSession.constructFromSave(save);
-        Visualizer.instance.session = session;
-        Visualizer.instance.ui.timeline.updateForSelectedStations();
+        visualizer.session = session;
+        visualizer.ui.timeline.updateForSelectedStations();
         this.showFinalPanel();
     }
 }

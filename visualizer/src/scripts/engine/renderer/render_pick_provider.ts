@@ -1,4 +1,3 @@
-import { Visualizer } from "../../visualizer/visualizer";
 import { Mat4 } from "../data_formats/mat/mat4";
 import { RenderableObject } from "../data_formats/renderable_object";
 import { Shader } from "../shaders/shader";
@@ -10,8 +9,8 @@ import { IRenderSettings } from "./i_render_settings";
 
 export class RenderPickProvider implements IRenderProvider {
 
-    private _cameraManager = Visualizer.instance.cameraManager;
-    private _shaderManager = Visualizer.instance.shaderManager;
+    private _cameraManager = visualizer.cameraManager;
+    private _shaderManager = visualizer.shaderManager;
 
     private _pickingShader!: Shader;
     private _pickingShaderIdUniform!: WebGLUniformLocation;

@@ -1,4 +1,3 @@
-import { Visualizer } from "../visualizer/visualizer";
 import { Renderer } from "./renderer/renderer";
 import { Time } from "./time";
 import { IFrameListener } from "./traits/i_frame_listener";
@@ -11,7 +10,7 @@ export class Engine {
     private _lastFrame: number = 0;
     private _lastSecond: number = 0;
     private _framesRendered: number = 0;
-    private _config = Visualizer.instance.configurationManager;
+    private _config = visualizer.configurationManager;
 
     private _frameListeners: IFrameListener[] = [];
     
@@ -22,7 +21,7 @@ export class Engine {
 
         if (time - this._lastSecond >= 1000) {
             this._lastSecond = time;
-            if (this._config.general.show_fps) Visualizer.instance.ui.info.setFPS(this._framesRendered);
+            if (this._config.general.show_fps) visualizer.ui.info.setFPS(this._framesRendered);
             this._framesRendered = 0;
         }
 

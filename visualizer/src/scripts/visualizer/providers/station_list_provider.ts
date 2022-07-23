@@ -1,11 +1,10 @@
 import { IStationInfo } from "../api/formats/i_station_info";
 import { IntervalAvailability } from "../cache/interval_availability";
-import { Visualizer } from "../visualizer";
 
 export class StationListProvider {
 
-    private _api = Visualizer.instance.api;
-    private _cache = Visualizer.instance.cache.stations;
+    private _api = visualizer.api;
+    private _cache = visualizer.cache.stations;
 
     requireOnInterval(start: Date, end: Date) {
         return new Promise<IStationInfo[]>((resolve, reject) => {
