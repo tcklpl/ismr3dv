@@ -66,4 +66,4 @@ And access it at `http://localhost:<port you defined>`.
 
 Earth and Sun textures by [**Solar System Scope**](https://www.solarsystemscope.com/textures/), distributed under Creative Commons 4.0 International (CC BY 4.0). No additional changes were made to the textures.
 
-Skybox textures were made using [**Spacescape**](http://alexcpeterson.com/spacescape/) by Alex Peterson, distributed under the MIT License.
+Skybox textures were made using [**Spacescape**](https://github.com/petrocket/spacescape) by Alex Peterson, distributed under the MIT License.
