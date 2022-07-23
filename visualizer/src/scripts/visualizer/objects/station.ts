@@ -38,7 +38,7 @@ export class StationRenderableObject extends RenderableObject implements IIntera
         
         const pos = new Vec4(this.mesh.centroid.x, this.mesh.centroid.y, this.mesh.centroid.z, 1);
         const model = this.modelMatrix;
-        const view = visualizer.cameraManager.activeCamera?.matrix as Mat4;
+        const view = visualizer.cameraManager.activeCamera?.viewMat as Mat4;
         const projection = visualizer.engine.renderer.perspectiveProjectionMat4;
 
         const ndc = projection.multiplyByVec4(view.multiplyByVec4(model.multiplyByVec4(pos)));

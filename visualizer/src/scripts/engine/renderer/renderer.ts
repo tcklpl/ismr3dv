@@ -149,7 +149,7 @@ export class Renderer implements IMouseListener {
         // first render all opaque objects
         scene.opaqueObjects.forEach(o => {
             o.render(() => {
-                camera.matrix.bindUniform(gl, o.u_view);
+                camera.viewMat.bindUniform(gl, o.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(gl, o.u_projection);
             });
         });
@@ -157,7 +157,7 @@ export class Renderer implements IMouseListener {
         // then render all gizmos
         visualizer.gizmoManager.allGizmos.filter(x => x.enabled).forEach(g => {
             g.draw(() => {
-                camera.matrix.bindUniform(gl, g.u_view);
+                camera.viewMat.bindUniform(gl, g.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(gl, g.u_projection);
             });
         });
@@ -170,7 +170,7 @@ export class Renderer implements IMouseListener {
         gl.depthMask(false);
         scene.transparentObjects.forEach(o => {
             o.render(() => {
-                camera.matrix.bindUniform(gl, o.u_view);
+                camera.viewMat.bindUniform(gl, o.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(gl, o.u_projection);
             });
         });
@@ -179,7 +179,7 @@ export class Renderer implements IMouseListener {
 
         // now render the skybox
         if (scene.skybox) {
-            scene.skybox.bind(camera.matrixNoTranslation, this._perspectiveProjectionMatrix);
+            scene.skybox.bind(camera.viewMatNoTranslation, this._perspectiveProjectionMatrix);
             this.renderSkybox();
         }
 

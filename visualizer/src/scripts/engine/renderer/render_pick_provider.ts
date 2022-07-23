@@ -75,7 +75,7 @@ export class RenderPickProvider implements IRenderProvider {
 
         objects.forEach(o => {
             o.renderPicking(this._pickingShader, this._pickingShaderIdUniform, () => {
-                this._cameraManager.activeCamera?.matrix.bindUniform(gl, o.u_pickingView);
+                this._cameraManager.activeCamera?.viewMat.bindUniform(gl, o.u_pickingView);
                 this._pickingProjectionMat4.bindUniform(gl, o.u_pickingProjection);
             });
         });

@@ -24,8 +24,7 @@ export class LookAtCamera extends Camera implements IPositionable {
     }
 
     generateCameraMatrix(): void {
-        this._cameraMatrix = Mat4.lookAt(this._pos, this._target, this._up);
-        this._cameraMatrix = Mat4.inverse(this._cameraMatrix);
+        this.cameraMatrix = Mat4.lookAt(this._pos, this._target, this._up);
     }
     
 }
