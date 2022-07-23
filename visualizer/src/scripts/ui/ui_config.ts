@@ -50,7 +50,6 @@ export class UIConfig implements IUI {
     }
 
     private setupDisplay(displayConfig: IDisplayConfiguration) {
-        console.log(displayConfig);
         $('#cfg-exposure').val(displayConfig.exposure);
         $('#cfg-gamma').val(displayConfig.gamma);
         $('#cfg-exposure-label').html(`${displayConfig.exposure}`);

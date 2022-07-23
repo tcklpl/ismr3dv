@@ -1,7 +1,6 @@
 import { IIPPInfo } from "../api/formats/i_ipp_info";
 import { MUtils } from "../../engine/utils/math_utils";
 import { TextureUtils } from "../../engine/utils/texture_utils";
-import { Visualizer } from "../visualizer";
 
 /**
  *  Moment class, it's meant to hold a specified time and all its IPP readings
@@ -21,11 +20,11 @@ export class Moment {
             const ll = MUtils.normalizedLatLong(x.lat, x.long);
             return [ll.y, ll.x, x.value];
         }));
-        this._buffer = TextureUtils.create1DVec3TextureFromBuffer(Visualizer.instance.gl, buf);
+        this._buffer = TextureUtils.create1DVec3TextureFromBuffer(gl, buf);
     }
 
     freeBuffer() {
-        Visualizer.instance.gl.deleteTexture(this._buffer);
+        gl.deleteTexture(this._buffer);
     }
 
     get time() {

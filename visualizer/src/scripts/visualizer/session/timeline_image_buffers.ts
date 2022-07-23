@@ -1,11 +1,9 @@
 import { Vec2 } from "../../engine/data_formats/vec/vec2";
 import { BufferUtils } from "../../engine/utils/buffer_utils";
 import { TextureUtils } from "../../engine/utils/texture_utils";
-import { Visualizer } from "../visualizer";
 
 export class TimelineImageBuffers {
 
-    private _gl = Visualizer.instance.gl;
     private _buffers: {tex: WebGLTexture, fb: WebGLFramebuffer}[] = [];
     private _nBuffers = 5;
     private _curBuffer = 0;
@@ -19,19 +17,19 @@ export class TimelineImageBuffers {
 
     private clearBuffers() {
         this._buffers.forEach(b => {
-            this._gl.deleteFramebuffer(b.fb);
-            this._gl.deleteTexture(b.tex);
+            gl.deleteFramebuffer(b.fb);
+            gl.deleteTexture(b.tex);
         });
     }
 
     private initializeBuffers() {
         this.clearBuffers();
         for (let i = 0; i < this._nBuffers; i++) {
-            const fb = BufferUtils.createFramebuffer(this._gl);
-            this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, fb);
-            const tex = TextureUtils.createBufferTexture(this._gl, this._curResolution.x, this._curResolution.y);
-            this._gl.framebufferTexture2D(this._gl.FRAMEBUFFER, this._gl.COLOR_ATTACHMENT0, this._gl.TEXTURE_2D, tex, 0);
-            BufferUtils.assertFrameBufferCompletion(this._gl, `Failed to create timeline framebuffer #${i}`);
+            const fb = BufferUtils.createFramebuffer(gl);
+            gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+            const tex = TextureUtils.createBufferTexture(gl, this._curResolution.x, this._curResolution.y);
+            gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+            BufferUtils.assertFrameBufferCompletion(gl, `Failed to create timeline framebuffer #${i}`);
             this._buffers.push({
                 fb: fb,
                 tex: tex

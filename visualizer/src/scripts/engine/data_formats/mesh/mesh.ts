@@ -1,4 +1,3 @@
-import { Visualizer } from "../../../visualizer/visualizer";
 import { BufferUtils } from "../../utils/buffer_utils";
 import { Vec2 } from "../vec/vec2";
 import { Vec3 } from "../vec/vec3";
@@ -10,8 +9,6 @@ export class Mesh {
     private _vertices: Vertex[] = [];
     private _filteredVertices: Vertex[] = [];
     private _centroid: Vec3;
-
-    private _gl = Visualizer.instance.gl;
 
     private _bufPositions: WebGLBuffer;
     private _bufUVs: WebGLBuffer;
@@ -87,63 +84,63 @@ export class Mesh {
         });
 
         // vertex position buffer
-        this._bufPositions = BufferUtils.createBuffer(this._gl);
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._bufPositions);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.position.values)), this._gl.STATIC_DRAW);
+        this._bufPositions = BufferUtils.createBuffer(gl);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._bufPositions);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.position.values)), gl.STATIC_DRAW);
 
         // vertex uv buffer
-        this._bufUVs = BufferUtils.createBuffer(this._gl);
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._bufUVs);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.uv.values)), this._gl.STATIC_DRAW);
+        this._bufUVs = BufferUtils.createBuffer(gl);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._bufUVs);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.uv.values)), gl.STATIC_DRAW);
 
         // vertex normal buffer
-        this._bufNormals = BufferUtils.createBuffer(this._gl);
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._bufNormals);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.normal.values)), this._gl.STATIC_DRAW);
+        this._bufNormals = BufferUtils.createBuffer(gl);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._bufNormals);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(v => v.normal.values)), gl.STATIC_DRAW);
 
         // create tangent buffer
-        this._bufTangents = BufferUtils.createBuffer(this._gl);
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._bufTangents);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(t => t.tangent.values)), this._gl.STATIC_DRAW);
+        this._bufTangents = BufferUtils.createBuffer(gl);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._bufTangents);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(t => t.tangent.values)), gl.STATIC_DRAW);
 
         // create bitangent buffer
-        this._bufBitangents = BufferUtils.createBuffer(this._gl);
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._bufBitangents);
-        this._gl.bufferData(this._gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(t => t.bitangent.values)), this._gl.STATIC_DRAW);
+        this._bufBitangents = BufferUtils.createBuffer(gl);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._bufBitangents);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._filteredVertices.flatMap(t => t.bitangent.values)), gl.STATIC_DRAW);
 
         // create VAO
-        this._vao = BufferUtils.createVAO(this._gl);
-        this._gl.bindVertexArray(this._vao);
+        this._vao = BufferUtils.createVAO(gl);
+        gl.bindVertexArray(this._vao);
 
         // bind positions to VAO
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._bufPositions);
-        this._gl.vertexAttribPointer(0, 3, this._gl.FLOAT, false, 0, 0);
-        this._gl.enableVertexAttribArray(0);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._bufPositions);
+        gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(0);
 
         // bind uvs to VAO
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._bufUVs);
-        this._gl.vertexAttribPointer(1, 2, this._gl.FLOAT, false, 0, 0);
-        this._gl.enableVertexAttribArray(1);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._bufUVs);
+        gl.vertexAttribPointer(1, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(1);
 
         // bind normals to VAO
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._bufNormals);
-        this._gl.vertexAttribPointer(2, 3, this._gl.FLOAT, false, 0, 0);
-        this._gl.enableVertexAttribArray(2);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._bufNormals);
+        gl.vertexAttribPointer(2, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(2);
 
         // bind tangents to VAO
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._bufTangents);
-        this._gl.vertexAttribPointer(3, 3, this._gl.FLOAT, false, 0, 0);
-        this._gl.enableVertexAttribArray(3);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._bufTangents);
+        gl.vertexAttribPointer(3, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(3);
 
         // bind bitangents to VAO
-        this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._bufBitangents);
-        this._gl.vertexAttribPointer(4, 3, this._gl.FLOAT, false, 0, 0);
-        this._gl.enableVertexAttribArray(4);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._bufBitangents);
+        gl.vertexAttribPointer(4, 3, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(4);
 
         // create index buffer
-        this._bufIndices = BufferUtils.createBuffer(this._gl);
-        this._gl.bindBuffer(this._gl.ELEMENT_ARRAY_BUFFER, this._bufIndices);
-        this._gl.bufferData(this._gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(filteredIndices), this._gl.STATIC_DRAW);
+        this._bufIndices = BufferUtils.createBuffer(gl);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._bufIndices);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(filteredIndices), gl.STATIC_DRAW);
 
         this._indicesSize = filteredIndices.length;
 
@@ -160,12 +157,12 @@ export class Mesh {
     }
 
     bindVAO() {
-        this._gl.bindVertexArray(this._vao);
+        gl.bindVertexArray(this._vao);
     }
 
     draw() {
         this.bindVAO();
-        this._gl.drawElements(this._gl.TRIANGLES, this._indicesSize, this._gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLES, this._indicesSize, gl.UNSIGNED_SHORT, 0);
     }
 
 }

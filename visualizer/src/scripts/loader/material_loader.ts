@@ -1,5 +1,4 @@
 import { AsyncUtils } from "../engine/utils/async_utils";
-import { TextureUtils } from "../engine/utils/texture_utils";
 import { Visualizer } from "../visualizer/visualizer";
 import { GenericLoader } from "./generic_loader";
 import { MaterialLoadlist } from "./material_loadlist";
@@ -19,7 +18,6 @@ export class MaterialLoader extends GenericLoader {
     private _sources: MaterialSource[] = [];
     private _config = Visualizer.instance.configurationManager.graphical;
 
-    private _gl = Visualizer.instance.gl;
     private _materialManager = Visualizer.instance.materialManager;
 
     protected initialize() {

@@ -1,12 +1,10 @@
-import { Visualizer } from "../visualizer";
 import { IMouseListener } from "./i_mouse_listener";
 
 export class Mouse {
 
     private _x: number = -1;
     private _y: number = -1;
-
-    private _gl = Visualizer.instance.gl;
+    
     private _listeners: IMouseListener[] = [];
 
     private _scrollStopTimer: number = -1;
@@ -18,8 +16,8 @@ export class Mouse {
 
     private registerEvents() {
         // Mouse move event
-        this._gl.canvas.addEventListener('mousemove', e => {
-            const rect = this._gl.canvas.getBoundingClientRect();
+        gl.canvas.addEventListener('mousemove', e => {
+            const rect = gl.canvas.getBoundingClientRect();
             this._x = e.clientX - rect.left;
             this._y = e.clientY - rect.top;
             
@@ -33,14 +31,14 @@ export class Mouse {
         });
 
         // Mouse click event
-        this._gl.canvas.addEventListener('click', e => {
+        gl.canvas.addEventListener('click', e => {
             this._listeners.forEach(l => {
                 if (l.onMouseLeftClick) l.onMouseLeftClick();
             })
         });
 
         // Mouse scroll event
-        this._gl.canvas.addEventListener('wheel', e => {
+        gl.canvas.addEventListener('wheel', e => {
             this._listeners.forEach(l => {
                 if (l.onMouseScroll) l.onMouseScroll(e.deltaY);
             });

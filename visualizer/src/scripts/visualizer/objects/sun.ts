@@ -2,7 +2,6 @@ import { Mesh } from "../../engine/data_formats/mesh/mesh";
 import { RenderableObject } from "../../engine/data_formats/renderable_object";
 import { Material } from "../../engine/materials/material";
 import { Shader } from "../../engine/shaders/shader";
-import { Visualizer } from "../visualizer";
 
 export class SunRenderableObject extends RenderableObject {
 
@@ -18,7 +17,7 @@ export class SunRenderableObject extends RenderableObject {
     render(uniformConfiguration: () => void): void {
         this.shader.bind();
         this._material.bind(this._materialBindPoints);
-        this.modelMatrix.bindUniform(Visualizer.instance.gl, this.u_model);
+        this.modelMatrix.bindUniform(gl, this.u_model);
         uniformConfiguration();
         this._mesh.draw();
     }

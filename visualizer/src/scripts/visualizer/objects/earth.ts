@@ -10,8 +10,6 @@ export class EarthRenderableObject extends RenderableObject {
 
     private _uSunPos: WebGLUniformLocation;
 
-    private _gl = Visualizer.instance.gl;
-
     constructor(id: number, mesh: Mesh, material: Material, shader: Shader) {
         super(id, mesh, material, shader);
 
@@ -31,9 +29,9 @@ export class EarthRenderableObject extends RenderableObject {
 
         const universe = Visualizer.instance.universeScene;
 
-        universe.sun.position.bindUniform(this._gl, this._uSunPos);
+        universe.sun.position.bindUniform(gl, this._uSunPos);
 
-        this.modelMatrix.bindUniform(Visualizer.instance.gl, this.u_model);
+        this.modelMatrix.bindUniform(gl, this.u_model);
         uniformConfiguration();
         this._mesh.draw();
     }

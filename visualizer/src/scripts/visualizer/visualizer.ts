@@ -27,7 +27,6 @@ export class Visualizer {
     private static _instance: Visualizer;
 
     // Main parts
-    private _gl: WebGL2RenderingContext;
     private _loader: Loader;
     private _engine!: Engine;
     private _io!: VisualizerIO;
@@ -59,8 +58,7 @@ export class Visualizer {
     // Scene
     private _universeScene!: UniverseScene;
 
-    constructor(gl: WebGL2RenderingContext) {
-        this._gl = gl;
+    constructor() {
         Visualizer._instance = this;
         this._io = new VisualizerIO();
 
@@ -97,10 +95,6 @@ export class Visualizer {
         this.ui.registerEvents();
 
         requestAnimationFrame(t => this._engine.render(t));
-    }
-
-    get gl() {
-        return this._gl;
     }
 
     public static get instance() {

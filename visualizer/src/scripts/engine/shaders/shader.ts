@@ -1,4 +1,3 @@
-import { Visualizer } from "../../visualizer/visualizer";
 import { EngineError } from "../errors/engine_error";
 import { ShaderUtils } from "../utils/shader_utils";
 
@@ -9,13 +8,12 @@ export class Shader {
     protected _program: WebGLProgram;
     protected _attributes: Map<string, number> = new Map();
     protected _uniforms: Map<string, WebGLUniformLocation> = new Map();
-    protected _gl = Visualizer.instance.gl;
 
     constructor(name: string, vertexSource: string, fragmentSource: string) {
         this._name = name;
 
-        this._program = ShaderUtils.createProgram(this._gl, vertexSource, fragmentSource);
-        this._gl.useProgram(this._program);
+        this._program = ShaderUtils.createProgram(gl, vertexSource, fragmentSource);
+        gl.useProgram(this._program);
 
         // create list of unique words in the shader source code
         let words: string[] = [];
@@ -28,7 +26,7 @@ export class Shader {
         // get all the attributes
         words.filter(x => x.startsWith('a_')).forEach(attr => {
             let name = attr.replace(/[^a-z0-9_]/gi, "");
-            this._attributes.set(name, this._gl.getAttribLocation(this._program, name));
+            this._attributes.set(name, gl.getAttribLocation(this._program, name));
         });
 
         // get all the uniforms
@@ -57,7 +55,7 @@ export class Shader {
                 }
 
                 uniformsToGet.forEach(uName => {
-                    const u = this._gl.getUniformLocation(this._program, uName);
+                    const u = gl.getUniformLocation(this._program, uName);
                     if (!u) throw new ShaderError(`Failed to get uniform '${uName}' at shader ${this._name}`);
                     this._uniforms.set(uName, u);
                 });
@@ -67,7 +65,7 @@ export class Shader {
     }
 
     bind() {
-        this._gl.useProgram(this._program);
+        gl.useProgram(this._program);
     }
 
     getUniform(name: string) {

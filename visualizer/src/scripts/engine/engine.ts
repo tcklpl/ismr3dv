@@ -11,7 +11,6 @@ export class Engine {
     private _lastFrame: number = 0;
     private _lastSecond: number = 0;
     private _framesRendered: number = 0;
-    private _gl = Visualizer.instance.gl;
     private _config = Visualizer.instance.configurationManager;
 
     private _frameListeners: IFrameListener[] = [];
@@ -36,9 +35,9 @@ export class Engine {
     }
 
     adjustToWindowSize() {
-        this._gl.canvas.width = this._gl.canvas.clientWidth;
-        this._gl.canvas.height = this._gl.canvas.clientHeight;
-        this._renderer.resize(this._gl.canvas.width, this._gl.canvas.height);
+        gl.canvas.width = gl.canvas.clientWidth;
+        gl.canvas.height = gl.canvas.clientHeight;
+        this._renderer.resize(gl.canvas.width, gl.canvas.height);
     }
 
     registerFrameListener(l: IFrameListener) {

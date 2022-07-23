@@ -2,10 +2,11 @@ import { EngineError } from "./engine/errors/engine_error";
 import { Visualizer } from "./visualizer/visualizer";
 
 const canvas = $('#ismr3dcanvas');
-const gl = (canvas.get(0) as HTMLCanvasElement).getContext('webgl2');
-if (!gl) throw new EngineError('Engine', `Failed to acquire WebGL2 context`);
+const glCtx = (canvas.get(0) as HTMLCanvasElement).getContext('webgl2');
+if (!glCtx) throw new EngineError('Engine', `Failed to acquire WebGL2 context`);
+globalThis.gl = glCtx;
 
-new Visualizer(gl);
+new Visualizer();
 
 /*
     Make sure we have both EXT_color_buffer_float and OES_texture_float_linear extensions in order to have HDR rendering.

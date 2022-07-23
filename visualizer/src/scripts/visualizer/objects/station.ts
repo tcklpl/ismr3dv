@@ -1,9 +1,7 @@
 import { Mat4 } from "../../engine/data_formats/mat/mat4";
 import { Mesh } from "../../engine/data_formats/mesh/mesh";
 import { RenderableObject } from "../../engine/data_formats/renderable_object";
-import { UBoolean } from "../../engine/data_formats/uniformable_basics/u_boolean";
 import { Vec2 } from "../../engine/data_formats/vec/vec2";
-import { Vec3 } from "../../engine/data_formats/vec/vec3";
 import { Vec4 } from "../../engine/data_formats/vec/vec4";
 import { IInteractable } from "../../engine/interactions/i_interactable";
 import { Material } from "../../engine/materials/material";
@@ -29,9 +27,9 @@ export class StationRenderableObject extends RenderableObject implements IIntera
 
     render(uniformConfiguration: () => void): void {
         this.shader.bind();
-        this._color.color.bindUniform(Visualizer.instance.gl, this._colorUniform);
-        this._color.bloom.bindUniform(Visualizer.instance.gl, this._applyBloomUniform);
-        this.modelMatrix.bindUniform(Visualizer.instance.gl, this.u_model);
+        this._color.color.bindUniform(gl, this._colorUniform);
+        this._color.bloom.bindUniform(gl, this._applyBloomUniform);
+        this.modelMatrix.bindUniform(gl, this.u_model);
         uniformConfiguration();
         this._mesh.draw();
     }
