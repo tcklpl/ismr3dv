@@ -12,7 +12,7 @@ export class Shader {
     constructor(name: string, vertexSource: string, fragmentSource: string) {
         this._name = name;
 
-        this._program = ShaderUtils.createProgram(gl, vertexSource, fragmentSource);
+        this._program = ShaderUtils.createProgram(vertexSource, fragmentSource);
         gl.useProgram(this._program);
 
         // create list of unique words in the shader source code

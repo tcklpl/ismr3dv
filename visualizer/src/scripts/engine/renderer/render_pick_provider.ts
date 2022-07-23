@@ -20,13 +20,13 @@ export class RenderPickProvider implements IRenderProvider {
     private _pickingProjectionMat4!: Mat4;
 
     setup(settings: IRenderSettings): void {
-        this._pickingRenderbuffer = BufferUtils.createRenderbuffer(gl);
-        this._pickingTexture = TextureUtils.createBufferTexture(gl, 1, 1);
+        this._pickingRenderbuffer = BufferUtils.createRenderbuffer();
+        this._pickingTexture = TextureUtils.createBufferTexture(1, 1);
 
         gl.bindRenderbuffer(gl.RENDERBUFFER, this._pickingRenderbuffer);
         gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, 1, 1);
 
-        this._pickingFramebuffer = BufferUtils.createFramebuffer(gl);
+        this._pickingFramebuffer = BufferUtils.createFramebuffer();
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._pickingFramebuffer);
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this._pickingTexture, 0);
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this._pickingRenderbuffer);

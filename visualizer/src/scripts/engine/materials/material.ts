@@ -16,9 +16,9 @@ export class Material {
             const maps: HTMLImageElement[] = [];
             textureMaps.forEach(v => maps.push(v));
             
-            this._maps.set('diffuse', TextureUtils.createCubemap(gl, maps));
+            this._maps.set('diffuse', TextureUtils.createCubemap(maps));
         } else {
-            textureMaps.forEach((v, k) => this._maps.set(k, TextureUtils.createTextureFromImage(gl, v)));
+            textureMaps.forEach((v, k) => this._maps.set(k, TextureUtils.createTextureFromImage(v)));
         }
 
     }

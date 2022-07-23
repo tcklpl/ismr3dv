@@ -2,38 +2,38 @@ import { EngineError } from "../errors/engine_error";
 
 export class BufferUtils {
 
-    static createBuffer(gl: WebGL2RenderingContext) {
+    static createBuffer() {
         let tmpBuffer = gl.createBuffer();
         if (!tmpBuffer) throw new BufferUtilsError(`Failed to create buffer`);
         return tmpBuffer;
     }
 
-    static createVAO(gl: WebGL2RenderingContext) {
+    static createVAO() {
         let tmpVao = gl.createVertexArray();
         if (!tmpVao) throw new BufferUtilsError(`Failed to create VAO`);
         return tmpVao;
     }
 
-    static createFramebuffer(gl: WebGL2RenderingContext) {
+    static createFramebuffer() {
         let tempBuf = gl.createFramebuffer();
         if (!tempBuf) throw new BufferUtilsError(`Failed to create framebuffer`);
         return tempBuf;
     }
 
-    static createRenderbuffer(gl: WebGL2RenderingContext) {
+    static createRenderbuffer() {
         let tempBuf = gl.createRenderbuffer();
         if (!tempBuf) throw new BufferUtilsError(`Failed to create renderbuffer`);
         return tempBuf;
     }
 
-    static assertFrameBufferCompletion(gl: WebGL2RenderingContext, msg?: string) {
+    static assertFrameBufferCompletion(msg?: string) {
         let status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
         if (status != gl.FRAMEBUFFER_COMPLETE) {
             throw new BufferUtilsError(`Incomplete framebuffer (status '${status}'). ${msg}`);
         }
     }
 
-    static createQuadVAO(gl: WebGL2RenderingContext) {
+    static createQuadVAO() {
         const quadCoords = new Float32Array([
             // positions     uvs
             -1.0,  1.0, 0.0, 0.0, 1.0,
@@ -42,8 +42,8 @@ export class BufferUtils {
              1.0, -1.0, 0.0, 1.0, 0.0,   
         ]);
 
-        const vao = this.createVAO(gl);
-        const buffer = this.createBuffer(gl);
+        const vao = this.createVAO();
+        const buffer = this.createBuffer();
         
         gl.bindVertexArray(vao);
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -58,7 +58,7 @@ export class BufferUtils {
         return vao;
     }
 
-    static createSkyboxVAO(gl: WebGL2RenderingContext) {
+    static createSkyboxVAO() {
         const skyboxCoords = new Float32Array([
             // positions          
             -1.0,  1.0, -1.0,
@@ -104,8 +104,8 @@ export class BufferUtils {
              1.0, -1.0,  1.0
         ]);
 
-        const vao = this.createVAO(gl);
-        const buffer = this.createBuffer(gl);
+        const vao = this.createVAO();
+        const buffer = this.createBuffer();
 
         gl.bindVertexArray(vao);
         gl.bindBuffer(gl.ARRAY_BUFFER, buffer);

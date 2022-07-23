@@ -25,11 +25,11 @@ export class TimelineImageBuffers {
     private initializeBuffers() {
         this.clearBuffers();
         for (let i = 0; i < this._nBuffers; i++) {
-            const fb = BufferUtils.createFramebuffer(gl);
+            const fb = BufferUtils.createFramebuffer();
             gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
-            const tex = TextureUtils.createBufferTexture(gl, this._curResolution.x, this._curResolution.y);
+            const tex = TextureUtils.createBufferTexture(this._curResolution.x, this._curResolution.y);
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
-            BufferUtils.assertFrameBufferCompletion(gl, `Failed to create timeline framebuffer #${i}`);
+            BufferUtils.assertFrameBufferCompletion(`Failed to create timeline framebuffer #${i}`);
             this._buffers.push({
                 fb: fb,
                 tex: tex
