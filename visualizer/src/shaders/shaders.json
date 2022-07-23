@@ -49,6 +49,11 @@
             "name": "bloom-upsample",
             "vertex": "common/basic_quad.vert",
             "fragment": "bloom/upsampling.frag"
+        },
+        {
+            "name": "skybox",
+            "vertex": "skybox/skybox.vert",
+            "fragment": "skybox/skybox.frag"
         }
     ]
 }
