@@ -9,7 +9,7 @@ import { IRenderSettings } from "./i_render_settings";
 import { RenderBloomProvider } from "./bloom/render_bloom_provider";
 import { RenderComposer } from "./compositor/render_compositor";
 import { RenderPickProvider } from "./render_pick_provider";
-import { SkyboxRenderableObject } from "../../visualizer/objects/skybox";
+import { Camera } from "../camera/camera";
 
 export class Renderer implements IMouseListener {
 
@@ -125,6 +125,10 @@ export class Renderer implements IMouseListener {
             console.warn(`Trying to render with no active scene`);
             return;
         }
+        if (!this._cameraManager.activeCamera) {
+            console.warn('Trying to render with no active camera');
+            return;
+        }
 
         const pickingId = this._picking.renderAndPickIdUnderMouse(this._sceneManager.active.opaqueObjects);
         visualizer.interactionManager.updateIdUnderMouse(pickingId);
@@ -140,11 +144,12 @@ export class Renderer implements IMouseListener {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         const scene = this._sceneManager.active as Scene;
+        const camera = this._cameraManager.activeCamera as Camera;
 
         // first render all opaque objects
         scene.opaqueObjects.forEach(o => {
             o.render(() => {
-                this._cameraManager.activeCamera?.matrix.bindUniform(gl, o.u_view);
+                camera.matrix.bindUniform(gl, o.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(gl, o.u_projection);
             });
         });
@@ -152,7 +157,7 @@ export class Renderer implements IMouseListener {
         // then render all gizmos
         visualizer.gizmoManager.allGizmos.filter(x => x.enabled).forEach(g => {
             g.draw(() => {
-                this._cameraManager.activeCamera?.matrix.bindUniform(gl, g.u_view);
+                camera.matrix.bindUniform(gl, g.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(gl, g.u_projection);
             });
         });
@@ -165,7 +170,7 @@ export class Renderer implements IMouseListener {
         gl.depthMask(false);
         scene.transparentObjects.forEach(o => {
             o.render(() => {
-                this._cameraManager.activeCamera?.matrix.bindUniform(gl, o.u_view);
+                camera.matrix.bindUniform(gl, o.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(gl, o.u_projection);
             });
         });
@@ -173,11 +178,10 @@ export class Renderer implements IMouseListener {
         gl.disable(gl.BLEND);
 
         // now render the skybox
-        scene.skybox?.render(() => {
-            const skybox = scene.skybox as SkyboxRenderableObject;
-            this._cameraManager.activeCamera?.matrixNoTranslation.bindUniform(gl, skybox.u_view);
-            this._perspectiveProjectionMatrix.bindUniform(gl, skybox.u_projection);
-        });
+        if (scene.skybox) {
+            scene.skybox.bind(camera.matrixNoTranslation, this._perspectiveProjectionMatrix);
+            this.renderSkybox();
+        }
 
         // free the framebuffer
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
