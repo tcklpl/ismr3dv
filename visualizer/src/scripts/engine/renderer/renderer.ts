@@ -10,6 +10,7 @@ import { IRenderSettings } from "./i_render_settings";
 import { RenderBloomProvider } from "./bloom/render_bloom_provider";
 import { RenderComposer } from "./compositor/render_compositor";
 import { RenderPickProvider } from "./render_pick_provider";
+import { SkyboxRenderableObject } from "../../visualizer/objects/skybox";
 
 export class Renderer implements IMouseListener {
 
@@ -31,6 +32,7 @@ export class Renderer implements IMouseListener {
     };
 
     private _quadVAO!: WebGLVertexArrayObject;
+    private _skyboxVAO!: WebGLVertexArrayObject;
 
     private _picking = new RenderPickProvider();
     private _bloom = new RenderBloomProvider();
@@ -51,9 +53,10 @@ export class Renderer implements IMouseListener {
 
         this._gl.enable(this._gl.DEPTH_TEST);
         this._gl.enable(this._gl.CULL_FACE);
-        this._gl.depthFunc(this._gl.LESS);
+        this._gl.depthFunc(this._gl.LEQUAL);
 
         this._quadVAO = BufferUtils.createQuadVAO(this._gl);
+        this._skyboxVAO = BufferUtils.createSkyboxVAO(this._gl);
 
         this._picking.setup(this._renderSettings);
         this._bloom.setup(this._renderSettings);
@@ -139,8 +142,10 @@ export class Renderer implements IMouseListener {
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, this._rlFramebuffer);
         this._gl.clear(this._gl.COLOR_BUFFER_BIT | this._gl.DEPTH_BUFFER_BIT);
 
+        const scene = this._sceneManager.active as Scene;
+
         // first render all opaque objects
-        (this._sceneManager.active as Scene).opaqueObjects.forEach(o => {
+        scene.opaqueObjects.forEach(o => {
             o.render(() => {
                 this._cameraManager.activeCamera?.matrix.bindUniform(this._gl, o.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(this._gl, o.u_projection);
@@ -161,7 +166,7 @@ export class Renderer implements IMouseListener {
         this._gl.blendFunc(this._gl.SRC_ALPHA, this._gl.ONE_MINUS_SRC_ALPHA);
 
         this._gl.depthMask(false);
-        (this._sceneManager.active as Scene).transparentObjects.forEach(o => {
+        scene.transparentObjects.forEach(o => {
             o.render(() => {
                 this._cameraManager.activeCamera?.matrix.bindUniform(this._gl, o.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(this._gl, o.u_projection);
@@ -170,6 +175,13 @@ export class Renderer implements IMouseListener {
         this._gl.depthMask(true);
         this._gl.disable(this._gl.BLEND);
 
+        // now render the skybox
+        scene.skybox?.render(() => {
+            const skybox = scene.skybox as SkyboxRenderableObject;
+            this._cameraManager.activeCamera?.matrixNoTranslation.bindUniform(this._gl, skybox.u_view);
+            this._perspectiveProjectionMatrix.bindUniform(this._gl, skybox.u_projection);
+        });
+
         // free the framebuffer
         this._gl.bindFramebuffer(this._gl.FRAMEBUFFER, null);
     }
@@ -177,6 +189,12 @@ export class Renderer implements IMouseListener {
     renderQuad() {
         this._gl.bindVertexArray(this._quadVAO);
         this._gl.drawArrays(this._gl.TRIANGLE_STRIP, 0, 4);
+        this._gl.bindVertexArray(null);
+    }
+
+    renderSkybox() {
+        this._gl.bindVertexArray(this._skyboxVAO);
+        this._gl.drawArrays(this._gl.TRIANGLES, 0, 36);
         this._gl.bindVertexArray(null);
     }
 
