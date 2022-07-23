@@ -44,6 +44,7 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
         mat.xRotate(MUtils.degToRad(this._currentRotationZ));
         mat.translate(0, 0, this._distance);
         this._cameraMatrix = Mat4.inverse(mat);
+        this._cameraMatrixNoTranslation = this._cameraMatrix.topLeftCornerTo3x3().toMat4();
     }
 
     onMouseMoveOffset(x: number, y: number) {
