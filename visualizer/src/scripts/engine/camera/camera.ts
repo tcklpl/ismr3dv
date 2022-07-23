@@ -7,8 +7,9 @@ export abstract class Camera {
     protected _pos: Vec3;
     protected _up: Vec3;
 
-    protected _cameraMatrix!: Mat4;
-    protected _cameraMatrixNoTranslation!: Mat4;
+    private _cameraMatrix!: Mat4;
+    private _viewMatrix!: Mat4;
+    private _viewMatrixNoTranslation!: Mat4;
 
     constructor(pos: Vec3, up: Vec3) {
         this._pos = pos;
@@ -17,12 +18,18 @@ export abstract class Camera {
 
     abstract generateCameraMatrix(): void;
 
-    get matrix() {
-        return this._cameraMatrix;
+    protected set cameraMatrix(mat: Mat4) {
+        this._cameraMatrix = mat;
+        this._viewMatrix = Mat4.inverse(mat);
+        this._viewMatrixNoTranslation = this._viewMatrix.duplicate().topLeftCornerTo3x3().toMat4();
     }
 
-    get matrixNoTranslation() {
-        return this._cameraMatrixNoTranslation;
+    get viewMat() {
+        return this._viewMatrix;
+    }
+
+    get viewMatNoTranslation() {
+        return this._viewMatrixNoTranslation;
     }
 
     get position() {
