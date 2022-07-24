@@ -1,9 +1,9 @@
+import { Entity } from "../../engine/data_formats/entity";
 import { Mesh } from "../../engine/data_formats/mesh/mesh";
-import { RenderableObject } from "../../engine/data_formats/renderable_object";
 import { Material } from "../../engine/materials/material";
 import { Shader } from "../../engine/shaders/shader";
 
-export class SunRenderableObject extends RenderableObject {
+export class SunEntity extends Entity {
 
     private _materialBindPoints: Map<string, WebGLUniformLocation> = new Map();
 

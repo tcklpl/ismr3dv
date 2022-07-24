@@ -1,11 +1,11 @@
-import { SkyboxRenderableObject } from "../../visualizer/objects/skybox";
+import { Skybox } from "../../visualizer/objects/skybox";
 import { RenderableObject } from "../data_formats/renderable_object";
 
 export class Scene {
 
     private _name: string;
     private _objects: RenderableObject[] = [];
-    protected _skybox?: SkyboxRenderableObject;
+    protected _skybox?: Skybox;
 
     private _cachedOpaqueObjects: RenderableObject[] = [];
     private _cachedTransparentObjects: RenderableObject[] = [];

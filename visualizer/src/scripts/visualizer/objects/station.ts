@@ -1,6 +1,6 @@
+import { Entity } from "../../engine/data_formats/entity";
 import { Mat4 } from "../../engine/data_formats/mat/mat4";
 import { Mesh } from "../../engine/data_formats/mesh/mesh";
-import { RenderableObject } from "../../engine/data_formats/renderable_object";
 import { Vec2 } from "../../engine/data_formats/vec/vec2";
 import { Vec4 } from "../../engine/data_formats/vec/vec4";
 import { IInteractable } from "../../engine/interactions/i_interactable";
@@ -9,7 +9,7 @@ import { Shader } from "../../engine/shaders/shader";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { StationColors } from "../session/station_colors";
 
-export class StationRenderableObject extends RenderableObject implements IInteractable {
+export class StationEntity extends Entity implements IInteractable {
 
     private _stationInfo!: IStationInfo;
     private _color = StationColors.IDLE;
