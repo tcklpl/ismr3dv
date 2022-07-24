@@ -6,6 +6,8 @@ import { IScalable } from "./i_scalable";
 
 export class Basic3DTransformative implements IPositionable, IRotatable, IScalable {
 
+    private _parent?: Basic3DTransformative;
+
     private _translation: Vec3 = Vec3.fromValue(0);
     private _rotation: Vec3 = Vec3.fromValue(0);
     private _scale: Vec3 = Vec3.fromValue(1);
@@ -28,6 +30,11 @@ export class Basic3DTransformative implements IPositionable, IRotatable, IScalab
             this._modelMatrix.multiplyBy(this._rotationMatrix);
         }
         this._modelMatrix.multiplyBy(this._scaleMatrix);
+        
+        if (this._parent) {
+            const model = this._parent.modelMatrix.duplicate().multiplyBy(this._modelMatrix);
+            this._modelMatrix = model;
+        }
     }
 
     setPosition(pos: Vec3): void {
@@ -109,6 +116,15 @@ export class Basic3DTransformative implements IPositionable, IRotatable, IScalab
 
     get currentScale() {
         return this._scale;
+    }
+
+    get parent() {
+        return this._parent;
+    }
+
+    set parent(p: Basic3DTransformative | undefined) {
+        this._parent = p;
+        this.buildModelMatrix();
     }
     
 }

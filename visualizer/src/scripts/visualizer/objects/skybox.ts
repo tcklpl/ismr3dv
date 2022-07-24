@@ -2,7 +2,7 @@ import { Mat4 } from "../../engine/data_formats/mat/mat4";
 import { Material } from "../../engine/materials/material";
 import { Shader } from "../../engine/shaders/shader";
 
-export class SkyboxRenderableObject {
+export class Skybox {
 
     private _shader: Shader;
     private _material: Material;

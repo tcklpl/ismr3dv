@@ -116,6 +116,7 @@ export class Mat4 implements IUniformable {
             b30 * a02 + b31 * a12 + b32 * a22 + b33 * a32,
             b30 * a03 + b31 * a13 + b32 * a23 + b33 * a33,
         ];
+        return this;
     }
 
     multiplyByVec4(m: Vec4) {

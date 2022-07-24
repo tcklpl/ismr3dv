@@ -3,7 +3,7 @@ import { MUtils } from "../../engine/utils/math_utils";
 import { CustomAlert } from "../../ui/custom_alert";
 import { IIPPInfo } from "../api/formats/i_ipp_info";
 import { IStationInfo } from "../api/formats/i_station_info";
-import { StationRenderableObject } from "../objects/station";
+import { StationEntity } from "../objects/station";
 import { ISessionConfig } from "./i_session.config";
 import { ISessionSave } from "./i_session_save";
 import { SessionTimeline } from "./session_timeline";
@@ -28,7 +28,7 @@ export class ISMRSession {
     private _objectManager = visualizer.objectManager;
 
     private _stationList?: IStationInfo[];
-    private _instantiatedStations: StationRenderableObject[] = [];
+    private _instantiatedStations: StationEntity[] = [];
     private _selectedStations: IStationInfo[] = [];
 
     private _timeline = new SessionTimeline();
@@ -47,7 +47,7 @@ export class ISMRSession {
         }
 
         this._stationList.forEach(s => {
-            const instance = this._objectManager.summon("monitoring_station", StationRenderableObject);
+            const instance = this._objectManager.summon("monitoring_station", StationEntity);
             instance.stationInfo = s;
             instance.pickable = true;
 
@@ -90,7 +90,7 @@ export class ISMRSession {
         });
     }
 
-    notifyStationClick(station: StationRenderableObject) {
+    notifyStationClick(station: StationEntity) {
         if (this._selectedStations.includes(station.stationInfo)) {
             this._selectedStations = this._selectedStations.filter(x => x != station.stationInfo);
             station.colorLocked = false;
