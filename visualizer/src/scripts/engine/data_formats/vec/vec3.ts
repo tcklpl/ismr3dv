@@ -42,6 +42,10 @@ export class Vec3 extends Vec2 {
         return this;
     }
 
+    checkIfAllValuesInRange(min: number, max: number) {
+        return this.x >= min && this.x <= max && this.y >= min && this.y <= max && this.z >= min && this.z <= max;
+    }
+
     public get z() {
         return this._values[2];
     }

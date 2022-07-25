@@ -10,6 +10,9 @@ import { RenderBloomProvider } from "./bloom/render_bloom_provider";
 import { RenderComposer } from "./compositor/render_compositor";
 import { RenderPickProvider } from "./render_pick_provider";
 import { Camera } from "../camera/camera";
+import { IScreenshotRequest } from "./i_screenshot_request";
+import { HTMLUtils } from "../../visualizer/utils/html_utils";
+import { Vec3 } from "../data_formats/vec/vec3";
 
 export class Renderer implements IMouseListener {
 
@@ -38,6 +41,8 @@ export class Renderer implements IMouseListener {
     private _rlRenderbuffer!: WebGLRenderbuffer;
     private _rlFramebuffer!: WebGLFramebuffer;
     private _layers!: IRenderLayers;
+
+    private _screenshotRequest?: IScreenshotRequest;
 
     constructor() {
         this.setupGl();
@@ -133,10 +138,21 @@ export class Renderer implements IMouseListener {
         const pickingId = this._picking.renderAndPickIdUnderMouse(this._sceneManager.active.opaqueObjects);
         visualizer.interactionManager.updateIdUnderMouse(pickingId);
 
+        if (this._screenshotRequest && this._screenshotRequest.background == 'custom') {
+            const bg = this._screenshotRequest.customColor as Vec3;
+            gl.clearColor(bg.x, bg.y, bg.z, 1);
+        }
+
         gl.viewport(0, 0, this._renderSettings.width, this._renderSettings.height);
         this.renderSceneIntoLayerbuffers();
         if (this._config.bloom) this._bloom.render(this._layers);
         this._compositor.compose(this._layers);
+
+        if (this._screenshotRequest) {
+            gl.canvas.toBlob((blob) => HTMLUtils.saveBlob(blob, 'screenshot.png'));
+            this._screenshotRequest = undefined;
+            gl.clearColor(0, 0, 0, 1);
+        }
     }
 
     private renderSceneIntoLayerbuffers() {
@@ -178,7 +194,7 @@ export class Renderer implements IMouseListener {
         gl.disable(gl.BLEND);
 
         // now render the skybox
-        if (scene.skybox) {
+        if (scene.skybox && (!this._screenshotRequest || this._screenshotRequest.background == 'as-is')) {
             scene.skybox.bind(camera.viewMatNoTranslation, this._perspectiveProjectionMatrix);
             this.renderSkybox();
         }
@@ -197,6 +213,24 @@ export class Renderer implements IMouseListener {
         gl.bindVertexArray(this._skyboxVAO);
         gl.drawArrays(gl.TRIANGLES, 0, 36);
         gl.bindVertexArray(null);
+    }
+
+    requestScreenshot(request: IScreenshotRequest) {
+        if (this._screenshotRequest) {
+            console.warn('Trying to take a screenshot with another one already enqueued');
+            return;
+        }
+        if (request.background == 'custom') {
+            if (!request.customColor) {
+                console.error('Trying to render a screenshot with an undefined custom background');
+                return;
+            }
+            if (!request.customColor.checkIfAllValuesInRange(0, 1)) {
+                console.error('Trying to render a screenshot with a invalid custom background color');
+                return;
+            }
+        }
+        this._screenshotRequest = request;
     }
 
     get perspectiveProjectionMat4() {

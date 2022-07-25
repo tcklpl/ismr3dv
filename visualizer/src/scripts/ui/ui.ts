@@ -5,6 +5,7 @@ import { UIGizmos } from "./ui_gizmos";
 import { UIInfo } from "./ui_info";
 import { UILoader } from "./ui_loader";
 import { UIOptionsHud } from "./ui_options_hud";
+import { UIScreenshot } from "./ui_screenshot";
 import { UISession } from "./ui_session";
 import { UIStationsHud } from "./ui_stations_hud";
 import { UITimeline } from "./ui_timeline";
@@ -21,6 +22,7 @@ export class UI {
     private _stationsHud = new UIStationsHud();
     private _gizmos = new UIGizmos();
     private _fatal = new UIFatal();
+    private _screenshot = new UIScreenshot();
 
     registerEssential() {
         this._config.registerEvents();
@@ -45,6 +47,7 @@ export class UI {
         this._stationsHud.registerEvents();
         this._gizmos.registerEvents();
         this._info.update();
+        this._screenshot.registerEvents();
     }
 
     get config() {
