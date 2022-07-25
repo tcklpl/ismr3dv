@@ -83,6 +83,10 @@
         {
             "url": "gizmos_menu.html",
             "append_to": "body"
+        },
+        {
+            "url": "screenshot.html",
+            "append_to": "body"
         }
     ]
 }
