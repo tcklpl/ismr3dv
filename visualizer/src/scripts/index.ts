@@ -25,8 +25,15 @@ canvas.on('mouseup', e => {
     document.exitPointerLock();
 });
 
+let resizeTimeout: number = -1;
 $(window).on("resize", () => {
-    visualizer?.engine?.adjustToWindowSize();
+    if (resizeTimeout != -1) {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = -1;
+    }
+    resizeTimeout = setTimeout(() => {
+        visualizer?.engine?.adjustToWindowSize();
+    }, 200);
 });
 
 window.onerror = (e, source, lineno, colno, error) => {
