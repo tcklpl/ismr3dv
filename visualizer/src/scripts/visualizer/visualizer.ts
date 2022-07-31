@@ -51,6 +51,7 @@ export class Visualizer {
     private _serverInfo!: IServerInfo;
 
     private _pointerLocked: boolean = false;
+    private _pointerLockListeners: ((lock: boolean) => void)[] = [];
 
     // Scene
     private _universeScene!: UniverseScene;
@@ -92,6 +93,10 @@ export class Visualizer {
         this.ui.registerEvents();
 
         requestAnimationFrame(t => this._engine.render(t));
+    }
+
+    registerPointerLockListener(l: (lock: boolean) => void) {
+        this._pointerLockListeners.push(l);
     }
 
     get materialManager() {
@@ -152,6 +157,7 @@ export class Visualizer {
 
     set pointerLocked(v: boolean) {
         this._pointerLocked = v;
+        this._pointerLockListeners.forEach(x => x(v));
     }
 
     get universeScene() {
@@ -189,6 +195,5 @@ export class Visualizer {
     get limitations() {
         return this._limitations;
     }
-
 
 }
