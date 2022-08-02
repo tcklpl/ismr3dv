@@ -52,6 +52,7 @@ with open(hashes_file_name, 'w') as f:
     f.write(json.dumps(hash_dict))
 
 for f in files_to_copy:
-    new_path = f'{dst}/{f.relative_to(src)}'
+    new_path = f'{dst.replace("/", "")}/{f.relative_to(src)}'
+    Path(new_path).parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(f, new_path)
 
