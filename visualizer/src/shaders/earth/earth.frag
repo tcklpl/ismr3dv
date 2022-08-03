@@ -37,7 +37,13 @@ vec3 calculateNormal() {
     return normalize(tbn * normalRaw);
 }
 
-float calculateSpecularIntensity(vec3 lightDirectionUnit, float lightIncidence, float specularMapValue, float multiplier) {
+/*
+    Calculates the specular intensity of the fragment.
+    lightDirectionUnit  Unit vector from the sun to this fragment in camera space.
+    multiplier          Intensity multiplier, contains the dot product of the light incidence, relevant map texels
+                        and an arbitrary value to change the intensity (0.7).
+*/
+float calculateSpecularIntensity(vec3 lightDirectionUnit, float multiplier) {
     vec3 viewDir = -(vtf_vertPos_cameraSpace.xyz / vtf_vertPos_cameraSpace.w);
     vec3 reflectDir = 2.0 * dot(vtf_normal_cameraSpace, lightDirectionUnit) * vtf_normal_cameraSpace - lightDirectionUnit;
     vec3 reflection = normalize(reflectDir);
@@ -45,15 +51,29 @@ float calculateSpecularIntensity(vec3 lightDirectionUnit, float lightIncidence, 
     float cosAngle = dot(reflection, toCamera);
     cosAngle = clamp(cosAngle, 0.0, 1.0);
     cosAngle = pow(cosAngle, 3.0);
-    return cosAngle * lightIncidence * specularMapValue * multiplier;
+    return cosAngle * multiplier;
 }
 
-vec3 calculateSpecular(float lightIncidence, vec4 specularMapTexel, vec3 color) {
-    vec3 t = (u_view * vec4(u_sun_position, 1.0)).xyz;
-    vec3 l2 = normalize(t - vtf_vertPos_cameraSpace.xyz);
-    return calculateSpecularIntensity(l2, lightIncidence, specularMapTexel.r, 0.7) * color;
+/*
+    Calculates the specular color of the fragment.
+    lightIncidence      The dot product of the light incidence in this fragment.
+    specularMapTexel    UV mapped texel from the specular map.
+    cloudMapTexel       UV mapped texel from the cloud map.
+    color               The specular color.
+
+    Takes in consideration 100% of the specular map and 50% of the cloud map.
+*/
+vec3 calculateSpecular(float lightIncidence, vec4 specularMapTexel, vec4 cloudMapTexel, vec3 color) {
+    vec3 sunPositionViewSpace = (u_view * vec4(u_sun_position, 1.0)).xyz;
+    vec3 sunToFragmentUnit = normalize(sunPositionViewSpace - vtf_vertPos_cameraSpace.xyz);
+    float multiplier = lightIncidence * specularMapTexel.r * (1.0 - cloudMapTexel.r / 2.0) * 0.7;
+    return calculateSpecularIntensity(sunToFragmentUnit, multiplier) * color;
 }
 
+/*
+    Calculates the fresnel effect on the current fragment, basically how much a fragment's normal is
+    facing away from the camera. (In this case not from the normal map, but from the 3d model normal).
+*/
 float calculateFresnel() {
     vec3 fragmentToCamera = normalize(-vtf_vertPos_cameraSpace.xyz);
     float facingCamera = dot(normalize(vtf_normal_cameraSpace), fragmentToCamera);
@@ -81,7 +101,7 @@ void main() {
     float cloudIntensity = incidence / 2.0;
     vec4 clouds = vec4(cloudMapTexel.rgb, cloudIntensity);
 
-    vec3 specular = calculateSpecular(incidence, specularMapTexel, vec3(2.0, 2.0, 1.0));
+    vec3 specular = calculateSpecular(incidence, specularMapTexel, cloudMapTexel, vec3(2.0, 2.0, 1.0));
 
     float fresnel = calculateFresnel();
     float ringIntensity = fresnel <= 0.75 ? 0.0 : (fresnel - 0.75 ) * 5.0;
@@ -98,6 +118,5 @@ void main() {
 
     // Inverse gamma correction, as this texture is already gamma corrected
     out_color = vec4(pow(out_color.rgb, vec3(2.2)), 1.0);
-
     out_bloom = vec4(ringColor * ringIntensity * 0.3, 1.0);
 }
