@@ -95,6 +95,10 @@ void main() {
     vec3 lightDirectionUnit = normalize(lightDirection);
     float incidence = dot(normal, lightDirectionUnit);
 
+    // Multiply the day map by the light incidence. It isn't necessary to multiply the night map because the light diference wouldn't
+    // even be visible as there's no light.
+    dayMapTexel *= clamp(incidence * 1.2, 0.0, 1.2);
+    
     // Mix day and night map based on light incidence
     vec4 dayNight = mix(vec4(dayMapTexel.rgb, 1.0), vec4(nightMapTexel.rgb, 1.0), 1.0 - clamp(incidence * 2.0, 0.0, 1.0));
     
