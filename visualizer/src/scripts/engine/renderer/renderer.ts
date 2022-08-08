@@ -178,10 +178,17 @@ export class Renderer implements IMouseListener {
             });
         });
 
-        // then render transparent objects
+        // render the skybox
+        if (scene.skybox && (!this._screenshotRequest || this._screenshotRequest.background == 'as-is')) {
+            scene.skybox.bind(camera.viewMatNoTranslation, this._perspectiveProjectionMatrix);
+            this.renderSkybox();
+        }
+
+        // render transparent objects
         // this is a really simple implementation but it's ok for it's purpose
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+        gl.disable(gl.CULL_FACE);
 
         gl.depthMask(false);
         scene.transparentObjects.forEach(o => {
@@ -192,12 +199,7 @@ export class Renderer implements IMouseListener {
         });
         gl.depthMask(true);
         gl.disable(gl.BLEND);
-
-        // now render the skybox
-        if (scene.skybox && (!this._screenshotRequest || this._screenshotRequest.background == 'as-is')) {
-            scene.skybox.bind(camera.viewMatNoTranslation, this._perspectiveProjectionMatrix);
-            this.renderSkybox();
-        }
+        gl.enable(gl.CULL_FACE);
 
         // free the framebuffer
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
