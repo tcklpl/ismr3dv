@@ -35,4 +35,6 @@ export abstract class Camera {
     get position() {
         return this._pos;
     }
+
+    abstract get asSerializable(): any & {type: string};
 }

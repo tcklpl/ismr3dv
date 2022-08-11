@@ -28,6 +28,13 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
         visualizer.registerPointerLockListener(l => this.onPointerLock(l));
     }
 
+    setData(data: ICameraSerializableInfo) {
+        this._phi = data.phi;
+        this._theta = data.theta;
+        this._distance = data.distance;
+        this.generateCameraMatrix();
+    }
+
     update(): void {
         if (this._deltaX != 0 || this._deltaY != 0 || this._deltaZ != 0) {
             if (this._deltaX != 0) this._phi = MUtils.clamp(0.1, 179.9, this._phi + (this._deltaX * Time.deltaTime));
@@ -76,4 +83,20 @@ export class MainCamera extends Camera implements IMouseListener, IFrameListener
         this._deltaZ = 0;
     }
 
+    get asSerializable() {
+        return <ICameraSerializableInfo> {
+            phi: this._phi,
+            theta: this._theta,
+            distance: this._distance,
+            type: "main"
+        };
+    }
+
+}
+
+export interface ICameraSerializableInfo {
+    phi: number;
+    theta: number;
+    distance: number;
+    type: string;
 }

@@ -3,6 +3,7 @@ import { MUtils } from "../../engine/utils/math_utils";
 import { CustomAlert } from "../../ui/custom_alert";
 import { IIPPInfo } from "../api/formats/i_ipp_info";
 import { IStationInfo } from "../api/formats/i_station_info";
+import { MainCamera } from "../camera/main_camera";
 import { StationEntity } from "../objects/station";
 import { ISessionConfig } from "./i_session.config";
 import { ISessionSave } from "./i_session_save";
@@ -178,6 +179,7 @@ export class ISMRSession {
             start_date: this._startDate,
             end_date: this._endDate,
             config: this.config,
+            camera: visualizer.cameraManager.activeCamera?.asSerializable,
 
             station_list: this._stationList,
             selected_stations: this._selectedStations.map(x => x.station_id),
@@ -193,6 +195,9 @@ export class ISMRSession {
         const session = new ISMRSession(save.start_date, save.end_date, save.name, save.creation_date);
         session._config = save.config;
         session.stations = save.station_list;
+        if (save.camera.type == "main") {
+            (visualizer.cameraManager.activeCamera as MainCamera).setData(save.camera);
+        }
         session.addIPP(save.raw_ipp);
         save.selected_stations.forEach(s => session.toggleStationById(s));
         return session;

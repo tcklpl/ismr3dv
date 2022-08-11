@@ -1,5 +1,6 @@
 import { IIPPInfo } from "../api/formats/i_ipp_info";
 import { IStationInfo } from "../api/formats/i_station_info";
+import { ICameraSerializableInfo } from "../camera/main_camera";
 import { ISessionConfig } from "./i_session.config";
 
 export interface ISessionSave {
@@ -11,6 +12,8 @@ export interface ISessionSave {
     end_date: Date;
 
     config: ISessionConfig;
+
+    camera: ICameraSerializableInfo;
 
     station_list: IStationInfo[];
     selected_stations: number[];

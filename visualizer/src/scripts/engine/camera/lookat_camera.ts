@@ -27,4 +27,9 @@ export class LookAtCamera extends Camera implements IPositionable {
         this.cameraMatrix = Mat4.lookAt(this._pos, this._target, this._up);
     }
     
+    get asSerializable(): any {
+        return {
+            type: "lookat"
+        }
+    }
 }
