@@ -15,6 +15,7 @@ import { UI } from "../ui/ui";
 import { ISMRAPIConnector } from "./api/api_connector";
 import { IServerInfo } from "./api/formats/i_server_info";
 import { ISMRCacheHub } from "./cache/cache_hub";
+import { EventHandler } from "./events/event_handler";
 import { GizmoManager } from "./gizmos/gizmo_manager";
 import { VisualizerIO } from "./io/visualizer_io";
 import { ISMRProviders } from "./providers/providers";
@@ -31,6 +32,7 @@ export class Visualizer {
     private _cache!: ISMRCacheHub;
     private _idb = new IDBManager();
     private _limitations!: ImplementationLimitations;
+    private _eventHandler = new EventHandler();
 
     // Managers
     private _materialManager = new MaterialManager();
@@ -194,6 +196,10 @@ export class Visualizer {
 
     get limitations() {
         return this._limitations;
+    }
+
+    get events() {
+        return this._eventHandler;
     }
 
 }
