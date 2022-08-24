@@ -31,9 +31,9 @@
             "fragment": "picking/picking.frag"
         },
         {
-            "name": "ipp_batch_renderer",
+            "name": "ipp_color_rainbow",
             "vertex": "common/basic_quad.vert",
-            "fragment": "ipp/ipp_batch_renderer.frag"
+            "fragment": "ipp/coloring/rainbow.frag"
         },
         {
             "name": "ipp_visualizer_color",
