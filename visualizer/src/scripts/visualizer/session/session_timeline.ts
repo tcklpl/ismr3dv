@@ -1,8 +1,6 @@
-import { Vec2 } from "../../engine/data_formats/vec/vec2";
 import { IIPPInfo } from "../api/formats/i_ipp_info";
-import { Moment } from "./moment";
-import { MomentBufferingManager } from "./moment_buffering_manager";
-import { TimelineImageBuffers } from "./timeline_image_buffers";
+import { Moment } from "./moments/moment";
+import { MomentBufferingManager } from "./moments/moment_buffering_manager";
 
 export class SessionTimeline {
     
@@ -12,8 +10,7 @@ export class SessionTimeline {
 
     private _currentlySelectedStations: number[] = [];
     private _moments: Moment[] = [];
-    private _timelineImageBuffers = new TimelineImageBuffers(new Vec2(2048, 1024));
-    private _momentBufferingManager = new MomentBufferingManager(this._timelineImageBuffers, 0.01);
+    private _momentBufferingManager = new MomentBufferingManager();
 
     constructor() {        
     }
@@ -43,6 +40,7 @@ export class SessionTimeline {
             if (!this._coveredStations.includes(ipp.id))
                 this._coveredStations.push(ipp.id);
         });
+        visualizer.universeScene.ippSphere.currentTexture = this._momentBufferingManager.texture;
     }
 
     isRangeCovered(start: Date, end: Date, stations: number[]) {
