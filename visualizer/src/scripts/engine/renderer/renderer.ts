@@ -188,7 +188,10 @@ export class Renderer implements IMouseListener {
         // this is a really simple implementation but it's ok for it's purpose
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-        gl.disable(gl.CULL_FACE);
+        gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE);
+        // gl.blendEquation(gl.FUNC_ADD);
+        // gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE);
+        // gl.disable(gl.CULL_FACE);
 
         gl.depthMask(false);
         scene.transparentObjects.forEach(o => {
@@ -199,7 +202,7 @@ export class Renderer implements IMouseListener {
         });
         gl.depthMask(true);
         gl.disable(gl.BLEND);
-        gl.enable(gl.CULL_FACE);
+        //gl.enable(gl.CULL_FACE);
 
         // free the framebuffer
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
