@@ -5,7 +5,7 @@ export class EventHandler {
 
     private _listeners: Map<string, IEventListener[]> = new Map();
 
-    registerListener(event: string, listener: (...args: any[]) => any) {
+    on(event: string, listener: (...args: any[]) => any) {
         const list = this._listeners.get(event) || [];
         const el = <IEventListener> {
             listener: listener,
