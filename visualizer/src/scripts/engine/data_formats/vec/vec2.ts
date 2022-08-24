@@ -48,6 +48,10 @@ export class Vec2 implements IUniformable {
         return this.x == other.x && this.y == other.y;
     }
 
+    containsAsMinMax(value: number) {
+        return this.x <= value && value <= this.y;
+    }
+
     clone() {
         return new Vec2(this.x, this.y);
     }
