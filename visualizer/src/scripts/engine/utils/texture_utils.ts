@@ -23,10 +23,53 @@ export class TextureUtils {
         return tex;
     }
 
-    static createBufferTexture(width: number, height: number) {
+    static createBufferTexture(width: number, height: number, filter?: number) {
         const tex = this.createWebGLTexture();
         gl.bindTexture(gl.TEXTURE_2D, tex);
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        if (filter) {
+            this.setTexturePreoperties(filter);
+        }
+        return tex;
+    }
+
+    static createRGBTexture(width: number, height: number, filter?: number) {
+        const tex = this.createWebGLTexture();
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, width, height, 0, gl.RGB, gl.UNSIGNED_BYTE, null);
+        if (filter) {
+            this.setTexturePreoperties(filter);
+        }
+        return tex;
+    }
+
+    static createR8UITexture(width: number, height: number, filter?: number) {
+        const tex = this.createWebGLTexture();
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.R8UI, width, height, 0, gl.RED_INTEGER, gl.UNSIGNED_BYTE, null);
+        if (filter) {
+            this.setTexturePreoperties(filter);
+        }
+        return tex;
+    }
+
+    static createR32FTexture(width: number, height: number, filter?: number) {
+        const tex = this.createWebGLTexture();
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.R32F, width, height, 0, gl.RED, gl.FLOAT, null);
+        if (filter) {
+            this.setTexturePreoperties(filter);
+        }
+        return tex;
+    }
+
+    static createRGB8UITexture(width: number, height: number, filter?: number) {
+        const tex = this.createWebGLTexture();
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB8UI, width, height, 0, gl.RGB_INTEGER, gl.UNSIGNED_BYTE, null);
+        if (filter) {
+            this.setTexturePreoperties(filter);
+        }
         return tex;
     }
 
