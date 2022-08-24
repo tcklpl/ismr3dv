@@ -1,3 +1,4 @@
+import { UIBottomHud } from "./ui_bottom_hud";
 import { UICanvas } from "./ui_canvas";
 import { UIConfig } from "./ui_config";
 import { UIFatal } from "./ui_fatal";
@@ -23,6 +24,7 @@ export class UI {
     private _gizmos = new UIGizmos();
     private _fatal = new UIFatal();
     private _screenshot = new UIScreenshot();
+    private _bottomHud = new UIBottomHud();
 
     registerEssential() {
         this._config.registerEvents();
@@ -84,6 +86,10 @@ export class UI {
 
     get fatal() {
         return this._fatal;
+    }
+
+    get bottomHud() {
+        return this._bottomHud;
     }
 
 }
