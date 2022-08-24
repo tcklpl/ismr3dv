@@ -3,8 +3,6 @@
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Timeline</h5>
         <div>
-            <i class="bi-question-lg" style="font-size: 1.2em;" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="hover focus" 
-            data-bs-placement="top" data-bs-content="<span class='text-color-active'><i class='bi-circle-fill icon-left'></i>Active</span><br><span class='text-color-buffered'><i class='bi-circle-fill icon-left'></i>Buffered</span><br><span class='text-color-buffered-same-moment'><i class='bi-circle-fill icon-left'></i>Same buffer</span><br><span class='text-color-inactive'><i class='bi-circle-fill icon-left'></i>Unbuffered</span>"></i>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
     </div>
@@ -31,27 +29,34 @@
 
         <!-- Actual timeline -->
         <div class="d-none fade flex-column w-100 h-100 align-items-start text-secondary justify-content-start" id="timeline-panel">
+
+            <canvas id="timeline-moment-indicator-canvas"></canvas>
             
-            <!-- Timeline controls -->
-            <div class="d-flex flex-row w-100 justify-content-center align-items-center">
-                <button id="tl-btn-first" class="btn"><i class="bi-chevron-double-left"></i></button>
-                <button id="tl-btn-prev" class="btn"><i class="bi-chevron-left"></i></button>
-                <div class="d-flex flex-column justify-content-center align-items-center" style="width: 12em;">
-                    <span id="tl-cur-name">Nome atual</span>
-                    <div class="d-flex flex-row">
-                        <input type="number" id="tl-cur-number" min="1"><span id="tl-max-number">/??</span>
-                    </div>
-                </div>
-                <button id="tl-btn-next" class="btn"><i class="bi-chevron-right"></i></button>
-                <button id="tl-btn-last" class="btn"><i class="bi-chevron-double-right"></i></button>
+            <div id="tl-bar-background">
+                <div id="tl-bar-buffered"></div>
+                <div id="tl-bar-colored"></div>
+                <div id="tl-bar-ghost"></div>
+                <div id="tl-bar-active"></div>
             </div>
 
-            <!-- Timeline moment frames -->
-            <div id="timeline-keyframe-container" class="w-100">
-                <ul id="timeline-keyframes">
-                    
-                </ul>
+            <div class="d-flex w-100 align-items-center">
+
+                <div class="d-flex justify-content-evenly align-items-center tl-control-sides" id="tl-controls-name">
+                    Info
+                </div>
+                <div class="d-flex justify-content-center align-items-center tl-control-center" id="tl-controls-player" style="font-size: 1.3em;">
+                    <i class="bi-chevron-double-left"></i>
+                    <i class="bi-caret-left"></i>
+                    <i class="bi-play-fill"></i>
+                    <i class="bi-caret-right"></i>
+                    <i class="bi-chevron-double-right"></i>
+                </div>
+                <div class="d-flex justify-content-center align-items-center tl-control-sides" id="tl-controls-stats">
+                    TODO: stats
+                </div>
+
             </div>
+
         </div>
         
     </div>

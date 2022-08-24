@@ -1,78 +1,66 @@
 @import "colors";
 
-#timeline-keyframes {
-    width: 100%;
-    overflow-x: auto;
-    padding: 10px;
-    white-space: nowrap;
-}
+$tl-height: 15px;
 
-#timeline-keyframes li {
-    list-style-type: none;
-    font-size: 1em;
-    width: 1.8em;
-    position: relative;
-    font-weight: 400;
-    text-align: center;
-    transition: 0.5s ease;
-    display: inline-block;
-}
-
-#timeline-keyframes li::before {
-    width: 1.2em;
-    height: 1.8em;
-    display: block;
-    font-size: 20px;
-    color: #ffffff;
-    background: $color-normal-inactive-moment;
-    border-radius: 10%;
-    margin: 0 auto 10px auto;
-    padding: 2px;
-    font-family: "bootstrap-icons";
-    content: "\F341";
-    transition: 0.5s ease;
+#tl-bar-background {
+    background-color: $cl-light-tl-bar-idle;
+    width: 100%; 
+    height: $tl-height;
+    padding: 0;
     cursor: pointer;
+    position: relative;
 }
 
-#timeline-keyframes li::after {
-    content: "";
-    height: 2px;
-    background: $color-normal-inactive-moment;
+#tl-bar-buffered {
+    z-index: 0;
+    width: 30%;
     position: absolute;
-    left: 0;
-    top: 1em;
-    z-index: -1;
+    height: $tl-height;
+    background-color: $cl-light-tl-bar-buffered;
+    pointer-events: none;
+}
+
+#tl-bar-colored {
+    z-index: 1;
+    width: 15%;
+    position: absolute;
+    height: $tl-height;
+    background-color: $cl-light-tl-bar-colored;
+    pointer-events: none;
+}
+
+#tl-bar-ghost {
+    z-index: 2;
+    width: 2px;
+    position: absolute;
+    height: $tl-height;
+    background-color: $cl-light-tl-bar-ghost;
+    pointer-events: none;
+}
+
+#tl-bar-active {
+    z-index: 3;
+    width: 2px;
+    position: relative;
+    height: $tl-height;
+    background-color: $cl-light-tl-bar-current;
+    pointer-events: none;
+}
+
+#timeline-moment-indicator-canvas {
+    height: 15px;
     width: 100%;
-    transition: 0.5s ease;
+    display: block;
 }
 
-#timeline-keyframes li.active::before,
-#timeline-keyframes li.active::after {
-    background: $color-active-moment !important;
+.tl-mom-indicator {
+    background-color: $cl-light-tl-bar-idle;
 }
 
-#timeline-keyframes li.buffered::before,
-#timeline-keyframes li.buffered::after {
-    background: $color-buffered-moment !important;
+.tl-control-sides {
+    flex: 1 1 40%
 }
 
-#timeline-keyframes li.same-buffer::before,
-#timeline-keyframes li.same-buffer::after {
-    background: $color-buffered-same-img-moment !important;
-}
-
-#timeline-keyframes li:nth-child(4n-3)::before {
-    background: $color-every4-inactive-moment;
-}
-
-#timeline-keyframes li.active::before {
-    content: "\F33E";
-}
-
-#tl-cur-number {
-    max-width: 5em;
-    border: 0;
-    border-bottom: 1px solid lightgray;
-    margin-right: 0.4em;
-    text-align: center;
+.tl-control-center {
+    flex: 1 1 20%;
 }

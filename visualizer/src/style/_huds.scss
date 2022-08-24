@@ -18,6 +18,11 @@
     padding: 10px;
 }
 
+.line-left {
+    border-left: 1px solid white;
+    padding-left: 0.5em;
+}
+
 #bottom-hud {
     @extend %hud-panel;
     bottom: 0;

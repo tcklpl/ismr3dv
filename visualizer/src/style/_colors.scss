@@ -2,24 +2,12 @@
 $color-active-green: #2F8D46;
 
 // timeline colors
-$color-normal-inactive-moment: #d3d3d3;
-$color-every4-inactive-moment: #a9a9a9;
-$color-active-moment: $color-active-green;
-$color-buffered-moment: #8da9c4;
-$color-buffered-same-img-moment: #9052a8;
+$cl-light-tl-bar-idle: rgb(102, 102, 102);
+$cl-light-tl-bar-buffered: #c2c2c2c2;
+$cl-light-tl-bar-colored: #d3d3d3;
+$cl-light-tl-bar-current: rgb(218, 73, 73);
+$cl-light-tl-bar-ghost: rgb(172, 61, 61);
 
 .text-color-active {
     color: $color-active-green;
-}
-
-.text-color-buffered {
-    color: $color-buffered-moment;
-}
-
-.text-color-buffered-same-moment {
-    color: $color-buffered-same-img-moment;
-}
-
-.text-color-inactive {
-    color: $color-normal-inactive-moment;
 }
