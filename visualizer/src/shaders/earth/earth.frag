@@ -117,10 +117,10 @@ void main() {
 
     out_color = dayNight;
     out_color += vec4(ringColor * ringIntensity * 2.0, 1.0);
-    out_color += (clouds * clouds.w);
+    out_color += vec4(clouds.rgb * clouds.w, 1.0);
     out_color += vec4(specular, 1.0);
 
     // Inverse gamma correction, as this texture is already gamma corrected
-    out_color = vec4(pow(out_color.rgb, vec3(2.2)), 1.0);
+    out_color = vec4(pow(out_color.rgb, vec3(2.2)).rgb, 1.0);
     out_bloom = vec4(ringColor * ringIntensity * 0.3, 1.0);
 }
