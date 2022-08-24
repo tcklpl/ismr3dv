@@ -9,14 +9,12 @@ export class IPPSphereEntity extends Entity {
     currentChannel: number = 0;
 
     private _uImage: WebGLUniformLocation;
-    private _uChannel: WebGLUniformLocation;
 
     constructor(id: number, mesh: Mesh, material: Material, shader: Shader) {
         super(id, mesh, material, shader);
 
         shader.bind();
         this._uImage = shader.assertGetUniform('u_ipp');
-        this._uChannel = shader.assertGetUniform('u_channel');
         this.transparent = true;
     }
 
@@ -28,8 +26,6 @@ export class IPPSphereEntity extends Entity {
         gl.activeTexture(gl.TEXTURE0);
         gl.uniform1i(this._uImage, 0);
         gl.bindTexture(gl.TEXTURE_2D, this.currentTexture as WebGLTexture);
-        
-        gl.uniform1i(this._uChannel, this.currentChannel);
 
         this.modelMatrix.bindUniform(gl, this.u_model);
         uniformConfiguration();
