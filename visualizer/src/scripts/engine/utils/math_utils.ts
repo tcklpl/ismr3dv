@@ -61,6 +61,20 @@ export class MUtils {
         return res;
     }
 
+    static minMaxNormalization(val: number, min: number, max: number) {
+        return (val - min) / (max - min);
+    }
+
+    static normalizeListMinMax(list: number[]) {
+        let min = list[0];
+        let max = list[0];
+        list.forEach(v => {
+            if (v < min) min = v;
+            if (v > max) max = v;
+        });
+        return list.map(v => this.minMaxNormalization(v, min, max));
+    }
+
     static fatorial(x: number) {
         if (x < 0) throw `Cannot calculate the fatorial of a negative number`;
         if (Math.floor(x) != x) throw `Cannot calculate the fatorial of a non-integer`;
