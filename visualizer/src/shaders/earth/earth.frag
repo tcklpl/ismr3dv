@@ -102,7 +102,7 @@ void main() {
     // Mix day and night map based on light incidence
     vec4 dayNight = mix(vec4(dayMapTexel.rgb, 1.0), vec4(nightMapTexel.rgb, 1.0), 1.0 - clamp(incidence * 2.0, 0.0, 1.0));
     
-    float cloudIntensity = incidence / 2.0;
+    float cloudIntensity = (incidence + 0.1) / 2.0;
     vec4 clouds = vec4(cloudMapTexel.rgb, cloudIntensity);
 
     vec3 specular = calculateSpecular(incidence, specularMapTexel, cloudMapTexel, vec3(2.0, 2.0, 1.0));
