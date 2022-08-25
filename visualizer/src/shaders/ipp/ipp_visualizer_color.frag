@@ -8,6 +8,7 @@ layout (location = 0) out vec4 out_color;
 layout (location = 1) out vec4 out_bloom;
 
 uniform sampler2D u_ipp;
+uniform float u_opacity;
 
 void main() {
 
@@ -16,6 +17,6 @@ void main() {
     if (ippSample.a == 0.0) discard;
     
     vec3 color = pow(ippSample.rgb, vec3(2.2));
-    out_color = vec4(color, ippSample.a * 0.8);
+    out_color = vec4(color, u_opacity);
     out_bloom = vec4(0.0);
 }

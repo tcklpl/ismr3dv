@@ -33,6 +33,9 @@ export class UITimeline implements IUI {
 
     private _tlPlayIntervalSelect = $('#tl-play-interval');
 
+    private _opacityControl = $('#tl-opacity');
+    private _opacityLabel = $('#tl-opacity-label');
+
     private _activeMoment = 0;
     private _hoveredMoment = 0;
     private _timelineMode: 'static' | 'user-hovering' = 'static';
@@ -157,6 +160,13 @@ export class UITimeline implements IUI {
             } catch (e) {
                 console.warn(e);
             }
+        });
+
+        this._opacityControl.on('input', () => {
+            const value = this._opacityControl.val() as number;
+            visualizer.universeScene.ippSphere.opacity = value;
+            const labelValue = (value * 100).toFixed(0);
+            this._opacityLabel.html(`${labelValue}%`);
         });
     }
 
