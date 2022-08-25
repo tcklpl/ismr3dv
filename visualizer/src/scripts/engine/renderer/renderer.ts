@@ -188,6 +188,7 @@ export class Renderer implements IMouseListener {
         // render transparent objects
         // this is a really simple implementation but it's ok for its purpose
         gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
         gl.depthMask(false);
         scene.transparentObjects.forEach(o => {
