@@ -16,6 +16,6 @@ void main() {
     if (ippSample.a == 0.0) discard;
     
     vec3 color = pow(ippSample.rgb, vec3(2.2));
-    out_color = vec4(color, ippSample.a * 1.0);
+    out_color = vec4(color, ippSample.a * 0.8);
     out_bloom = vec4(0.0);
 }

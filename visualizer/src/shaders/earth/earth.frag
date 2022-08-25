@@ -93,7 +93,7 @@ void main() {
     // Calculate the light incidence based on the sun
     vec3 lightDirection = u_sun_position - vtf_vertPos_modelSpace.xyz;
     vec3 lightDirectionUnit = normalize(lightDirection);
-    float incidence = dot(normal, lightDirectionUnit);
+    float incidence = clamp(dot(normal, lightDirectionUnit), 0.0, 1.0);
 
     // Multiply the day map by the light incidence. It isn't necessary to multiply the night map because the light diference wouldn't
     // even be visible as there's no light.
@@ -121,6 +121,7 @@ void main() {
     out_color += vec4(specular, 1.0);
 
     // Inverse gamma correction, as this texture is already gamma corrected
-    out_color = vec4(pow(out_color.rgb, vec3(2.2)).rgb, 1.0);
+    vec3 color = pow(out_color.rgb, vec3(2.2));
+    out_color = vec4(color, 1.0);
     out_bloom = vec4(ringColor * ringIntensity * 0.3, 1.0);
 }
