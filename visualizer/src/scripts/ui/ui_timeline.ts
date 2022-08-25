@@ -1,9 +1,7 @@
 import { Vec2 } from "../engine/data_formats/vec/vec2";
 import { MUtils } from "../engine/utils/math_utils";
 import { ISMRSession } from "../visualizer/session/ismr_session";
-import { MomentFreeingLocation } from "../visualizer/session/moments/moment_buffering_manager";
 import { DateUtils } from "../visualizer/utils/date_utils";
-import { RandomUtils } from "../visualizer/utils/random_utils";
 import { IUI } from "./i_ui";
 import { MessageScreen } from "./message_screen";
 
@@ -27,9 +25,19 @@ export class UITimeline implements IUI {
 
     private _tlMomentName = $('#tl-controls-name');
 
+    private _btnFirst = $('#tl-btn-first');
+    private _btnPrev = $('#tl-btn-prev');
+    private _btnPlay = $('#tl-btn-play');
+    private _btnNext = $('#tl-btn-next');
+    private _btnLast = $('#tl-btn-last');
+
+    private _tlPlayIntervalSelect = $('#tl-play-interval');
+
     private _activeMoment = 0;
     private _hoveredMoment = 0;
-    private _timelineMode: 'idle' | 'user-hovering' | 'playing' = 'idle';
+    private _timelineMode: 'static' | 'user-hovering' = 'static';
+    private _isPlaying = false;
+    private _playInterval = 1000;
     
     private _bufferBounds = new Vec2(0, 0);
     private _colorBounds = new Vec2(0, 0);
@@ -47,10 +55,8 @@ export class UITimeline implements IUI {
 
         this._timelineBarBg.on('click', e => {
             const prog = e.offsetX / (this._timelineBarBg.width() as number);
-            this._activeMoment = Math.round(prog * (this.session.timeline.currentMoments.length - 1));
-            this.updateCurrentMomentMarkerAndInfo();
-            this.session.timeline.buffer.getMomentByIndex(this._activeMoment);
-            visualizer.ui.bottomHud.currentDateLabel = this.session.timeline.currentMoments[this._activeMoment].date.toLocaleString();
+            const moment = Math.round(prog * (this.session.timeline.currentMoments.length - 1));
+            this.setMoment(moment);
         });
 
         this._timelineBarBg.on('mousemove', e => {
@@ -61,7 +67,7 @@ export class UITimeline implements IUI {
         });
 
         this._timelineBarBg.on('mouseleave', e => {
-            this._timelineMode = 'idle';
+            this._timelineMode = 'static';
             this._hoveredMoment = -1;
             this.updateCurrentMomentMarkerAndInfo();
         });
@@ -112,6 +118,65 @@ export class UITimeline implements IUI {
             this.updateBufferIndicators();
             this.updateCurrentMomentMarkerAndInfo();
         });
+
+        this._btnFirst.on('click', () => {
+            this.setMoment(0);
+        })
+
+        this._btnPrev.on('click', () => {
+            if (this._activeMoment > 0) {
+                this.setMoment(this._activeMoment - 1);
+            }
+        });
+
+        this._btnPlay.on('click', () => {
+            this._isPlaying = !this._isPlaying;
+            if (this._isPlaying) {
+                this._btnPlay.removeClass('bi-play-fill').addClass('bi-pause-fill');
+                this.playTask();
+            } else {
+                this._btnPlay.removeClass('bi-pause-fill').addClass('bi-play-fill');
+            }
+        });
+
+        this._btnNext.on('click', () => {
+            if (this._activeMoment < (this.session.timeline.currentMoments.length - 1)) {
+                this.setMoment(this._activeMoment + 1);
+            }
+        });
+
+        this._btnLast.on('click', () => {
+            this.setMoment(this.session.timeline.currentMoments.length - 1);
+        });
+
+        this._tlPlayIntervalSelect.on('input', () => {
+            const valStr = this._tlPlayIntervalSelect.val() as string || "";
+            try {
+                const val = Number.parseInt(valStr);
+                this._playInterval = val;
+            } catch (e) {
+                console.warn(e);
+            }
+        });
+    }
+
+    private playTask() {
+        if (this._isPlaying) {
+            if (this._activeMoment < (this.session.timeline.currentMoments.length - 1)) {
+                this.setMoment(this._activeMoment + 1);
+            } else {
+                this._isPlaying = false;
+                this._btnPlay.removeClass('bi-pause-fill').addClass('bi-play-fill');
+            }
+            setTimeout(() => this.playTask(), this._playInterval);
+        }
+    }
+
+    private setMoment(index: number) {
+        this._activeMoment = index;
+        this.updateCurrentMomentMarkerAndInfo();
+        this.session.timeline.buffer.getMomentByIndex(this._activeMoment);
+        visualizer.ui.bottomHud.currentDateLabel = this.session.timeline.currentMoments[this._activeMoment].date.toLocaleString();
     }
 
     getMomentOffsetPercentage(index: number) {
@@ -127,8 +192,7 @@ export class UITimeline implements IUI {
         let momentToQuery = 0;
         let updateGhost = true;
         switch(this._timelineMode) {
-            case 'idle':
-            case 'playing':
+            case 'static':
                 momentToQuery = this._activeMoment;
                 break;
             case 'user-hovering':

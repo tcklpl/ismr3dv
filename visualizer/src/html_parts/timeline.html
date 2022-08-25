@@ -45,14 +45,25 @@
                     Info
                 </div>
                 <div class="d-flex justify-content-center align-items-center tl-control-center" id="tl-controls-player" style="font-size: 1.3em;">
-                    <i class="bi-chevron-double-left"></i>
-                    <i class="bi-caret-left"></i>
-                    <i class="bi-play-fill"></i>
-                    <i class="bi-caret-right"></i>
-                    <i class="bi-chevron-double-right"></i>
+                    <i class="bi-chevron-double-left cursor-pointer" id="tl-btn-first"></i>
+                    <i class="bi-caret-left cursor-pointer" id="tl-btn-prev"></i>
+                    <i class="bi-play-fill cursor-pointer" id="tl-btn-play"></i>
+                    <i class="bi-caret-right cursor-pointer" id="tl-btn-next"></i>
+                    <i class="bi-chevron-double-right cursor-pointer" id="tl-btn-last"></i>
                 </div>
                 <div class="d-flex justify-content-center align-items-center tl-control-sides" id="tl-controls-stats">
-                    TODO: stats
+                    
+                    <div class="d-flex align-items-center">
+                        <i class="bi-speedometer icon-left"></i>
+                        <select class="form-select" id="tl-play-interval">
+                            <option value="10000">0.1 Hz</option>
+                            <option value="2000">0.5 Hz</option>
+                            <option selected value="1000">1 Hz</option>
+                            <option value="200">5 Hz</option>
+                            <option value="100">10 Hz</option>
+                        </select>
+                    </div>
+
                 </div>
 
             </div>

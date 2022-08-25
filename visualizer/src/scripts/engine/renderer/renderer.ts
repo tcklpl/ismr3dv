@@ -186,7 +186,7 @@ export class Renderer implements IMouseListener {
         }
 
         // render transparent objects
-        // this is a really simple implementation but it's ok for it's purpose
+        // this is a really simple implementation but it's ok for its purpose
         gl.enable(gl.BLEND);
 
         gl.depthMask(false);
