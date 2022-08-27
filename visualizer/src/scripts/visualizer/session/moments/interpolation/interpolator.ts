@@ -36,6 +36,7 @@ export class MomentInterpolator {
     }
 
     interpolateData(data: IMomentInterpEntry[]) {
+        this.state = 'working';
         this._workLoad += data.length;
         data.forEach(d => this._worker.postMessage(d));
     }
@@ -49,7 +50,7 @@ export class MomentInterpolator {
         }
     }
 
-    get state() {
+    getStatus() {
         return this._status;
     }
 

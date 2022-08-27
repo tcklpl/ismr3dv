@@ -39,6 +39,11 @@ export class Moment {
         gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, size.x, size.y, gl.RGBA, gl.UNSIGNED_BYTE, this.bufferColoredData.data);
     }
 
+    clearInterpAndColorData() {
+        this.bufferColoredData = undefined;
+        this.bufferInterpolatedData = undefined;
+    }
+
     get time() {
         return this._time;
     }

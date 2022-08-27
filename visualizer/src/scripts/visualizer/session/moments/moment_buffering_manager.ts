@@ -2,9 +2,9 @@ import { Moment } from "./moment";
 import { MomentColorer } from "./colorers/moment_buffering_colorer";
 import { Vec2 } from "../../../engine/data_formats/vec/vec2";
 import { TextureUtils } from "../../../engine/utils/texture_utils";
-import { miInverseDistanceWeighting } from "./interpolation/mi_inverse_distance_weighting";
 import { IMomentInterpEntry } from "./interpolation/i_moment_queue_entries";
 import { MIStates, MomentInterpolator } from "./interpolation/interpolator";
+import { InterpolatingFunctions } from "./interpolation/interpolating_functions";
 
 export type MomentFreeingLocation = 'before' | 'after';
 
@@ -22,6 +22,7 @@ export class MomentBufferingManager {
     private _interpColorProvider = new MomentColorer(this._bufferSize);
 
     private _interpolator!: MomentInterpolator;
+    private _interpolatingFunction: InterpolatingFunctions = InterpolatingFunctions.INVERSE_DISTANCE_WEIGHTING;
 
     private _momentWaitingForColor?: number;
     private _momentsToProcess = 0;
@@ -32,7 +33,7 @@ export class MomentBufferingManager {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-        this.setInterpolator(miInverseDistanceWeighting);
+        this.setupInterpolator();
     }
 
     private killInterpolatorIfPresent() {
@@ -41,15 +42,38 @@ export class MomentBufferingManager {
         }
     }
 
-    setInterpolator(interpFuncThread: (...args: any[]) => void) {
+    setupInterpolator() {
         this.killInterpolatorIfPresent();
-        this._interpolator = new MomentInterpolator(interpFuncThread, this._bufferSize);
+        this._interpolator = new MomentInterpolator(this._interpolatingFunction.func, this._bufferSize);
         this._interpolator.onMessage = m => this.onInterpolatorMessage(m);
         this._interpolator.onError = e => this.onInterpolatorError(e);
         this._interpolator.onStateChange(s => this.onInterpolatorStateChange(s));
     }
 
+    private resetInterpolator() {
+        this._interpolator.terminate();
+        this.setupInterpolator();
+    }
+
+    clearInterpolationCache() {
+        // Do nothing if there's nothing to clear
+        if (this._bufferBounds.x == -1 && this._bufferBounds.y == -1) return;
+        
+        for (let i = this._bufferBounds.x; i <= this._bufferBounds.y; i++) {
+            this.clearBuffersAt(i, 'after');
+        }
+
+        this._bufferBounds.x = -1;
+        this._bufferBounds.y = -1;
+        visualizer.events.dispatchEvent('moment-interpolation-cache-cleared');
+    }
+
     replaceMoments(moments: Moment[]) {
+        // kill and replace the interpolator if it's running
+        if (this._interpolator.getStatus() != 'idle') {
+            this.resetInterpolator();
+        }
+        this.clearInterpolationCache();
         this._moments = moments;
         this.getMomentByIndex(this._currentIndex);
         if (this._currentIndex >= moments.length) {
@@ -114,8 +138,7 @@ export class MomentBufferingManager {
             console.warn(`Clearing moment out of bounds: ${index} (${position}) on [0, ${this._moments.length}]`);
             return;
         }
-        this._moments[index].bufferColoredData = undefined;
-        this._moments[index].bufferInterpolatedData = undefined;
+        this._moments[index].clearInterpAndColorData();
         visualizer.events.dispatchEvent('moment-freed', index, position);
     }
 
@@ -132,13 +155,30 @@ export class MomentBufferingManager {
     getMomentByIndex(index: number) {
 
         let hasBeenTexturedYet = false;
-        const initialized = this._bufferBounds.x != -1 && this._bufferBounds.y != -1;
+        let initialized = this._bufferBounds.x != -1 && this._bufferBounds.y != -1;
 
         if (this._bufferBounds.containsAsMinMax(index) && initialized) {
             this.subTexAt(index);
             hasBeenTexturedYet = true;
 
             if (index == this._currentIndex) return;
+        }
+
+        // If it's completly out of bounds and the interpolator is still running
+        // (this will happen if the user clicks on the timeline while the interpolator is still running
+        // in a completly different area).
+        if (!this._bufferBounds.containsAsMinMax(index) && initialized) {
+            // If the interpolator is still running we're gonna kill it
+            if (this._interpolator.getStatus() != 'idle') {
+                this.resetInterpolator();
+            }
+            // If the colorer is still running (most probable) we're gonna clear it's queue
+            if (this._interpColorProvider.status == 'working') {
+                this._interpColorProvider.clearQueue();
+            }
+            // Now we can clear all the moments cache
+            this.clearInterpolationCache();
+            initialized = false;
         }
 
         const difference = index - this._currentIndex;

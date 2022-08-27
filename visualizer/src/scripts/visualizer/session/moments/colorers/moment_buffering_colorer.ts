@@ -5,6 +5,8 @@ import { TextureUtils } from "../../../../engine/utils/texture_utils";
 import { IMomentColorQueueEntry } from "../interpolation/i_moment_queue_entries";
 import { MomentColorRainbow } from "./color_programs/rainbow";
 
+export type MomentColorerStatus = 'idle' | 'working';
+
 export class MomentColorer implements IFrameListener {
 
     private _fb: WebGLFramebuffer;
@@ -15,6 +17,7 @@ export class MomentColorer implements IFrameListener {
     private _selectedColorProgram = new MomentColorRainbow();
 
     private _queue: IMomentColorQueueEntry[] = [];
+    private _status: MomentColorerStatus = 'idle';
 
     constructor(bufferSize: Vec2) {
         this._bufferSize = bufferSize;
@@ -39,10 +42,22 @@ export class MomentColorer implements IFrameListener {
 
         // notify the entry that it's interpolation is complete
         entry.onColorCompletion(out);
+
+        if (this._queue.length == 0) this._status = 'idle';
     }
 
     enqueue(entry: IMomentColorQueueEntry) {
         this._queue.push(entry);
+        this._status = 'working';
+    }
+
+    clearQueue() {
+        this._queue = [];
+        this._status = 'idle';
+    }
+
+    get status() {
+        return this._status;
     }
 
 }

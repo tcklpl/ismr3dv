@@ -122,6 +122,15 @@ export class UITimeline implements IUI {
             this.updateCurrentMomentMarkerAndInfo();
         });
 
+        visualizer.events.on('moment-interpolation-cache-cleared', () => {
+            console.log('cache cleared!');
+            this._bufferBounds = Vec2.fromValue(0);
+            this._colorBounds = Vec2.fromValue(0);
+
+            this.updateBufferIndicators();
+            this.updateCurrentMomentMarkerAndInfo();
+        });
+
         this._btnFirst.on('click', () => {
             this.setMoment(0);
         })
