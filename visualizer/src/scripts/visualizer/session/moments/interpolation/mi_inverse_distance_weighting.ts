@@ -1,4 +1,3 @@
-import { IIPPInfo } from "../../../api/formats/i_ipp_info";
 import { IMomentInterpEntry } from "./i_moment_queue_entries";
 
 export const miInverseDistanceWeighting = (width: number, height: number) => {
