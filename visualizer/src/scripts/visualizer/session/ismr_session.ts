@@ -32,13 +32,15 @@ export class ISMRSession {
     private _instantiatedStations: StationEntity[] = [];
     private _selectedStations: IStationInfo[] = [];
 
-    private _timeline = new SessionTimeline();
+    private _timeline: SessionTimeline;
 
-    constructor(startDate: Date, endDate: Date, name?: string, creationDate?: Date) {
+    constructor(startDate: Date, endDate: Date, name?: string, creationDate?: Date, currentMoment?: number) {
         this._startDate = startDate;
         this._endDate = endDate;
         this._creationDate = creationDate ?? new Date();
         this._name = name && name.length > 0 ? name : `${this._creationDate?.toDateString()} - ${startDate.toDateString()} to ${endDate.toDateString()}`;
+
+        this._timeline = new SessionTimeline(currentMoment);
     }
 
     instantiateStationsAs3dObjects() {
@@ -183,7 +185,11 @@ export class ISMRSession {
 
             station_list: this._stationList,
             selected_stations: this._selectedStations.map(x => x.station_id),
-            raw_ipp: this._timeline.ippList || []
+            raw_ipp: this._timeline.ippList || [],
+
+            current_moment: this.timeline.buffer.currentIndex,
+            ipp_opacity: visualizer.universeScene.ippSphere.opacity,
+            moment_play_speed: visualizer.ui.timeline.speed
         };
     }
 
@@ -192,7 +198,7 @@ export class ISMRSession {
     }
 
     static constructFromSave(save: ISessionSave) {
-        const session = new ISMRSession(save.start_date, save.end_date, save.name, save.creation_date);
+        const session = new ISMRSession(save.start_date, save.end_date, save.name, save.creation_date, save.current_moment);
         session._config = save.config;
         session.stations = save.station_list;
         if (save.camera.type == "main") {
@@ -200,6 +206,7 @@ export class ISMRSession {
         }
         session.addIPP(save.raw_ipp);
         save.selected_stations.forEach(s => session.toggleStationById(s));
+
         return session;
     }
 

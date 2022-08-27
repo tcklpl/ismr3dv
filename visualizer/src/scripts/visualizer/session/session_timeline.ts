@@ -10,9 +10,10 @@ export class SessionTimeline {
 
     private _currentlySelectedStations: number[] = [];
     private _moments: Moment[] = [];
-    private _momentBufferingManager = new MomentBufferingManager();
+    private _momentBufferingManager: MomentBufferingManager;
 
-    constructor() {        
+    constructor(currentIndex?: number) {
+        this._momentBufferingManager = new MomentBufferingManager(currentIndex);
     }
 
     private getTimeFromIPP(ipp: IIPPInfo) {

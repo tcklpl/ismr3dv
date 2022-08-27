@@ -164,9 +164,7 @@ export class UITimeline implements IUI {
 
         this._opacityControl.on('input', () => {
             const value = this._opacityControl.val() as number;
-            visualizer.universeScene.ippSphere.opacity = value;
-            const labelValue = (value * 100).toFixed(0);
-            this._opacityLabel.html(`${labelValue}%`);
+            this.ippOpacity = value;
         });
     }
 
@@ -332,6 +330,51 @@ export class UITimeline implements IUI {
 
     private get ippSphere() {
         return visualizer.universeScene.ippSphere;
+    }
+
+    get speed() {
+        const valStr = this._tlPlayIntervalSelect.val() as string || "";
+        try {
+            return Number.parseInt(valStr);
+        } catch (e) {
+            console.warn(e);
+        }
+        return 1000;
+    }
+
+    set speed(s: number) {
+        const speedChildren = $('#tl-play-interval option');
+        const matches = speedChildren.removeAttr('selected').filter(`[value=${s}]`);
+        if (matches.length == 0) {
+            speedChildren.filter(`[value=1000]`).prop('selected', true);
+        } else {
+            matches.prop('selected', true);
+        }
+        this._playInterval = s;
+    }
+
+    get ippOpacity() {
+        return this._opacityControl.val() as number;
+    }
+
+    set ippOpacity(opacity: number) {
+        if (opacity < 0 || opacity > 1) {
+            console.warn('Trying to set an invalid opacity value: ' + opacity);
+            return;
+        }
+        this._opacityControl.val(opacity);
+        visualizer.universeScene.ippSphere.opacity = opacity;
+        const labelValue = (opacity * 100).toFixed(0);
+        this._opacityLabel.html(`${labelValue}%`);
+    }
+
+    get currentIndex() {
+        return this._activeMoment;
+    }
+
+    set currentIndex(i: number) {
+        this._activeMoment = i;
+        this.updateCurrentMomentMarkerAndInfo();
     }
 
 }

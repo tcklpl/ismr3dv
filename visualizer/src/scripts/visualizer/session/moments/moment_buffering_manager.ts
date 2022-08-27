@@ -49,10 +49,12 @@ export class MomentBufferingManager {
         this._interpolator.onStateChange(s => this.onInterpolatorStateChange(s));
     }
 
-    replaceMoments(moments: Moment[], newIndex = 0) {
+    replaceMoments(moments: Moment[]) {
         this._moments = moments;
-        this._currentIndex = newIndex;
         this.getMomentByIndex(this._currentIndex);
+        if (this._currentIndex >= moments.length) {
+            this._currentIndex = moments.length - 1;
+        }
     }
 
     private onInterpolatorStateChange(state: MIStates) {
@@ -208,6 +210,10 @@ export class MomentBufferingManager {
 
     get texture() {
         return this._currentTexture;
+    }
+
+    get currentIndex() {
+        return this._currentIndex;
     }
 
 }

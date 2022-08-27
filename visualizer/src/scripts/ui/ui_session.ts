@@ -287,6 +287,9 @@ export class UISession implements IUI {
         const session = ISMRSession.constructFromSave(save);
         visualizer.session = session;
         visualizer.ui.timeline.updateForSelectedStations();
+        visualizer.ui.timeline.speed = save.moment_play_speed ?? 1000;
+        visualizer.ui.timeline.ippOpacity = save.ipp_opacity ?? 0.5;
+        visualizer.ui.timeline.currentIndex = save.current_moment ?? 0;
         this.showFinalPanel();
     }
 }
