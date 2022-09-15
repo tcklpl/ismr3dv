@@ -177,6 +177,7 @@ export class UISession implements IUI {
                     session.stations = list;
                     visualizer.session = session;
                     this.showFinalPanel();
+                    visualizer.events.dispatchEvent('stations-update');
                 } else {
                     new MessageScreen('Error', 'No available stations were found on the provided time interval');
                     this.switchDatePanelTab(this._serverInfo.showcase_mode ? this._datePanelTabShowcase : this._datePanelTabSelectors);
@@ -291,5 +292,6 @@ export class UISession implements IUI {
         visualizer.ui.timeline.ippOpacity = save.ipp_opacity ?? 0.5;
         visualizer.ui.timeline.currentIndex = save.current_moment ?? 0;
         this.showFinalPanel();
+        visualizer.events.dispatchEvent('stations-update');
     }
 }

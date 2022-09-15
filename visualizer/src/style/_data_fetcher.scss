@@ -1,0 +1,62 @@
+@import "colors";
+
+.data-fetcher-panel {
+    z-index: 3;
+    background-color: $bg-color-light;
+    padding: 3em;
+}
+
+.df-station-entry {
+    width: 100%;
+    height: 3em;
+    border: 1px solid black;
+    border-radius: 0.5em;
+    margin-bottom: 0.1em;
+    cursor: pointer;
+    background-color: white;
+}
+
+.df-station-check {
+    display: none;
+}
+
+input:checked + .df-station-entry {
+    box-shadow: inset -5px 0 0 0 $color-active-green;
+}
+
+.df-filter {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 0.5em;
+    margin-bottom: 0.1em;
+    position: relative;
+    display: inline-block;
+    background-color: white;
+    padding: 0.2em;
+}
+
+.df-filter-inactive {
+    background-color: #ddd;
+}
+
+.df-filter-error {
+    background-color: rgb(255, 166, 166) !important;
+}
+
+#df-station-container {
+    overflow-y: auto;
+}
+
+.df-content {
+    // This makes overflow works
+    height: 1rem;
+}
+
+.df-menu-third {
+    flex: 1 1 33.33%;
+}
+
+#df-filter-container {
+    height: 1rem;
+    overflow-y: auto;
+}

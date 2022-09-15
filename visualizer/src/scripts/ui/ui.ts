@@ -1,3 +1,4 @@
+import { UIDataFetcher } from "./data_fetcher/ui_data_fetcher";
 import { UIBottomHud } from "./ui_bottom_hud";
 import { UICanvas } from "./ui_canvas";
 import { UIConfig } from "./ui_config";
@@ -25,6 +26,7 @@ export class UI {
     private _fatal = new UIFatal();
     private _screenshot = new UIScreenshot();
     private _bottomHud = new UIBottomHud();
+    private _dataFetcher = new UIDataFetcher();
 
     registerEssential() {
         this._config.registerEvents();
@@ -50,6 +52,7 @@ export class UI {
         this._gizmos.registerEvents();
         this._info.update();
         this._screenshot.registerEvents();
+        this._dataFetcher.registerEvents();
     }
 
     get config() {
@@ -91,5 +94,8 @@ export class UI {
     get bottomHud() {
         return this._bottomHud;
     }
-
+    
+    get dataFetcher() {
+        return this._dataFetcher;
+    }
 }

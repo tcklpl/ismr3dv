@@ -87,6 +87,10 @@
         {
             "url": "screenshot.html",
             "append_to": "body"
+        },
+        {
+            "url": "data_fetcher.html",
+            "append_to": "body"
         }
     ]
 }

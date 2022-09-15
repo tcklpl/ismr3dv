@@ -105,6 +105,7 @@ export class ISMRSession {
         }
         visualizer.ui.stationsHud.update();
         visualizer.ui.timeline.updateForSelectedStations();
+        visualizer.events.dispatchEvent('station-selection-update');
     }
 
     toggleStationById(id: number) {
@@ -125,6 +126,7 @@ export class ISMRSession {
         });
         this._selectedStations = [];
         visualizer.ui.timeline.updateForSelectedStations();
+        visualizer.events.dispatchEvent('station-selection-update');
     }
 
     selectAllStations() {
@@ -139,6 +141,7 @@ export class ISMRSession {
             instance.colorLocked = true;
         });
         visualizer.ui.timeline.updateForSelectedStations();
+        visualizer.events.dispatchEvent('station-selection-update');
     }
 
     addIPP(ipp: IIPPInfo[]) {

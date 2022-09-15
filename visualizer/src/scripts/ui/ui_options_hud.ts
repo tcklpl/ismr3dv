@@ -9,6 +9,7 @@ export class UIOptionsHud implements IUI {
     private _exportSessionBtn = $('#cfg-export-btn');
     private _timelineBtn = $('#cfg-timeline-btn');
     private _newSessionBtn = $('#cfg-session-btn');
+    private _dfBtn = $('#cfg-df-btn');
 
     registerEvents() {
         this._saveSessionBtn.on('click', () => this.saveSession());
@@ -28,12 +29,15 @@ export class UIOptionsHud implements IUI {
                 $('#session-screen-container').collapse('show');
             }
         });
+
+        this._dfBtn.on('click', () => visualizer.ui.dataFetcher.show());
     }
 
     setSessionRelatedButtonsEnabled(state: boolean) {
         this._saveSessionBtn.prop('disabled', !state || !visualizer.idb.isAvailable);
         this._exportSessionBtn.prop('disabled', !state);
         this._timelineBtn.prop('disabled', !state);
+        this._dfBtn.prop('disabled', !state);
     }
 
     private saveSession() {
