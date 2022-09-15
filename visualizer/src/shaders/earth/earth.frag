@@ -93,27 +93,29 @@ void main() {
     // Calculate the light incidence based on the sun
     vec3 lightDirection = u_sun_position - vtf_vertPos_modelSpace.xyz;
     vec3 lightDirectionUnit = normalize(lightDirection);
-    float incidence = clamp(dot(normal, lightDirectionUnit), 0.0, 1.0);
+    float incidence = dot(normal, lightDirectionUnit);
+    float clampedIncidence = clamp(incidence, 0.0, 1.0);
 
     // Multiply the day map by the light incidence. It isn't necessary to multiply the night map because the light diference wouldn't
     // even be visible as there's no light.
-    dayMapTexel *= clamp(incidence * 1.2, 0.0, 1.2);
+    dayMapTexel *= clamp(clampedIncidence * 1.2, 0.0, 1.2);
     
     // Mix day and night map based on light incidence
-    vec4 dayNight = mix(vec4(dayMapTexel.rgb, 1.0), vec4(nightMapTexel.rgb, 1.0), 1.0 - clamp(incidence * 2.0, 0.0, 1.0));
+    vec4 dayNight = mix(vec4(dayMapTexel.rgb, 1.0), vec4(nightMapTexel.rgb, 1.0), 1.0 - clamp(clampedIncidence * 2.0, 0.0, 1.0));
     
-    float cloudIntensity = (incidence + 0.1) / 2.0;
+    float cloudIntensity = (clampedIncidence + 0.1) / 2.0;
     vec4 clouds = vec4(cloudMapTexel.rgb, cloudIntensity);
 
-    vec3 specular = calculateSpecular(incidence, specularMapTexel, cloudMapTexel, vec3(2.0, 2.0, 1.0));
+    vec3 specular = calculateSpecular(clampedIncidence, specularMapTexel, cloudMapTexel, vec3(2.0, 2.0, 1.0));
 
     float fresnel = calculateFresnel();
     float ringIntensity = fresnel <= 0.75 ? 0.0 : (fresnel - 0.75 ) * 5.0;
+    ringIntensity *= clamp(clampedIncidence, 0.2, 1.0);
 
     vec3 ringDayColor = vec3(0.55, 0.78, 1.0);
     vec3 ringNightColor = vec3(0.25, 0.34, 0.43);
 
-    vec3 ringColor = mix(ringNightColor, ringDayColor, incidence);
+    vec3 ringColor = mix(ringNightColor, ringDayColor, clampedIncidence);
 
     out_color = dayNight;
     out_color += vec4(ringColor * ringIntensity * 2.0, 1.0);
