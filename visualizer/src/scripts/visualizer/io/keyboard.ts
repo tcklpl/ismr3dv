@@ -12,13 +12,13 @@ export class Keyboard {
     private _keyUpListeners: Map<string, IKeyEventListener[]> = new Map();
 
     constructor() {
-        document.addEventListener('keydown', e => this.onKeyEvent(e, 'down'));
-        document.addEventListener('keyup', e => this.onKeyEvent(e, 'up'));
+        $('#ismr3dcanvas').on('keydown', e => this.onKeyEvent(e, 'down'));
+        $('#ismr3dcanvas').on('keyup', e => this.onKeyEvent(e, 'up'));
     }
 
     registerListener(key: string, listener: IKeyEventListener) {
         if (!this.validateListener(listener)) {
-            console.error(`Trying to register invalis listener for key '${key}'`);
+            console.error(`Trying to register invalid listener for key '${key}'`);
             return;
         }
         const listenerList = listener.on == 'down' ? this._keyDownListeners : this._keyUpListeners;
@@ -37,7 +37,7 @@ export class Keyboard {
         return true;
     }
 
-    private onKeyEvent(e: KeyboardEvent, type: 'down' | 'up') {
+    private onKeyEvent(e: JQuery.KeyDownEvent | JQuery.KeyUpEvent, type: 'down' | 'up') {
         const key = e.key.toLowerCase();
         const toRemove: IKeyEventListener[] = [];
         const listeners = type == 'down' ? this._keyDownListeners : this._keyUpListeners;
