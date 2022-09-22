@@ -5,4 +5,6 @@ export interface IIPPRequest {
     satellites: string;
     stations: number[];
     ion: number;
+    filter?: string;
+    field?: string;
 }

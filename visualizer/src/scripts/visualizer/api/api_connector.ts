@@ -24,14 +24,25 @@ export class ISMRAPIConnector {
     }
 
     fetchIPP(req: IIPPRequest) {
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
         return new Promise<IIPPInfo[]>((resolve, reject) => {
             fetch(
-                ISMRAPIEndpoints.IPP
-                .replace(':startdate', req.startDate.toISOString())
-                .replace(':enddate', req.endDate.toISOString())
-                .replace(':sat', req.satellites)
-                .replace(':stations', req.stations.join(','))
-                .replace(':ion', `${req.ion}`)
+                ISMRAPIEndpoints.IPP,
+                {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({
+                        startdate: req.startDate.toISOString(),
+                        enddate: req.endDate.toISOString(),
+                        sat: req.satellites,
+                        stations: req.stations.join(','),
+                        ion: `${req.ion}`,
+                        filter: req.filter,
+                        field: req.field
+                    })
+                }
             )
             .then(res => {
                 if (res.ok) {
