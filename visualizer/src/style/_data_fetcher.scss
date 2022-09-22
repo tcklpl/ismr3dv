@@ -8,12 +8,12 @@
 
 .df-station-entry {
     width: 100%;
-    height: 3em;
     border: 1px solid black;
     border-radius: 0.5em;
     margin-bottom: 0.1em;
     cursor: pointer;
     background-color: white;
+    padding: 0.2em;
 }
 
 .df-station-check {
@@ -22,7 +22,29 @@
 
 input:checked + .df-station-entry {
     box-shadow: inset -5px 0 0 0 $color-active-green;
+    background-color: rgb(236, 255, 231);
 }
+
+.df-satellite-entry {
+    flex: 1 1;
+    min-width: 9em;
+    border: 1px solid black;
+    border-radius: 0.5em;
+    margin: 0.1em;
+    cursor: pointer;
+    background-color: white;
+    padding: 0.2em;
+}
+
+.df-satellite-check {
+    display: none;
+}
+
+input:checked + .df-satellite-entry {
+    box-shadow: inset -5px 0 0 0 $color-active-green;
+    background-color: rgb(236, 255, 231);
+}
+
 
 .df-filter {
     width: 100%;
@@ -54,9 +76,29 @@ input:checked + .df-station-entry {
 
 .df-menu-third {
     flex: 1 1 33.33%;
+    padding: 2em;
 }
 
 #df-filter-container {
     height: 1rem;
     overflow-y: auto;
+}
+
+.df-ds-div2 {
+
+    span {
+        flex: 1 1 40%;
+    }
+
+    select, input {
+        flex: 1 1 60%;
+    }
+}
+
+#df-loading {
+    z-index: 2;
+    position: fixed;
+    background-color: #00000080;
+    color: white;
+    margin: -3em;
 }
