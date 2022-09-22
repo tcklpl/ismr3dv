@@ -12,7 +12,6 @@ export class UITimeline implements IUI {
     private _noStationsPanel = $('#timeline-no-stations');
 
     private _needFetchPanel = $('#timeline-need-fetch');
-    private _needFetchBtn = $('#timeline-btn-fetch');
     private _fetchingPanel = $('#timeline-fetching');
 
     private _timelinePanel = $('#timeline-panel');
@@ -51,10 +50,6 @@ export class UITimeline implements IUI {
     }
 
     registerEvents() {
-        this._needFetchBtn.on('click', () => {
-            this.setActivePanel(this._fetchingPanel);
-            this.fetchIPP();
-        });
 
         this._timelineBarBg.on('click', e => {
             const prog = e.offsetX / (this._timelineBarBg.width() as number);
@@ -129,6 +124,14 @@ export class UITimeline implements IUI {
 
             this.updateBufferIndicators();
             this.updateCurrentMomentMarkerAndInfo();
+        });
+
+        visualizer.events.on('new-ipp-data', () => {
+            this.updateForSelectedStations();
+        });
+
+        visualizer.events.on('ipp-fetch-error', () => {
+            this.setActivePanel(this._needFetchPanel);
         });
 
         this._btnFirst.on('click', () => {
@@ -261,7 +264,7 @@ export class UITimeline implements IUI {
             return;
         }
 
-        if (!session.timeline.isRangeCovered(session.startDate, session.endDate, session.selectedStations.map(x => x.station_id))) {
+        if (session.timeline.ippList.length == 0) {
             this.setActivePanel(this._needFetchPanel);
             return;
         }
@@ -305,32 +308,6 @@ export class UITimeline implements IUI {
         moment2DCanvas.fillStyle = '#555';
         moment2DCanvas.fill(path);
         
-    }
-
-    fetchIPP() {
-        const session = visualizer.session;
-        if (!session) return;
-
-        visualizer.api.fetchIPP({
-            startDate: session.startDate,
-            endDate: session.endDate,
-            ion: 350,
-            satellites: 'GPS',
-            stations: session.selectedStations.map(x => x.station_id)
-        })
-        .then(t => {
-            session.addIPP(t.map(ipp => {
-                ipp.id = parseInt(`${ipp.id}`);
-                ipp.value = parseFloat(`${ipp.value}`);
-                return ipp;
-            }));
-            this.updateForSelectedStations();
-        })
-        .catch(err => {
-            this.setActivePanel(this._needFetchPanel);
-            new MessageScreen('Error', 'There was an error while fetching the requested data, does it exist? is your connection ok?');
-            console.log(err);
-        });
     }
 
     private get session() {
