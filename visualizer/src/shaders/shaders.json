@@ -54,6 +54,11 @@
             "name": "skybox",
             "vertex": "skybox/skybox.vert",
             "fragment": "skybox/skybox.frag"
+        },
+        {
+            "name": "satellite",
+            "vertex": "satellite/satellite.vert",
+            "fragment": "satellite/satellite.frag"
         }
     ]
 }

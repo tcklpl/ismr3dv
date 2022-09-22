@@ -23,6 +23,13 @@
             "mesh": "sphere",
             "shader": "ipp_visualizer_color",
             "material": ""
+        },
+        {
+            "name": "satellite",
+            "mesh": "satellite",
+            "shader": "satellite",
+            "material": "satellite"
         }
+
     ]
 }

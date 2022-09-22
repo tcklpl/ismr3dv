@@ -68,6 +68,21 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "satellite",
+            "maps": [ "diffuse", "specular" ],
+            "resolutions": [ "2k" ],
+            "default_resolution": "2k",
+            "images": [
+                {
+                    "resolution": "2k",
+                    "maps": {
+                        "diffuse": "satellite/diffuse.png",
+                        "specular": "satellite/specular.png"
+                    }
+                }
+            ]
         }
     ]
 }

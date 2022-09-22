@@ -7,6 +7,10 @@
         {
             "name": "pyramid",
             "obj": "pyramid/pyramid.obj"
+        },
+        {
+            "name": "satellite",
+            "obj": "satellite/satellite.obj"
         }
     ]
 }
