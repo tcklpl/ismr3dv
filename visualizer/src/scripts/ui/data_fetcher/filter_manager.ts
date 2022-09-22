@@ -1,7 +1,7 @@
 import { DataFilter } from "../../visualizer/data/filters/data_filter";
 import { getISMRFilterByName } from "../../visualizer/data/filters/filter_list";
 import { FilterCard } from "./filter_card";
-import { FilterCardStatusIcon } from "./filter_card_status_icons";
+import { FilterCardStatus } from "./filter_card_status";
 
 export class FilterManager {
 
@@ -9,6 +9,7 @@ export class FilterManager {
     private _filterIndex = 1;
 
     private _container = $('#df-filter-container');
+    private _panelNoFilters = $('#df-filter-no-filters');
 
     createDefaultFilterCard() {
         this._filters.push(new FilterCard(new DataFilter(), `Filter ${this._filterIndex++}`, this._container));
@@ -35,18 +36,21 @@ export class FilterManager {
         this._filters.forEach(f => {
             if (filteredFilters.find(x => x.filter.equals(f.filter) && x !== f && f.isActive)) {
                 problematic.push(f);
-                f.status = FilterCardStatusIcon.ERROR;
+                f.status = FilterCardStatus.ERROR;
             } else {
-                if (f.filter.isComplete) f.status = FilterCardStatusIcon.OK;
-                else f.status = FilterCardStatusIcon.INCOMPLETE;
+                if (!f.isActive) f.status = FilterCardStatus.DISABLED
+                else if (f.filter.isComplete) f.status = FilterCardStatus.OK;
+                else f.status = FilterCardStatus.INCOMPLETE;
             }
         });
 
-        const str = this._filters
-            .filter(x => x.isActive && x.status == FilterCardStatusIcon.OK)
-            .map(x => `${x.filter.filter?.name} ${x.filter.operator?.asFilterStringWithArgs(...x.filter.arguments)}`)
-            .join(';');
-        console.log(str);
+        if (this._filters.length > 0) {
+            this._panelNoFilters.removeClass('d-flex').addClass('d-none');
+            this._container.removeClass('d-none').addClass('d-flex');
+        } else {
+            this._container.removeClass('d-flex').addClass('d-none');
+            this._panelNoFilters.removeClass('d-none').addClass('d-flex');
+        }
     }
 
     removeCard(card: FilterCard) {
@@ -59,5 +63,21 @@ export class FilterManager {
         this._filters.forEach(f => f.purge());
         this._filters = [];
         this.revalidate();
+    }
+
+    get serializedFilters() {
+        return this._filters.map(f => {
+            return {
+                ...f.filter.asSerializable,
+                active: f.isActive
+            }
+        });
+    }
+
+    get filtersAsString() {
+        return this._filters
+            .filter(x => x.isActive && x.status == FilterCardStatus.OK)
+            .map(x => `${x.filter.filter?.name} ${x.filter.operator?.asFilterStringWithArgs(...x.filter.arguments)}`)
+            .join(';');
     }
 }

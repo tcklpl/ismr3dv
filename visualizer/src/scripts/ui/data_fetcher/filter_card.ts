@@ -1,17 +1,17 @@
 import { DataFilter } from "../../visualizer/data/filters/data_filter";
-import { IISMRFilter, ISMRFilterGroup, ISMRFilterList } from "../../visualizer/data/filters/filter_list";
+import { getISMRFiltersAsOptgroupHTMLSource, IISMRFilter, ISMRFilterGroup, ISMRFilterList } from "../../visualizer/data/filters/filter_list";
 import { NumericFilterOperators } from "../../visualizer/data/filters/operators/numeric_filter_oprators";
 import { RandomUtils } from "../../visualizer/utils/random_utils";
 import { ConfirmationScreen } from "../confirmation_screen";
 import { MessageScreen } from "../message_screen";
-import { FilterCardStatusIcon } from "./filter_card_status_icons";
+import { FilterCardStatus } from "./filter_card_status";
 
 export class FilterCard {
     
     private _filter: DataFilter;
     private _name: string;
     private _active: boolean = true;
-    private _status: FilterCardStatusIcon = FilterCardStatusIcon.INCOMPLETE;
+    private _status: FilterCardStatus = FilterCardStatus.INCOMPLETE;
 
     // IDs
     private _containerId!: string;
@@ -53,21 +53,7 @@ export class FilterCard {
         this._arg1Id = `df-arg1-${RandomUtils.randomString(10)}`;
         this._arg2Id = `df-arg2-${RandomUtils.randomString(10)}`;
 
-        const filtersByCategory: Map<ISMRFilterGroup, IISMRFilter[]> = new Map();
-        ISMRFilterList.forEach(f => {
-            if (filtersByCategory.has(f.filterGroup)) {
-                filtersByCategory.get(f.filterGroup)?.push(f);
-            } else {
-                filtersByCategory.set(f.filterGroup, [f]);
-            }
-        });
-
-        let filtersSrc = '';
-        filtersByCategory.forEach((f, fc) => {
-            filtersSrc += `<optgroup label="${fc}">`;
-            filtersSrc += f.map(x => `<option value="${x.name}">${x.displayName}</option>`);
-            filtersSrc += `</optgroup>`;
-        });
+        let filtersSrc = getISMRFiltersAsOptgroupHTMLSource();
 
         return `
         <div class="df-filter d-flex flex-column" id="${this._containerId}">
@@ -166,7 +152,7 @@ export class FilterCard {
 
     set name(name: string) {
         this._name = name;
-        $(`#${this._filterNameId}`).html(name);
+        $(`#${this._filterNameId}`).html(`${name} (<span class="${this._status.color}">${this._status.string}</span>)`);
     }
 
     get isActive() {
@@ -181,16 +167,19 @@ export class FilterCard {
         return this._filter;
     }
 
-    set status(s: FilterCardStatusIcon) {
-        $(`#${this._filterStatusIconId}`).removeClass(this._status);
+    set status(s: FilterCardStatus) {
+        $(`#${this._filterStatusIconId}`).removeClass(this._status.icon);
         this._status = s;
-        $(`#${this._filterStatusIconId}`).addClass(this._status);
+        $(`#${this._filterStatusIconId}`).addClass(this._status.icon);
 
-        if (s == FilterCardStatusIcon.ERROR) {
+        if (s == FilterCardStatus.ERROR) {
             $(`#${this._containerId}`).addClass('df-filter-error');
         } else {
             $(`#${this._containerId}`).removeClass('df-filter-error');
         }
+
+        // update the name to show the new status
+        this.name = this.name;
     }
 
 }
