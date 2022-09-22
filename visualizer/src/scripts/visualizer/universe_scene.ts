@@ -4,6 +4,7 @@ import { MUtils } from "../engine/utils/math_utils";
 import { MainCamera } from "./camera/main_camera";
 import { EarthEntity } from "./objects/earth";
 import { IPPSphereEntity } from "./objects/ipp_renderer";
+import { SatelliteEntity } from "./objects/satellite";
 import { Skybox } from "./objects/skybox";
 import { StationEntity } from "./objects/station";
 import { SunEntity } from "./objects/sun";
@@ -42,7 +43,11 @@ export class UniverseScene extends Scene {
 
         this._skybox = new Skybox(this._materialManager.assertGetByName('stars'), this._shaderManager.assertGetShader('skybox'));
 
-        this.addObjects(this._earth, this._sun, this._ipp);
+        const test = this._objectManager.summon("satellite", SatelliteEntity);
+        test.setScale(new Vec3(0.03, 0.03, 0.03));
+        test.translate(new Vec3(0, 1.3, 0));
+
+        this.addObjects(this._earth, this._sun, this._ipp, test);
         this.alignSunWithTime(new Date());
     }
 
