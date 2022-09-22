@@ -2,6 +2,7 @@ import { IServerInfo } from "../visualizer/api/formats/i_server_info";
 import { ISMRSession } from "../visualizer/session/ismr_session";
 import { ISessionSave } from "../visualizer/session/i_session_save";
 import { RandomUtils } from "../visualizer/utils/random_utils";
+import { SizeNameUtils } from "../visualizer/utils/size_name_utils";
 import { ConfirmationScreen } from "./confirmation_screen";
 import { IUI } from "./i_ui";
 import { MessageScreen } from "./message_screen";
@@ -45,6 +46,7 @@ export class UISession implements IUI {
     private _loadStationList = $('#ns-load-station-list');
     private _loadGoBackBtn = $('[id^=ns-load-go-back-reset-]');
     private _loadSpinner = $('#ns-load-station-list-loading');
+    private _loadSessionLoadingProgressScreen = $('#ns-load-station-session-loading');
 
     private newScreenChangeHovered(newSelected?: JQuery<HTMLElement>) {
         this._initialPanel.children().removeClass('text-primary').addClass('text-secondary');
@@ -62,6 +64,15 @@ export class UISession implements IUI {
             $(`#ns-pb-step${i}`).addClass('active');
         }
     }
+
+    private setLoadPanel(panel: JQuery<HTMLElement>) {
+        this._loadIDBError.removeClass('d-flex active show').addClass('d-none');
+        this._loadEmpty.removeClass('d-flex active show').addClass('d-none');
+        this._loadStationList.removeClass('d-flex active show').addClass('d-none');
+        this._loadSpinner.removeClass('d-flex active show').addClass('d-none');
+        this._loadSessionLoadingProgressScreen.removeClass('d-flex active show').addClass('d-none');
+        panel.removeClass('d-none').addClass('d-flex active show');
+    };
 
     registerEvents() {
         this._serverInfo = visualizer.serverInfo;
@@ -89,9 +100,21 @@ export class UISession implements IUI {
             if (visualizer.session) visualizer.session.config.auto_save_interval_minutes = this._finishAutosaveInterval.val() as number;
         });
 
-        this._finishFinalButton.on('click', () => visualizer.session?.save());
-
         this._loadGoBackBtn.on('click', () => this.resetUI());
+
+        visualizer.events.on('load-session-started', () => {
+            this.setLoadPanel($('#ns-load-station-session-loading'));
+        });
+
+        visualizer.events.on('load-session-progress', (args: any[]) => {
+            const step = args[0] as number;
+            const total = args[1] as number;
+            const msg = args[2] as string;
+            const percentage = (step / total * 100);
+            $('#session-loading-progress-bar').attr('aria-valuenow', percentage).css('width', `${percentage}%`);
+            $('#session-loading-message-percentage').html(`${SizeNameUtils.truncateNumber(percentage, 1)}%`);
+            $('#session-loading-message').html(msg);
+        });
     }
 
     resetUI() {
@@ -239,15 +262,7 @@ export class UISession implements IUI {
 
     private constructLoadSessionPanel() {
 
-        const setLoadPanel = (panel: JQuery<HTMLElement>) => {
-            this._loadIDBError.removeClass('d-flex active show').addClass('d-none');
-            this._loadEmpty.removeClass('d-flex active show').addClass('d-none');
-            this._loadStationList.removeClass('d-flex active show').addClass('d-none');
-            this._loadSpinner.removeClass('d-flex active show').addClass('d-none');
-            panel.removeClass('d-none').addClass('d-flex active show');
-        };
-
-        setLoadPanel(this._loadSpinner);
+        this.setLoadPanel(this._loadSpinner);
 
         visualizer.idb.sessionController.fetchAll().then(sessions => {
             if (sessions.length > 0) {
@@ -274,13 +289,13 @@ export class UISession implements IUI {
                         });
                     });
                 });
-                setLoadPanel(this._loadStationList);
+                this.setLoadPanel(this._loadStationList);
             } else {
-                setLoadPanel(this._loadEmpty);
+                this.setLoadPanel(this._loadEmpty);
             }
         })
         .catch(() => {
-            setLoadPanel(this._loadIDBError);
+            this.setLoadPanel(this._loadIDBError);
         });
     }
 

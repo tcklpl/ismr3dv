@@ -33,6 +33,20 @@
         <div class="d-none fade flex-row flex-wrap" id="ns-load-station-list">
         </div>
 
+        <div class="d-none fade flex-column align-items-center justify-content-center h-100 text-secondary" id="ns-load-station-session-loading">
+            <div class="loading-content">
+                <div class="spinner-border loading-screen-spinner" role="status"></div><br>
+                <div class="progress" id="session-loading-progress-bar-holder">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0"
+                        aria-valuemin="0" aria-valuemax="100" style="width: 0%" id="session-loading-progress-bar"></div>
+                </div>
+                <div class="row">
+                    <div class="col-6 text-start"><a id="session-loading-message">Initializing loader</a></div>
+                    <div class="col-6 text-end"><a id="session-loading-message-percentage">0%</a></div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </div>
