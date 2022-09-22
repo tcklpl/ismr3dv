@@ -18,17 +18,33 @@ export const miInverseDistanceWeighting = (width: number, height: number) => {
         const entry = e.data as IMomentInterpEntry;
         const data = entry.data;
 
+        const uniquePositions: Map<{x: number, y: number}, number[]> = new Map();
         const buffer = new Float32Array(width * height);
 
         // populate the buffer with all the values
-        const positionedValues = data.map(d => {
+        data.forEach(d => {
             const normalizedLat = (-d.lat + 90) / 180;
             const normalizedLong = (d.long + 180) / 360;
-            return {
-                x: Math.round(normalizedLong * width),
-                y: Math.round(normalizedLat * height),
-                value: d.value
-            };
+            const x = Math.round(normalizedLong * width);
+            const y = Math.round(normalizedLat * height);
+
+            const key = {x: x, y: y};
+            if (uniquePositions.has(key)) {
+                uniquePositions.get(key)?.push(d.value);
+            } else {
+                uniquePositions.set(key, [d.value]);
+            }
+        });
+
+        const positionedValues: {x: number, y: number, value: number}[] = [];
+
+        uniquePositions.forEach((v, k) => {
+            const finalValue = v.reduce((prev, cur) => prev += cur, 0) / v.length;
+            positionedValues.push({
+                x: k.x,
+                y: k.y,
+                value: finalValue
+            });
         });
 
         // get the bounds

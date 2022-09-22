@@ -7,6 +7,7 @@ export const miNoInterpolation = (width: number, height: number) => {
     self.onmessage = e => {
         const entry = e.data as IMomentInterpEntry;
         const data = entry.data;
+        const uniquePositions: Map<{x: number, y: number}, number[]> = new Map();
 
         const buffer = new Float32Array(width * height);
 
@@ -18,7 +19,17 @@ export const miNoInterpolation = (width: number, height: number) => {
             const y = Math.round(normalizedLat * height);
             const value = d.value;
 
-            buffer[getPosition(x, y)] = value;
+            const key = {x: x, y: y};
+            if (uniquePositions.has(key)) {
+                uniquePositions.get(key)?.push(value);
+            } else {
+                uniquePositions.set(key, [value]);
+            }
+        });
+        
+        uniquePositions.forEach((v, k) => {
+            const finalValue = v.reduce((prev, cur) => prev += cur, 0) / v.length;
+            buffer[getPosition(k.x, k.y)] = finalValue;
         });
 
         self.postMessage({buffer: buffer, index: entry.index});
