@@ -6,7 +6,7 @@ export interface IISMRFilter {
     filterGroup: ISMRFilterGroup;
 }
 
-export type ISMRFilterGroup = 'S4' | 'TEC' | 'Phi' | 'Temporal' | 'CCD' | 'SI' | 'CN0' | 'VS4' | 'Positional' | 'Locktime' | 'P' | 'T' | 'F2ND' | 'Other';
+export type ISMRFilterGroup = 'S4' | 'TEC' | 'Phi' | 'Temporal' | 'CCD' | 'SI' | 'CN0' | 'Positional' | 'Locktime' | 'P' | 'T' | 'F2ND' | 'Other';
 
 export const ISMRFilterList: IISMRFilter[] = [
     // S4
@@ -82,22 +82,12 @@ export const ISMRFilterList: IISMRFilter[] = [
     {displayName: 'Average CN0 L2', name: 'avg_cn0_l2', dataType: 'number', filterGroup: 'CN0'},
     {displayName: 'Average CN0 L5', name: 'avg_cn0_l5', dataType: 'number', filterGroup: 'CN0'},
 
-    // VS4
-    {displayName: 'VS4 L1', name: 'vs4_l1', dataType: 'number', filterGroup: 'VS4'},
-    {displayName: 'VS4 L2', name: 'vs4_l2', dataType: 'number', filterGroup: 'VS4'},
-    {displayName: 'VS4 L5', name: 'vs4_l5', dataType: 'number', filterGroup: 'VS4'},
-
     // Positional
     {displayName: 'Azimuth', name: 'azim', dataType: 'number', filterGroup: 'Positional'},
     {displayName: 'Elevation', name: 'elev', dataType: 'number', filterGroup: 'Positional'},
-    {displayName: 'Latitude', name: 'lat_', dataType: 'number', filterGroup: 'Positional'},
-    {displayName: 'Longitude', name: 'long_', dataType: 'number', filterGroup: 'Positional'},
-    {displayName: 'X', name: 'x_', dataType: 'number', filterGroup: 'Positional'},
-    {displayName: 'Y', name: 'y_', dataType: 'number', filterGroup: 'Positional'},
-    {displayName: 'Z', name: 'z_', dataType: 'number', filterGroup: 'Positional'},
 
     // Locktime
-    {displayName: 'LOCKTIME L1', name: 'locktime_l1', dataType: 'number', filterGroup: 'Locktime'},
+    {displayName: 'Locktime L1', name: 'locktime_l1', dataType: 'number', filterGroup: 'Locktime'},
     {displayName: 'Locktime L2', name: 'locktime_l2', dataType: 'number', filterGroup: 'Locktime'},
     {displayName: 'Locktime L5', name: 'locktime_l5', dataType: 'number', filterGroup: 'Locktime'},
 
@@ -123,3 +113,22 @@ export const ISMRFilterList: IISMRFilter[] = [
 export function getISMRFilterByName(name: string) {
     return ISMRFilterList.find(x => x.name == name);
 };
+
+export function getISMRFiltersAsOptgroupHTMLSource() {
+    const filtersByCategory: Map<ISMRFilterGroup, IISMRFilter[]> = new Map();
+    ISMRFilterList.forEach(f => {
+        if (filtersByCategory.has(f.filterGroup)) {
+            filtersByCategory.get(f.filterGroup)?.push(f);
+        } else {
+            filtersByCategory.set(f.filterGroup, [f]);
+        }
+    });
+
+    let filtersSrc = '';
+    filtersByCategory.forEach((f, fc) => {
+        filtersSrc += `<optgroup label="${fc}">`;
+        filtersSrc += f.map(x => `<option value="${x.name}">${x.displayName}</option>`);
+        filtersSrc += `</optgroup>`;
+    });
+    return filtersSrc;
+}
