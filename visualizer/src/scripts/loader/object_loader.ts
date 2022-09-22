@@ -23,13 +23,13 @@ export class ObjectLoader extends GenericLoader {
         this._loadlist.objects.forEach(o => {
 
            let mesh = this._meshManager.getByName(o.mesh);
-           if (!mesh) throw `Invalid mesh when creating object ${o.name}`;
+           if (!mesh) throw `Invalid mesh when creating object '${o.name}': Mesh '${o.mesh}' not found, available: [${this._meshManager.allRegistered.map(m => m.name)}]`;
 
            let shader = this._shaderManager.getByName(o.shader);
-           if (!shader) throw `Invalid shader when creating object ${o.name}`;
+           if (!shader) throw `Invalid shader when creating object '${o.name}': Shader '${o.shader}' not found, available: [${this._shaderManager.allRegistered.map(s => s.name)}]`;
 
            let material = o.material ? this._materialManager.getByName(o.material) : new Material("none", new Map(), false);
-           if (!material) throw `Invalid material when creating object ${o.name}`;
+           if (!material) throw `Invalid material when creating object '${o.name}': Material '${o.material}' not found, available: [${this._materialManager.allRegistered.map(m => m.name)}]`;
 
             this._sources.push({
                 name: o.name,
