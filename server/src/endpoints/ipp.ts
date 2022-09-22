@@ -16,15 +16,19 @@ export default {
         let sattelites: string;
         let stationsToQuery: string;
         let ionDistance: string;
+        let filters: string;
+        let dataField: string;
 
         try {
-            let { startdate, enddate, sat, stations, ion } = request.params;
+            const { startdate, enddate, sat, stations, ion, filter, field } = request.body;
 
             dateBeginStr = startdate;
             dateEndStr = enddate;
             sattelites = sat;
             stationsToQuery = stations;
             ionDistance = ion;
+            filters = filter || 'true';
+            dataField = field || 's4';
 
             dateBegin = new Date(dateBeginStr);
             dateEnd = new Date(dateEndStr);
@@ -42,10 +46,10 @@ export default {
             `&satellite=${sattelites}`,
             `&station=${stationsToQuery}`,
             `&ion=${ionDistance}`,
-            `&field=s4`,
+            `&field=${dataField}`,
             `&mode=json`,
             `&aggregation=none`,
-            `&filters=true`,
+            `&filters=${filters}`,
             `&key=${Config.instance.apiKey}`
         ];
 
