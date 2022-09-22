@@ -145,7 +145,7 @@ export class ISMRSession {
     }
 
     addIPP(ipp: IIPPInfo[]) {
-        this._timeline.addIPP(ipp);
+        this._timeline.setIPP(ipp);
     }
 
     get name() {
@@ -192,7 +192,11 @@ export class ISMRSession {
 
             current_moment: this.timeline.buffer.currentIndex,
             ipp_opacity: visualizer.universeScene.ippSphere.opacity,
-            moment_play_speed: visualizer.ui.timeline.speed
+            moment_play_speed: visualizer.ui.timeline.speed,
+
+            filters: visualizer.ui.dataFetcher.filterManager.serializedFilters,
+            selected_satellite_categories: visualizer.ui.dataFetcher.satTypeManager.selection,
+            ion_height: visualizer.ui.dataFetcher.ionHeight
         };
     }
 
@@ -201,14 +205,39 @@ export class ISMRSession {
     }
 
     static constructFromSave(save: ISessionSave) {
+
+        const totalLoadSteps = 7;
+        visualizer.events.dispatchEvent('load-session-started');
+
+        visualizer.events.dispatchEvent('load-session-progress', 1, totalLoadSteps, 'Starting to load');
         const session = new ISMRSession(save.start_date, save.end_date, save.name, save.creation_date, save.current_moment);
+
+        visualizer.events.dispatchEvent('load-session-progress', 2, totalLoadSteps, 'Loading configuration');
         session._config = save.config;
+
+        visualizer.events.dispatchEvent('load-session-progress', 3, totalLoadSteps, 'Loading the station list');
         session.stations = save.station_list;
+
+        visualizer.events.dispatchEvent('load-session-progress', 4, totalLoadSteps, 'Loading and adding IPP info');
+        session.addIPP(save.raw_ipp);
+
+        visualizer.events.dispatchEvent('load-session-progress', 5, totalLoadSteps, 'Toggling selected stations');
+        save.selected_stations.forEach(s => session.toggleStationById(s));
+
+        visualizer.events.dispatchEvent('load-session-progress', 6, totalLoadSteps, 'Loading filters and other selected info');
+        if (save.filters) visualizer.ui.dataFetcher.filterManager.constructFiltersFromSave(save.filters);
+        if (save.selected_satellite_categories) {
+            visualizer.ui.dataFetcher.satTypeManager.selection.push(...save.selected_satellite_categories)
+            visualizer.ui.dataFetcher.satTypeManager.updateForExternallySetSelection();
+        };
+        if (save.ion_height) visualizer.ui.dataFetcher.ionHeight = save.ion_height;
+
+        visualizer.events.dispatchEvent('load-session-progress', 7, totalLoadSteps, 'Recovering the camera position');
         if (save.camera.type == "main") {
             (visualizer.cameraManager.activeCamera as MainCamera).setData(save.camera);
         }
-        session.addIPP(save.raw_ipp);
-        save.selected_stations.forEach(s => session.toggleStationById(s));
+
+        visualizer.events.dispatchEvent('load-session-finished');
 
         return session;
     }

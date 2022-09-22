@@ -9,7 +9,7 @@
         <!-- Station List -->
         <div class="d-flex flex-column df-menu-third">
             <h2><i class="bi-broadcast-pin icon-left"></i>Stations</h2>
-            <div class="d-flex">
+            <div class="d-flex" style="margin-bottom: 0.2em;">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="bi-search"></i></span>
@@ -23,8 +23,8 @@
 
             </div>
             <div class="d-flex">
-                <button class="btn">Clear Selection</button>
-                <button class="btn">Select All</button>
+                <button class="btn" id="df-st-select-none">Clear Selection</button>
+                <button class="btn" id="df-st-select-all">Select All</button>
             </div>
         </div>
 
@@ -45,7 +45,10 @@
                     </ul>
                 </div>
             </div>
-            <div class="d-flex flex-column flex-grow-1 align-items-center justify-content-start" id="df-filter-container">
+            <div class="d-flex flex-grow-1 align-items-center justify-content-center" id="df-filter-no-filters">
+                <i class="bi-slash-circle icon-left"></i>No filters are selected
+            </div>
+            <div class="d-none flex-column flex-grow-1 align-items-center justify-content-start" id="df-filter-container">
 
                 <!-- This will be populated by the ui script -->
 
@@ -54,8 +57,31 @@
 
         <!-- Data Summary -->
         <div class="d-flex flex-column df-menu-third">
-            <h2><i class="bi-info-lg icon-left"></i>Data Summary</h2>
+            <h2><i class="bi-pie-chart icon-left"></i>Data</h2>
+            <div>
+                <div class="d-flex flex-wrap" id="df-data-types">
+                    <!-- This will be populated by the ui script -->
+                </div>
+            </div>
+            <hr>
+            <div class="d-flex df-ds-div2">
+                <span>ION Height</span>
+                <input type="number" min="100" max="1000" value="350" id="df-ion-dst" class="form-control">
+            </div>
+            <div class="d-flex df-ds-div2">
+                <span>Target Index</span>
+                <select class="form-control" id="df-dst-index-selector">
+                    <!-- This will be populated by the ui script -->
+                </select>
+            </div>
+            <div>
+                <button class="btn btn-primary" id="btn-fetch-data">Fetch Data</button>
+            </div>
         </div>
+    </div>
+
+    <div class="d-none flex-grow-1 justify-content-center align-items-center full-screen" id="df-loading">
+        <div class="spinner-border" role="status"></div><label>Fetching Data...</label>
     </div>
     
 </div>

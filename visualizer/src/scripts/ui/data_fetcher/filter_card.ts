@@ -37,6 +37,16 @@ export class FilterCard {
             const filterTypeChildren = $(`#${this._valueSelectId} option`);
             filterTypeChildren.removeAttr('selected').filter(`[value=${filter.filter.name}]`).prop('selected', true);
         }
+
+        if (filter.arguments.length > 0) {
+            $(`#${this._arg1Id}`).val(filter.arguments[0]);
+            if (filter.arguments.length == 2) $(`#${this._arg2Id}`).val(filter.arguments[1]);
+        }
+
+        if (filter.operator) {
+            const filterTypeChildren = $(`#${this._operatorSelectId} option`);
+            filterTypeChildren.removeAttr('selected').filter(`[value=${filter.operator.name}]`).prop('selected', true);
+        }
     }
 
     private createDefaultFilterString() {
@@ -157,6 +167,10 @@ export class FilterCard {
 
     get isActive() {
         return this._active;
+    }
+
+    set active(a: boolean) {
+        this._active = a;
     }
 
     get status() {

@@ -15,6 +15,7 @@ import { UI } from "../ui/ui";
 import { ISMRAPIConnector } from "./api/api_connector";
 import { IServerInfo } from "./api/formats/i_server_info";
 import { ISMRCacheHub } from "./cache/cache_hub";
+import { IPPFetcher } from "./data/ipp_fetcher";
 import { EventHandler } from "./events/event_handler";
 import { GizmoManager } from "./gizmos/gizmo_manager";
 import { VisualizerIO } from "./io/visualizer_io";
@@ -33,6 +34,7 @@ export class Visualizer {
     private _idb = new IDBManager();
     private _limitations!: ImplementationLimitations;
     private _eventHandler = new EventHandler();
+    private _ippFetcher = new IPPFetcher();
 
     // Managers
     private _materialManager = new MaterialManager();
@@ -200,6 +202,10 @@ export class Visualizer {
 
     get events() {
         return this._eventHandler;
+    }
+
+    get ippFetcher() {
+        return this._ippFetcher;
     }
 
 }

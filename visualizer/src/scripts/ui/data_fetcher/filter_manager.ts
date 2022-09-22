@@ -2,6 +2,8 @@ import { DataFilter } from "../../visualizer/data/filters/data_filter";
 import { getISMRFilterByName } from "../../visualizer/data/filters/filter_list";
 import { FilterCard } from "./filter_card";
 import { FilterCardStatus } from "./filter_card_status";
+import { ISerializedFilter } from "./i_serialized_filter";
+import { NumericFilterOperators } from "../../visualizer/data/filters/operators/numeric_filter_oprators";
 
 export class FilterManager {
 
@@ -65,11 +67,25 @@ export class FilterManager {
         this.revalidate();
     }
 
+    constructFiltersFromSave(all: ISerializedFilter[]) {
+        all.forEach(f => {
+            const df = new DataFilter();
+            df.arguments = f.arguments;
+            df.filter = f.filter;
+            df.operator = f.operatorName ? NumericFilterOperators.assertGetByName(f.operatorName) : undefined;
+            const fc = new FilterCard(df, f.name, this._container);
+            this._filters.push(fc);
+            fc.active = f.active;
+        });
+        this.revalidate();
+    }
+
     get serializedFilters() {
         return this._filters.map(f => {
             return {
                 ...f.filter.asSerializable,
-                active: f.isActive
+                active: f.isActive,
+                name: f.name
             }
         });
     }

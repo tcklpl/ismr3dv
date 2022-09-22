@@ -27,9 +27,9 @@ export class SessionTimeline {
         return Date.UTC(parseInt(matches[1]), parseInt(matches[2]), parseInt(matches[3]), parseInt(matches[4]), parseInt(matches[5]), parseInt(matches[6]));
     }
 
-    addIPP(list: IIPPInfo[]) {
-        const filteredList = list.filter(x => !this._ippInfoList.includes(x));
-        filteredList.forEach(ipp => {
+    setIPP(list: IIPPInfo[]) {
+        this._ippInfoList = list;
+        this._ippInfoList.forEach(ipp => {
             const date = this.getTimeFromIPP(ipp);
             let toInsert = this._ippByDate.get(Math.floor(date / 100000));
             if (!toInsert) {
