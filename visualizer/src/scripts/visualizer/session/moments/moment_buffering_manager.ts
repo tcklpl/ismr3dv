@@ -150,6 +150,7 @@ export class MomentBufferingManager {
         gl.bindTexture(gl.TEXTURE_2D, this._currentTexture);
         this._moments[index].texSubCurrent();
         visualizer.universeScene.ippSphere.currentTexture = this._currentTexture;
+        visualizer.universeScene.alignSunWithTime(this._moments[index].date);
     }
 
     getMomentByIndex(index: number) {

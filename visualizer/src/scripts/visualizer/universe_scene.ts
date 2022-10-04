@@ -33,8 +33,8 @@ export class UniverseScene extends Scene {
         this._earth = this._objectManager.summon("earth", EarthEntity);
 
         this._sun = this._objectManager.summon("sun", SunEntity);
-        // sun starts at 8 * sin0, 0, 8*cos0
-        this._sun.translate(new Vec3(0, 0, 8));
+        // sun starts at cos0, 0, sin0
+        this._sun.translate(new Vec3(16, 0, 0));
 
         this._ipp = this._objectManager.summon("ipp_sphere", IPPSphereEntity);
         this._ipp.scale(Vec3.fromValue(0.06));
@@ -52,15 +52,15 @@ export class UniverseScene extends Scene {
     }
 
     alignSunWithTime(t: Date) {
-        // sun's defualt position @0,0,8 sits around GMT+6
+        // sun's defualt position @8,0,0 sits around GMT-12
         const utcHour = t.getUTCHours();
         const utcMins = t.getUTCMinutes();
         // 360 / 24 = each hour = 15 degrees
-        const offsetHours = (utcHour + 6) % 24;
+        const offsetHours = (utcHour + 12) % 24;
         const rotationDegrees = (offsetHours + (utcMins / 60)) * 15;
         const rotationDegreesRadians = MUtils.degToRad(rotationDegrees);
-        const x = Math.sin(rotationDegreesRadians) * 16;
-        const z = Math.cos(rotationDegreesRadians) * 16;
+        const x = -Math.cos(rotationDegreesRadians) * 16;
+        const z = -Math.sin(rotationDegreesRadians) * 16;
         this._sun.setPosition(new Vec3(x, 0, z));
         visualizer.ui.bottomHud.currentDateLabel = t.toLocaleString();
     }
