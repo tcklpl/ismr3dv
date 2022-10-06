@@ -42,6 +42,10 @@ export class Vec3 extends Vec2 {
         return this;
     }
 
+    clone() {
+        return new Vec3(this.x, this.y, this.z);
+    }
+
     checkIfAllValuesInRange(min: number, max: number) {
         return this.x >= min && this.x <= max && this.y >= min && this.y <= max && this.z >= min && this.z <= max;
     }
@@ -112,6 +116,13 @@ export class Vec3 extends Vec2 {
 
     static fromValue(val: number) {
         return new Vec3(val, val, val);
+    }
+
+    static interpolate(a: Vec3, b: Vec3, n: number) {
+        const xDiff = a.x - b.x;
+        const yDiff = a.y - b.y;
+        const zDiff = a.z - b.z;
+        return new Vec3(a.x + (xDiff * n), a.y + (yDiff * n), a.z + (zDiff * n));
     }
 
 }

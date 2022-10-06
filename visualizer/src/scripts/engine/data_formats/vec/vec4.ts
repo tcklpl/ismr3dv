@@ -46,6 +46,10 @@ export class Vec4 extends Vec3 {
         return this;
     }
 
+    clone() {
+        return new Vec4(this.x, this.y, this.z, this.w);
+    }
+
     public get w() {
         return this._values[3];
     }
@@ -74,5 +78,13 @@ export class Vec4 extends Vec3 {
 
     static fromValue(val: number) {
         return new Vec4(val, val, val, val);
+    }
+
+    static interpolate(a: Vec4, b: Vec4, n: number) {
+        const xDiff = a.x - b.x;
+        const yDiff = a.y - b.y;
+        const zDiff = a.z - b.z;
+        const wDiff = a.w - b.w;
+        return new Vec4(a.x + (xDiff * n), a.y + (yDiff * n), a.z + (zDiff * n), a.w + (wDiff * n));
     }
 }

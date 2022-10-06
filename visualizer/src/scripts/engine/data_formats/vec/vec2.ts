@@ -94,4 +94,10 @@ export class Vec2 implements IUniformable {
         return new Vec2(val, val);
     }
 
+    static interpolate(a: Vec2, b: Vec2, n: number) {
+        const xDiff = a.x - b.x;
+        const yDiff = a.y - b.y;
+        return new Vec2(a.x + (xDiff * n), a.y + (yDiff * n));
+    }
+
 }
