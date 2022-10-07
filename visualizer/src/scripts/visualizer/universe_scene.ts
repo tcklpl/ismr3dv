@@ -8,6 +8,7 @@ import { SatelliteEntity } from "./objects/satellite";
 import { Skybox } from "./objects/skybox";
 import { StationEntity } from "./objects/station";
 import { SunEntity } from "./objects/sun";
+import { ISMRSession } from "./session/ismr_session";
 
 export class UniverseScene extends Scene {
 
@@ -20,6 +21,7 @@ export class UniverseScene extends Scene {
     private _ipp!: IPPSphereEntity;
 
     private _stations: StationEntity[] = [];
+    private _satellites: SatelliteEntity[] = [];
 
     private _mainCamera!: MainCamera;
 
@@ -43,11 +45,7 @@ export class UniverseScene extends Scene {
 
         this._skybox = new Skybox(this._materialManager.assertGetByName('stars'), this._shaderManager.assertGetShader('skybox'));
 
-        const test = this._objectManager.summon("satellite", SatelliteEntity);
-        test.setScale(new Vec3(0.03, 0.03, 0.03));
-        test.translate(new Vec3(0, 1.3, 0));
-
-        this.addObjects(this._earth, this._sun, this._ipp, test);
+        this.addObjects(this._earth, this._sun, this._ipp);
         this.alignSunWithTime(new Date());
     }
 
@@ -63,6 +61,21 @@ export class UniverseScene extends Scene {
         const z = -Math.sin(rotationDegreesRadians) * 16;
         this._sun.setPosition(new Vec3(x, 0, z));
         visualizer.ui.bottomHud.currentDateLabel = t.toLocaleString();
+    }
+
+    updateSatellites(positions: Map<string, Vec3>) {
+        const curMoment = (visualizer.session as ISMRSession).timeline.currentMoment;
+        this.satellites.forEach(s => {
+            const contains = positions.has(s.curInfo.name);
+            s.visible = contains;
+            if (contains) {
+                const position = (positions.get(s.curInfo.name) as Vec3).clone().multiplyByFactor(1.2);
+                s.setPosition(position);
+                s.lookAt(Vec3.fromValue(0));
+                s.curInfo.value = curMoment.ippPerSatellite.get(s.curInfo.name) as number;
+            }
+        });
+        this.rebuildCache();
     }
 
     get earth() {
@@ -89,6 +102,18 @@ export class UniverseScene extends Scene {
         this.removeObjects(...this._stations);
         this._earth.removeChildren(...this._stations);
         this._stations = s;
+        this.addObjects(...s);
+        this._earth.registerChildren(...s);
+    }
+
+    get satellites() {
+        return this._satellites;
+    }
+
+    set satellites(s: SatelliteEntity[]) {
+        this.removeObjects(...this._satellites);
+        this._earth.removeChildren(...this._satellites);
+        this._satellites = s;
         this.addObjects(...s);
         this._earth.registerChildren(...s);
     }

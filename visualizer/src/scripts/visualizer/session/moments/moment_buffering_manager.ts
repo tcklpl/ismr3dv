@@ -75,7 +75,7 @@ export class MomentBufferingManager {
         }
         this.clearInterpolationCache();
         this._moments = moments;
-        this.getMomentByIndex(this._currentIndex);
+        this.setMomentByIndex(this._currentIndex);
         if (this._currentIndex >= moments.length) {
             this._currentIndex = moments.length - 1;
         }
@@ -151,9 +151,10 @@ export class MomentBufferingManager {
         this._moments[index].texSubCurrent();
         visualizer.universeScene.ippSphere.currentTexture = this._currentTexture;
         visualizer.universeScene.alignSunWithTime(this._moments[index].date);
+        visualizer.universeScene.updateSatellites(this._moments[index].satellitesCoords);
     }
 
-    getMomentByIndex(index: number) {
+    setMomentByIndex(index: number) {
 
         let hasBeenTexturedYet = false;
         let initialized = this._bufferBounds.x != -1 && this._bufferBounds.y != -1;

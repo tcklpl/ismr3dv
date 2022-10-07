@@ -4,6 +4,7 @@ import { CustomAlert } from "../../ui/custom_alert";
 import { IIPPInfo } from "../api/formats/i_ipp_info";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { MainCamera } from "../camera/main_camera";
+import { SatelliteEntity } from "../objects/satellite";
 import { StationEntity } from "../objects/station";
 import { ISessionConfig } from "./i_session.config";
 import { ISessionSave } from "./i_session_save";
@@ -33,6 +34,8 @@ export class ISMRSession {
     private _selectedStations: IStationInfo[] = [];
 
     private _timeline: SessionTimeline;
+
+    private _instantiatedSatellites: SatelliteEntity[] = [];
 
     constructor(startDate: Date, endDate: Date, name?: string, creationDate?: Date, currentMoment?: number) {
         this._startDate = startDate;
@@ -65,6 +68,37 @@ export class ISMRSession {
         visualizer.universeScene.stations = this._instantiatedStations;
     }
 
+    instantiateSatellitesAs3dObjects() {
+        
+        const satelliteNameList: string[] = [];
+        this._timeline.currentMoments.forEach(s => {
+            [...s.satellitesCoords.keys()].forEach(k => {
+                if (!satelliteNameList.includes(k)) satelliteNameList.push(k);
+            });
+        });
+
+        satelliteNameList.forEach(sn => {
+
+            if (this._timeline.currentMoments[0].satellitesCoords.has(sn)) {
+                const instance = this._objectManager.summon("satellite", SatelliteEntity);
+                instance.pickable = true;
+                instance.curInfo.name = sn;
+
+                const pos = this._timeline.currentMoments[0].satellitesCoords.get(sn) as Vec3;
+                pos.multiplyByFactor(1.2);
+                instance.setPosition(pos);
+                instance.setScale(Vec3.fromValue(0.01));
+                instance.lookAt(Vec3.add(pos, pos));
+
+                this._instantiatedSatellites.push(instance);
+            }
+            
+        });
+
+        visualizer.universeScene.stations = this._instantiatedStations;
+        visualizer.universeScene.satellites = this._instantiatedSatellites;
+    }
+
     autoSave() {
         if (!this._config.save_on_browser) return;
         this._autoSaveTask = setTimeout(() => {
@@ -80,7 +114,6 @@ export class ISMRSession {
         // check if an auto save task is currently running
         if (this._autoSaveTask >= 0) {
             clearTimeout(this._autoSaveTask);
-            this._autoSaveTask = -1;
             this.autoSave();
         }
 
@@ -146,6 +179,7 @@ export class ISMRSession {
 
     addIPP(ipp: IIPPInfo[]) {
         this._timeline.setIPP(ipp);
+        this.instantiateSatellitesAs3dObjects();
     }
 
     get name() {
@@ -207,24 +241,22 @@ export class ISMRSession {
     static constructFromSave(save: ISessionSave) {
 
         const totalLoadSteps = 7;
+        let step = 1;
         visualizer.events.dispatchEvent('load-session-started');
 
-        visualizer.events.dispatchEvent('load-session-progress', 1, totalLoadSteps, 'Starting to load');
+        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Starting to load');
         const session = new ISMRSession(save.start_date, save.end_date, save.name, save.creation_date, save.current_moment);
 
-        visualizer.events.dispatchEvent('load-session-progress', 2, totalLoadSteps, 'Loading configuration');
+        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Loading configuration');
         session._config = save.config;
 
-        visualizer.events.dispatchEvent('load-session-progress', 3, totalLoadSteps, 'Loading the station list');
+        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Loading the station list');
         session.stations = save.station_list;
 
-        visualizer.events.dispatchEvent('load-session-progress', 4, totalLoadSteps, 'Loading and adding IPP info');
-        session.addIPP(save.raw_ipp);
-
-        visualizer.events.dispatchEvent('load-session-progress', 5, totalLoadSteps, 'Toggling selected stations');
+        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Toggling selected stations');
         save.selected_stations.forEach(s => session.toggleStationById(s));
 
-        visualizer.events.dispatchEvent('load-session-progress', 6, totalLoadSteps, 'Loading filters and other selected info');
+        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Loading filters and other selected info');
         if (save.filters) visualizer.ui.dataFetcher.filterManager.constructFiltersFromSave(save.filters);
         if (save.selected_satellite_categories) {
             visualizer.ui.dataFetcher.satTypeManager.selection.push(...save.selected_satellite_categories)
@@ -232,11 +264,12 @@ export class ISMRSession {
         };
         if (save.ion_height) visualizer.ui.dataFetcher.ionHeight = save.ion_height;
 
-        visualizer.events.dispatchEvent('load-session-progress', 7, totalLoadSteps, 'Recovering the camera position');
+        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Recovering the camera position');
         if (save.camera.type == "main") {
             (visualizer.cameraManager.activeCamera as MainCamera).setData(save.camera);
         }
 
+        session.instantiateSatellitesAs3dObjects();
         visualizer.events.dispatchEvent('load-session-finished');
 
         return session;

@@ -41,25 +41,21 @@ export class SessionTimeline {
             if (!this._coveredStations.includes(ipp.id))
                 this._coveredStations.push(ipp.id);
         });
+        this._moments = [];
+        this._ippByDate.forEach((ippList, time) => {
+            this._moments.push(new Moment(time, ippList));
+        });
+        this._momentBufferingManager.replaceMoments([...this._moments]);
         visualizer.universeScene.ippSphere.currentTexture = this._momentBufferingManager.texture;
     }
 
-    isRangeCovered(start: Date, end: Date, stations: number[]) {
-        const startTime = Math.floor(start.getTime() / 100000);
-        const endTime = Math.floor(end.getTime() / 100000);
-
-        for (let i = startTime; i <= endTime; i++) {
-            const timeIPP = this._ippByDate.get(i);
-            if (!timeIPP) {
-                return false;
-            }
+    setActiveMoment(index: number) {
+        if (index < 0 || index > this._moments.length) {
+            console.warn(`Trying to set moment out of bounds: ${index} -> [0, ${this._moments.length}]`);
+            return;
         }
-
-        if (stations.find(x => !this._coveredStations.includes(Math.floor(x)))) {
-            return false;   
-        }
-
-        return true;
+        this._momentBufferingManager.setMomentByIndex(index);
+        visualizer.events.dispatchEvent('moment-changed', index);
     }
 
     updateSelectedStations(selection: number[]) {
@@ -71,12 +67,6 @@ export class SessionTimeline {
 
         // selection is different...
         this._currentlySelectedStations = selection.map(x => Math.floor(x));
-        this._moments = [];
-        this._ippByDate.forEach((ippList, time) => {
-            const filteredIPPList = ippList.filter(x => this._currentlySelectedStations.includes(Math.floor(x.id)));
-            this._moments.push(new Moment(time, filteredIPPList));
-        });
-        this._momentBufferingManager.replaceMoments([...this._moments]);
         return true;
     }
 
@@ -94,6 +84,14 @@ export class SessionTimeline {
 
     get buffer() {
         return this._momentBufferingManager;
+    }
+
+    get currentMomentIndex() {
+        return this._momentBufferingManager.currentIndex;
+    }
+
+    get currentMoment() {
+        return this._moments[this._momentBufferingManager.currentIndex];
     }
 
 }
