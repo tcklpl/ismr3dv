@@ -11,14 +11,9 @@ export class UIStationsHud implements IUI {
     registerEvents() {
         this.update();
 
-        this._selectNoneBtn.on('click', () => {
-            visualizer.session?.clearStationSelection();
-            this.update();
-        });
-        this._selectAllBtn.on('click', () => {
-            visualizer.session?.selectAllStations()
-            this.update();
-        });
+        this._selectNoneBtn.on('click', () => visualizer.session?.clearStationSelection());
+        this._selectAllBtn.on('click', () => visualizer.session?.selectAllStations());
+        visualizer.events.on('station-selection-update', () => this.update());
     }
 
     update() {
