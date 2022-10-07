@@ -35,7 +35,6 @@ export class UITimeline implements IUI {
     private _opacityControl = $('#tl-opacity');
     private _opacityLabel = $('#tl-opacity-label');
 
-    private _activeMoment = 0;
     private _hoveredMoment = 0;
     private _timelineMode: 'static' | 'user-hovering' = 'static';
     private _isPlaying = false;
@@ -54,7 +53,7 @@ export class UITimeline implements IUI {
         this._timelineBarBg.on('click', e => {
             const prog = e.offsetX / (this._timelineBarBg.width() as number);
             const moment = Math.round(prog * (this.session.timeline.currentMoments.length - 1));
-            this.setMoment(moment);
+            this.session.timeline.setActiveMoment(moment);
         });
 
         this._timelineBarBg.on('mousemove', e => {
@@ -135,12 +134,13 @@ export class UITimeline implements IUI {
         });
 
         this._btnFirst.on('click', () => {
-            this.setMoment(0);
+            this.session.timeline.setActiveMoment(0);
         })
 
         this._btnPrev.on('click', () => {
-            if (this._activeMoment > 0) {
-                this.setMoment(this._activeMoment - 1);
+            const index = this.session.timeline.currentMomentIndex;
+            if (index > 0) {
+                this.session.timeline.setActiveMoment(index - 1);
             }
         });
 
@@ -155,13 +155,14 @@ export class UITimeline implements IUI {
         });
 
         this._btnNext.on('click', () => {
-            if (this._activeMoment < (this.session.timeline.currentMoments.length - 1)) {
-                this.setMoment(this._activeMoment + 1);
+            const index = this.session.timeline.currentMomentIndex;
+            if (index < (this.session.timeline.currentMoments.length - 1)) {
+                this.session.timeline.setActiveMoment(index + 1);
             }
         });
 
         this._btnLast.on('click', () => {
-            this.setMoment(this.session.timeline.currentMoments.length - 1);
+            this.session.timeline.setActiveMoment(this.session.timeline.currentMoments.length - 1);
         });
 
         this._tlPlayIntervalSelect.on('input', () => {
@@ -178,25 +179,23 @@ export class UITimeline implements IUI {
             const value = this._opacityControl.val() as number;
             this.ippOpacity = value;
         });
+
+        visualizer.events.on('moment-changed', () => {
+            this.updateCurrentMomentMarkerAndInfo();
+        })
     }
 
     private playTask() {
         if (this._isPlaying) {
-            if (this._activeMoment < (this.session.timeline.currentMoments.length - 1)) {
-                this.setMoment(this._activeMoment + 1);
+            const index = this.session.timeline.currentMomentIndex;
+            if (index < (this.session.timeline.currentMoments.length - 1)) {
+                this.session.timeline.setActiveMoment(index + 1);
             } else {
                 this._isPlaying = false;
                 this._btnPlay.removeClass('bi-pause-fill').addClass('bi-play-fill');
             }
             setTimeout(() => this.playTask(), this._playInterval);
         }
-    }
-
-    private setMoment(index: number) {
-        this._activeMoment = index;
-        this.updateCurrentMomentMarkerAndInfo();
-        this.session.timeline.buffer.getMomentByIndex(this._activeMoment);
-        visualizer.ui.bottomHud.currentDateLabel = this.session.timeline.currentMoments[this._activeMoment].date.toLocaleString();
     }
 
     getMomentOffsetPercentage(index: number) {
@@ -213,7 +212,7 @@ export class UITimeline implements IUI {
         let updateGhost = true;
         switch(this._timelineMode) {
             case 'static':
-                momentToQuery = this._activeMoment;
+                momentToQuery = this.session.timeline.currentMomentIndex;
                 break;
             case 'user-hovering':
                 momentToQuery = this._hoveredMoment;
@@ -239,7 +238,7 @@ export class UITimeline implements IUI {
             moment.bufferProgression == 2 ? 'Buffered' : 'ERROR';
         this._tlMomentName.html(`
             <span><i class="bi-alarm icon-left"></i>${DateUtils.to_DDMMYYYY_HHMMSS(moment.date)}</span>
-            <span><i class="bi-bar-chart icon-left"></i>${moment.avgDataValue.toFixed(2)}</span>
+            <span><i class="bi-bar-chart icon-left"></i>${moment.ippMeasurements.avg.toFixed(2)}</span>
             <span><i class="bi-memory icon-left"></i>${bufferStatus}</span>`
         );
     }
@@ -297,7 +296,7 @@ export class UITimeline implements IUI {
         const path = new Path2D();
         path.moveTo(0, height);
 
-        MUtils.normalizeListMinMax(session.timeline.currentMoments.map(m => m.avgDataValue)).forEach((m, i) => {
+        MUtils.normalizeListMinMax(session.timeline.currentMoments.map(m => m.ippMeasurements.avg)).forEach((m, i) => {
             const y = height - Math.round(m * height);
             path.lineTo(stepX * i, y);
         });
@@ -352,15 +351,6 @@ export class UITimeline implements IUI {
         visualizer.universeScene.ippSphere.opacity = opacity;
         const labelValue = (opacity * 100).toFixed(0);
         this._opacityLabel.html(`${labelValue}%`);
-    }
-
-    get currentIndex() {
-        return this._activeMoment;
-    }
-
-    set currentIndex(i: number) {
-        this._activeMoment = i;
-        this.updateCurrentMomentMarkerAndInfo();
     }
 
 }

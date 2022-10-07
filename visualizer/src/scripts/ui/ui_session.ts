@@ -302,10 +302,11 @@ export class UISession implements IUI {
     private loadSession(save: ISessionSave) {
         const session = ISMRSession.constructFromSave(save);
         visualizer.session = session;
+        session.addIPP(save.raw_ipp);
         visualizer.ui.timeline.updateForSelectedStations();
         visualizer.ui.timeline.speed = save.moment_play_speed ?? 1000;
         visualizer.ui.timeline.ippOpacity = save.ipp_opacity ?? 0.5;
-        visualizer.ui.timeline.currentIndex = save.current_moment ?? 0;
+        visualizer.ui.timeline.updateCurrentMomentMarkerAndInfo();
         this.showFinalPanel();
         visualizer.events.dispatchEvent('stations-update');
     }

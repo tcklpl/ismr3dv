@@ -24,9 +24,9 @@ export class Scene {
         this.rebuildCache();
     }
 
-    private rebuildCache() {
-        this._cachedOpaqueObjects = this._objects.filter(x => !x.transparent);
-        this._cachedTransparentObjects = this._objects.filter(x => x.transparent);
+    protected rebuildCache() {
+        this._cachedOpaqueObjects = this._objects.filter(x => !x.transparent && x.visible);
+        this._cachedTransparentObjects = this._objects.filter(x => x.transparent && x.visible);
     }
 
     get name() {

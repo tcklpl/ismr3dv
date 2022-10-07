@@ -77,6 +77,10 @@
             "append_to": "body"
         },
         {
+            "url": "satellite_info_popup.html",
+            "append_to": "body"
+        },
+        {
             "url": "bottom_hud.html",
             "append_to": "body"
         },

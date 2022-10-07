@@ -53,6 +53,7 @@ export class UI {
         this._info.update();
         this._screenshot.registerEvents();
         this._dataFetcher.registerEvents();
+        this._bottomHud.registerEvents();
     }
 
     get config() {
