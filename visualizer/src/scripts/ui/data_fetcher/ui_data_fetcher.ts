@@ -17,7 +17,7 @@ export class UIDataFetcher implements IUI {
     private _stSearch = $('#df-station-search');
     private _stCards: {element: JQuery<HTMLElement>, station: IStationInfo}[] = [];
     private _stBtnSelectAll = $('#df-st-select-all');
-    private _stBtnSelectNone = $('#df-st-select-all');
+    private _stBtnSelectNone = $('#df-st-select-none');
 
     private _clearFilters = $('#df-clear-filters');
     private _newFilterElev = $('#df-new-filter-elev');
