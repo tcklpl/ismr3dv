@@ -10,8 +10,9 @@ export abstract class RenderableObject extends MatrixCompliant3DTransformative i
     _id: number;
     private _idVec4: Vec4;
     private _zeroVec4 = Vec4.fromValue(0);
-    private _pickable = false;
-    private _transparent = false;
+    pickable = false;
+    transparent = false;
+    visible = true;
 
     protected _mesh: Mesh;
     protected _material: Material;
@@ -32,6 +33,7 @@ export abstract class RenderableObject extends MatrixCompliant3DTransformative i
     abstract render(uniformConfiguration: () => void): void;
 
     renderPicking(shader: Shader, idUniform: WebGLUniformLocation, uniformConfiguration: () => void) {
+        if (!this.visible) return;
         shader.bind();
 
         if (!this._hasPickingSetup) {
@@ -42,7 +44,7 @@ export abstract class RenderableObject extends MatrixCompliant3DTransformative i
         }
 
         this.modelMatrix.bindUniform(gl, this._pickingModelMat4Uniform);
-        (this._pickable ? this._idVec4 : this._zeroVec4).bindUniform(gl, idUniform);
+        (this.pickable ? this._idVec4 : this._zeroVec4).bindUniform(gl, idUniform);
         uniformConfiguration();
         this._mesh.draw();
     }
@@ -65,22 +67,6 @@ export abstract class RenderableObject extends MatrixCompliant3DTransformative i
 
     get idVec4() {
         return this._idVec4;
-    }
-    
-    get pickable() {
-        return this._pickable;
-    }
-
-    set pickable(p: boolean) {
-        this._pickable = p;
-    }
-
-    get transparent() {
-        return this._transparent;
-    }
-
-    set transparent(v: boolean) {
-        this._transparent = v;
     }
 
     get mesh() {
