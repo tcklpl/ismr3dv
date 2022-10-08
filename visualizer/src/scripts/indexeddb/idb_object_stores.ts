@@ -2,6 +2,7 @@
 export class IDBObjStore {
 
     public static SESSION = new IDBObjStore('sessions', 'name');
+    public static CONFIG = new IDBObjStore('config', 'key');
 
     private _name: string;
     private _key: string;

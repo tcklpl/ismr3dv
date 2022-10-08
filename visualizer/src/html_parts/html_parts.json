@@ -33,10 +33,6 @@
             "append_to": "#config-modal-body-content"
         },
         {
-            "url": "config/storage_configuration.html",
-            "append_to": "#config-modal-body-content"
-        },
-        {
             "url": "timeline.html",
             "append_to": "body"
         },

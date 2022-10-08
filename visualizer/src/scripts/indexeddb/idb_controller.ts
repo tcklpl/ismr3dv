@@ -25,6 +25,15 @@ export class IDBController<T> {
         }); 
     }
 
+    getOne(key: any) {
+        return new Promise<T | undefined>((resolve, reject) => {
+            const objectStore = this.getObjectStore('readonly');
+            const request = objectStore.get(key);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject();
+        }); 
+    }
+
     put(value: T) {
         return new Promise<void>((resolve, reject) => {
             const objectStore = this.getObjectStore('readwrite');

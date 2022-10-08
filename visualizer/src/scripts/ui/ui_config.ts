@@ -1,8 +1,6 @@
-import { IDisplayConfiguration } from "../engine/config/display_configuration";
-import { IGeneralConfiguration } from "../engine/config/general_configuration";
-import { IGraphicalConfiguration } from "../engine/config/graphical_configuration";
-import { StorageType } from "../local_storage/storage_type";
-import { SizeNameUtils } from "../visualizer/utils/size_name_utils";
+import { DisplayConfig } from "../config/configs/display";
+import { GeneralConfig } from "../config/configs/general";
+import { GraphicalConfig, TextureSize2k8k } from "../config/configs/graphical";
 import { IUI } from "./i_ui";
 
 export class UIConfig implements IUI {
@@ -36,31 +34,30 @@ export class UIConfig implements IUI {
         this.setupGeneral(configManager.general);
         this.setupDisplay(configManager.display);
         this.setupGraphical(configManager.graphical);
-        this.setupStorage();
     }
 
-    private setupGeneral(generalConfig: IGeneralConfiguration) {
+    private setupGeneral(generalConfig: GeneralConfig) {
         $('#cfg-fps').prop('checked', generalConfig.show_fps);
     }
 
-    private saveGeneral(generalConfig: IGeneralConfiguration) {
+    private saveGeneral(generalConfig: GeneralConfig) {
         generalConfig.show_fps = $('#cfg-fps').is(':checked');
         visualizer.ui.info.update();
     }
 
-    private setupDisplay(displayConfig: IDisplayConfiguration) {
+    private setupDisplay(displayConfig: DisplayConfig) {
         $('#cfg-exposure').val(displayConfig.exposure);
         $('#cfg-gamma').val(displayConfig.gamma);
         $('#cfg-exposure-label').html(`${displayConfig.exposure}`);
         $('#cfg-gamma-label').html(`${displayConfig.gamma}`);
     }
 
-    private saveDisplay(displayConfig: IDisplayConfiguration) {
+    private saveDisplay(displayConfig: DisplayConfig) {
         displayConfig.exposure = $('#cfg-exposure').val() as number;
         displayConfig.gamma = $('#cfg-gamma').val() as number;
     }
 
-    private setupGraphical(graphicalConfig: IGraphicalConfiguration) {
+    private setupGraphical(graphicalConfig: GraphicalConfig) {
         const earthTsChildren = $('#ctf-earth-texsize option');
         const sunTsChildren = $('#ctf-sun-texsize option');
         this._hasUnsupportedTextures = false;
@@ -81,47 +78,12 @@ export class UIConfig implements IUI {
         $('#cfg-resolution-scale-label').html(`${(graphicalConfig.resolution_scale * 100).toFixed(0)}%`);
     }
 
-    private saveGraphical(graphicalConfig: IGraphicalConfiguration) {
+    private saveGraphical(graphicalConfig: GraphicalConfig) {
         graphicalConfig.bloom = $('#cfg-bloom').is(':checked');
-        graphicalConfig.earth_texture_size = $('#ctf-earth-texsize').val() as string;
-        graphicalConfig.sun_texture_size = $('#ctf-sun-texsize').val() as string;
+        graphicalConfig.earth_texture_size = $('#ctf-earth-texsize').val() as TextureSize2k8k;
+        graphicalConfig.sun_texture_size = $('#ctf-sun-texsize').val() as TextureSize2k8k;
         graphicalConfig.resolution_scale = $('#cfg-resolution-scale').val() as number;
         visualizer.engine.adjustToWindowSize();
-    }
-
-    private setupStorage() {
-        const storage = visualizer.storageController;
-
-        const totalSize = storage.maxSizeKb * 1000;
-
-        const configSize = storage.storagePerCategory.get(StorageType.CONFIG) ?? 0;
-        const cacheSize = storage.storagePerCategory.get(StorageType.CACHE) ?? 0;
-
-        $('#cfg-storage-info-total-space').html(`Total: ${SizeNameUtils.getNameBySize(totalSize, ['B', 'KB', 'MB'], 1000)}`);
-        $('#cfg-storage-info-used-space').html(`In use: ${SizeNameUtils.getNameBySize(storage.totalUsedSizeBytes, ['B', 'KB', 'MB'], 1000)}`);
-
-        $('#cfg-storage-info-config-size').html(`${SizeNameUtils.getNameBySize(configSize, ['B', 'KB', 'MB'], 1000)}`);
-        $('#cfg-storage-info-cache-size').html(`${SizeNameUtils.getNameBySize(cacheSize, ['B', 'KB', 'MB'], 1000)}`);
-        $('#cfg-storage-info-free-size').html(`${SizeNameUtils.getNameBySize(storage.totalFreeSpaceBytes, ['B', 'KB', 'MB'], 1000)}`);
-
-        let usedProgressBar = 0;
-        const minumumPercentage = 0.005;
-        let configPercentage = configSize / totalSize;
-        configPercentage = configPercentage > 0 ? Math.max(configPercentage, minumumPercentage) : 0;
-        usedProgressBar += configPercentage;
-
-        let cachePercentage = cacheSize / totalSize;
-        cachePercentage = cachePercentage > 0 ? Math.min(Math.max(cachePercentage, minumumPercentage), 100 - usedProgressBar) : 0;
-        usedProgressBar += cachePercentage;
-
-        $('#cfg-storage-pb-config').css('width', `${configPercentage * 100}%`);
-        $('#cfg-storage-pb-cache').css('width', `${cachePercentage * 100}%`);
-
-        $('#btn-clear-storage-cache').prop('disabled', cacheSize <= 0 ? 'disabled': '');
-        $('#btn-clear-storage-cache').on('click', () => {
-            visualizer.cache.nuke();
-            this.setupStorage();
-        });
     }
 
     private checkForTextureSizeSupport(elementValue: string) {

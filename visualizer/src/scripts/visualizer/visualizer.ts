@@ -1,5 +1,5 @@
 import { CameraManager } from "../engine/camera/camera_manager";
-import { ConfigurationManager } from "../engine/config/configuration_manager";
+import { ConfigurationManager } from "../config/configuration_manager";
 import { Engine } from "../engine/engine";
 import { InteractionManager } from "../engine/interactions/interaction_manager";
 import { ImplementationLimitations } from "../engine/limitations";
@@ -10,11 +10,9 @@ import { SceneManager } from "../engine/scenes/scene_manager";
 import { ShaderManager } from "../engine/shaders/shader_manager";
 import { IDBManager } from "../indexeddb/idb_manager";
 import { Loader } from "../loader/loader";
-import { StorageController } from "../local_storage/storage_controller";
 import { UI } from "../ui/ui";
 import { ISMRAPIConnector } from "./api/api_connector";
 import { IServerInfo } from "./api/formats/i_server_info";
-import { ISMRCacheHub } from "./cache/cache_hub";
 import { IPPFetcher } from "./data/ipp_fetcher";
 import { EventHandler } from "./events/event_handler";
 import { GizmoManager } from "./gizmos/gizmo_manager";
@@ -26,11 +24,10 @@ import { UniverseScene } from "./universe_scene";
 export class Visualizer {
 
     // Main parts
-    private _loader: Loader;
+    private _loader!: Loader;
     private _engine!: Engine;
     private _io!: VisualizerIO;
     private _ui = new UI();
-    private _cache!: ISMRCacheHub;
     private _idb = new IDBManager();
     private _limitations!: ImplementationLimitations;
     private _eventHandler = new EventHandler();
@@ -43,7 +40,6 @@ export class Visualizer {
     private _objectManager = new ObjectManager();
     private _cameraManager = new CameraManager();
     private _sceneManager = new SceneManager();
-    private _storageController = new StorageController();
     private _configurationManager = new ConfigurationManager();
     private _interactionManager!: InteractionManager;
     private _gizmoManager!: GizmoManager;
@@ -64,17 +60,25 @@ export class Visualizer {
         globalThis.visualizer = this;
         this._io = new VisualizerIO();
 
-        this._configurationManager.loadConfiguration();
-        this._configurationManager.saveConfigurations();
-
         this._limitations = new ImplementationLimitations();
-        this.ui.registerEssential();
 
         this._api.fetchServerInfo()
         .then(si => this._serverInfo = si)
         .catch(() => {
             throw `Failed to fetch server info`;
         });
+
+        this.idb.onReady(() => {
+            this._configurationManager.loadConfiguration();
+            this._configurationManager.onLoad = () => {
+                this._configurationManager.saveConfigurations();
+                this.initializeLoad();
+            }
+        });
+    }
+
+    private initializeLoad() {
+        this.ui.registerEssential();
 
         this._loader = new Loader();
         this._loader.onLoad = () => this.postLoad();
@@ -87,7 +91,6 @@ export class Visualizer {
         this._engine = new Engine();
         this._engine.adjustToWindowSize();
 
-        this._cache = new ISMRCacheHub();
         this._providers = new ISMRProviders();
 
         this._universeScene = new UniverseScene("universe");
@@ -131,10 +134,6 @@ export class Visualizer {
         return this._configurationManager;
     }
 
-    get storageController() {
-        return this._storageController;
-    }
-
     get interactionManager() {
         return this._interactionManager;
     }
@@ -174,10 +173,6 @@ export class Visualizer {
 
     get session() {
         return this._session;
-    }
-
-    get cache() {
-        return this._cache;
     }
 
     get idb() {
