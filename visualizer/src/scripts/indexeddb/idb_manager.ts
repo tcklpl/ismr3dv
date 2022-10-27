@@ -1,4 +1,5 @@
 import { IDBConfigController } from "./controllers/idb_config_controller";
+import { IDBIGRFController } from "./controllers/idb_igrf_controller";
 import { IDBSessionController } from "./controllers/idb_session_controller";
 import { IDBConnection } from "./idb_connection";
 
@@ -8,6 +9,7 @@ export class IDBManager {
 
     private _idbSessionController: IDBSessionController;
     private _idbConfigController: IDBConfigController;
+    private _idbIGRFController: IDBIGRFController;
 
     private _onReady: (() => void)[] = [];
 
@@ -16,6 +18,7 @@ export class IDBManager {
         this._idbConnection.onReady = () => this._onReady.forEach(f => f());
         this._idbSessionController = new IDBSessionController(this._idbConnection);
         this._idbConfigController = new IDBConfigController(this._idbConnection);
+        this._idbIGRFController = new IDBIGRFController(this._idbConnection);
     }
 
     onReady(f: () => void) {
@@ -37,6 +40,10 @@ export class IDBManager {
 
     get configController() {
         return this._idbConfigController;
+    }
+
+    get igrfController() {
+        return this._idbIGRFController;
     }
 
 }
