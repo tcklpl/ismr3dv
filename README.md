@@ -67,3 +67,5 @@ And access it at `http://localhost:<port you defined>`.
 Earth and Sun textures by [**Solar System Scope**](https://www.solarsystemscope.com/textures/), distributed under Creative Commons 4.0 International (CC BY 4.0). No additional changes were made to the textures.
 
 Skybox textures were made using [**Spacescape**](https://github.com/petrocket/spacescape) by Alex Peterson, distributed under the MIT License.
+
+[**International Geomagnetic Reference Field (IGRF)**](https://www.ngdc.noaa.gov/IAGA/vmod/igrf.html) : Alken, P., Thébault, E., Beggan, C.D. et al. The implementation used in this software was made using the **Python 3.7 Package** ([GitHub](https://github.com/ciaranbe/pyIGRF), [Download link from the IGRF Website](https://www.ngdc.noaa.gov/IAGA/vmod/pyIGRF.zip)) source code, distributed under the MIT License. 
