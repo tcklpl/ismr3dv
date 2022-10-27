@@ -20,6 +20,7 @@ import { VisualizerIO } from "./io/visualizer_io";
 import { ISMRProviders } from "./providers/providers";
 import { ISMRSession } from "./session/ismr_session";
 import { UniverseScene } from "./universe_scene";
+import { IGRFFetcher } from "./igrf/igrf_fetcher";
 
 export class Visualizer {
 
@@ -32,6 +33,7 @@ export class Visualizer {
     private _limitations!: ImplementationLimitations;
     private _eventHandler = new EventHandler();
     private _ippFetcher = new IPPFetcher();
+    private _igrfFetcher: IGRFFetcher;
 
     // Managers
     private _materialManager = new MaterialManager();
@@ -68,6 +70,8 @@ export class Visualizer {
             throw `Failed to fetch server info`;
         });
 
+        this._igrfFetcher = new IGRFFetcher();
+
         this.idb.onReady(() => {
             this._configurationManager.loadConfiguration();
             this._configurationManager.onLoad = () => {
@@ -98,6 +102,8 @@ export class Visualizer {
         this._sceneManager.active = this._universeScene;
 
         this.ui.registerEvents();
+
+        this._igrfFetcher.loadModel();
 
         requestAnimationFrame(t => this._engine.render(t));
     }
