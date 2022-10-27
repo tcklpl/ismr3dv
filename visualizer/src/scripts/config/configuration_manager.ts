@@ -23,15 +23,12 @@ export class ConfigurationManager {
             this._controller = visualizer.idb.configController;
     
             const graphical = await this._controller.getOne(this._graphical.key);
-            console.log(graphical);
             if (graphical) this._graphical = graphical as GraphicalConfig;
     
             const general = await this._controller.getOne(this._general.key);
-            console.log(general);
             if (general) this._general = general as GeneralConfig;
     
             const display = await this._controller.getOne(this._display.key);
-            console.log(display);
             if (display) this._display = display as DisplayConfig;
 
             if (this.onLoad) this.onLoad();
@@ -44,10 +41,6 @@ export class ConfigurationManager {
                 console.warn('Failed to save config: IndexedDB is unavailable');
                 return;
             };
-
-            console.log(this._graphical);
-            console.log(this._general);
-            console.log(this._display);
     
             this._controller.put(this._graphical);
             this._controller.put(this._general);
