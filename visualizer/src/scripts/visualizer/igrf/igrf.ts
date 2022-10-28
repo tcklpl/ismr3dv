@@ -170,12 +170,7 @@ export class IGRFModel {
         const y = Bp;
         const z = -Br;
 
-        const { declination, horizontal, inclination, totalIntensity } = this.calculateNonLinearComponents(x, y, z);
-
-        console.log(`declination: ${declination}`);
-        console.log(`horizontal: ${horizontal}`);
-        console.log(`inclination: ${inclination}`);
-        console.log(`totalIntensity: ${totalIntensity}`);
+        return this.calculateNonLinearComponents(x, y, z);
         
     }
 
