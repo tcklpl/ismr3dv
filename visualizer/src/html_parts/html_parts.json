@@ -91,6 +91,31 @@
         {
             "url": "data_fetcher.html",
             "append_to": "body"
+        },
+        
+        {
+            "url": "interpolation/interp_info.html",
+            "append_to": "body"
+        },
+        {
+            "url": "interpolation/interp_config_modal.html",
+            "append_to": "body"
+        },
+        {
+            "url": "interpolation/interp_config_tabs.html",
+            "append_to": "#interp-modal-body-nav"
+        },
+        {
+            "url": "interpolation/interp_config_interpolator.html",
+            "append_to": "#interp-modal-body-content"
+        },
+        {
+            "url": "interpolation/interp_config_colorer.html",
+            "append_to": "#interp-modal-body-content"
+        },
+        {
+            "url": "interpolation/interp_config_precision.html",
+            "append_to": "#interp-modal-body-content"
         }
     ]
 }

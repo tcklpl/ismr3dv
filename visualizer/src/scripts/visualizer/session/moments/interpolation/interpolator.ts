@@ -15,8 +15,8 @@ export class MomentInterpolator {
 
     private _stateChangeListeners: ((s: MIStates) => void)[] = [];
 
-    constructor(interpFuncThread: (...args: any[]) => void, bufferSize: Vec2) {
-        this._worker = WorkerUtils.createWorkerFromFunction(interpFuncThread, bufferSize.x, bufferSize.y);
+    constructor(interpFuncThread: (...args: any[]) => void, bufferSize: Vec2, ...extraParameters: any[]) {
+        this._worker = WorkerUtils.createWorkerFromFunction(interpFuncThread, bufferSize.x, bufferSize.y, ...extraParameters);
         this._worker.onmessage = m => {
             this._workLoad--;
             if (this._workLoad <= 0) {

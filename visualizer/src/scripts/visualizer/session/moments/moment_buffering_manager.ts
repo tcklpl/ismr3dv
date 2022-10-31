@@ -22,7 +22,8 @@ export class MomentBufferingManager {
     private _interpColorProvider = new MomentColorer(this._bufferSize);
 
     private _interpolator!: MomentInterpolator;
-    private _interpolatingFunction: InterpolatingFunctions = InterpolatingFunctions.INVERSE_DISTANCE_WEIGHTING;
+    private _interpolatingFunction: InterpolatingFunctions = InterpolatingFunctions.DEFAULT;
+    private _interpolatingParameters: any[] = InterpolatingFunctions.DEFAULT.options.map(opt => opt.default);
 
     private _momentWaitingForColor?: number;
     private _momentsToProcess = 0;
@@ -44,7 +45,7 @@ export class MomentBufferingManager {
 
     setupInterpolator() {
         this.killInterpolatorIfPresent();
-        this._interpolator = new MomentInterpolator(this._interpolatingFunction.func, this._bufferSize);
+        this._interpolator = new MomentInterpolator(this._interpolatingFunction.func, this._bufferSize, ...this._interpolatingParameters);
         this._interpolator.onMessage = m => this.onInterpolatorMessage(m);
         this._interpolator.onError = e => this.onInterpolatorError(e);
         this._interpolator.onStateChange(s => this.onInterpolatorStateChange(s));
@@ -66,6 +67,14 @@ export class MomentBufferingManager {
         this._bufferBounds.x = -1;
         this._bufferBounds.y = -1;
         visualizer.events.dispatchEvent('moment-interpolation-cache-cleared');
+    }
+
+    replaceInterpolator(fun: InterpolatingFunctions, params: any[]) {
+        this.clearInterpolationCache();
+        this._interpolatingFunction = fun;
+        this._interpolatingParameters = params;
+        this.setupInterpolator();
+        this.setMomentByIndex(this.currentIndex);
     }
 
     replaceMoments(moments: Moment[]) {
@@ -256,6 +265,10 @@ export class MomentBufferingManager {
 
     get currentIndex() {
         return this._currentIndex;
+    }
+
+    get currentInterpolatingFunction() {
+        return this._interpolatingFunction;
     }
 
 }

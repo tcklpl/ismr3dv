@@ -1,13 +1,8 @@
 import { IMomentInterpEntry } from "./i_moment_queue_entries";
 
-export const miInverseDistanceWeighting = (width: number, height: number) => {
+export const miInverseDistanceWeighting = (width: number, height: number, p: number = 2, interpolationDistance: number = 20, colorDistance: number = 10) => {
 
-    const colorDistance = 10;
-
-    const interpolationDistance = 20;
     const interpDstSquared = interpolationDistance**2;
-
-    const p = 2;
 
     const getPosition = (x: number, y: number) => y * width + x;
     const distanceSquared = (x1: number, y1: number, x2: number, y2: number) => ((x1 - x2)**2 + (y1 - y2)**2);

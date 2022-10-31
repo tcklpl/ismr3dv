@@ -31,9 +31,11 @@ export class UIOptionsHud implements IUI {
         });
 
         this._dfBtn.on('click', () => visualizer.ui.dataFetcher.show());
+
+        visualizer.events.on('session-is-present', (status: boolean, ...rest) => this.setSessionRelatedButtonsEnabled(status));
     }
 
-    setSessionRelatedButtonsEnabled(state: boolean) {
+    private setSessionRelatedButtonsEnabled(state: boolean) {
         this._saveSessionBtn.prop('disabled', !state || !visualizer.idb.isAvailable);
         this._exportSessionBtn.prop('disabled', !state);
         this._timelineBtn.prop('disabled', !state);

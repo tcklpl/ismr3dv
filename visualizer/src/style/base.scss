@@ -13,6 +13,9 @@
 @import "cursor";
 @import "data_fetcher";
 
+@import 'ui/ui';
+@import 'components/components';
+
 body {
     width: 100vw;
     height: 100vh;

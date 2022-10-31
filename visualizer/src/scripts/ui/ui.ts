@@ -1,4 +1,5 @@
 import { UIDataFetcher } from "./data_fetcher/ui_data_fetcher";
+import { UIInterpolation } from "./interpolation/ui_interpolation";
 import { UIBottomHud } from "./ui_bottom_hud";
 import { UICanvas } from "./ui_canvas";
 import { UIConfig } from "./ui_config";
@@ -27,6 +28,7 @@ export class UI {
     private _screenshot = new UIScreenshot();
     private _bottomHud = new UIBottomHud();
     private _dataFetcher = new UIDataFetcher();
+    private _interpolation = new UIInterpolation();
 
     registerEssential() {
         this._config.registerEvents();
@@ -54,6 +56,7 @@ export class UI {
         this._screenshot.registerEvents();
         this._dataFetcher.registerEvents();
         this._bottomHud.registerEvents();
+        this._interpolation.registerEvents();
     }
 
     get config() {
@@ -98,5 +101,9 @@ export class UI {
     
     get dataFetcher() {
         return this._dataFetcher;
+    }
+
+    get interpolation() {
+        return this._interpolation;
     }
 }

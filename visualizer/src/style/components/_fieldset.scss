@@ -1,0 +1,13 @@
+
+.bordered-fieldset {
+    border: 1px solid #aaa;
+    padding: 1em;
+    margin-top: 1em;
+
+    legend {
+        float: none;
+        width: auto;
+        padding: 0;
+        margin-bottom: 0;
+    }
+}

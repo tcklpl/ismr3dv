@@ -201,6 +201,7 @@ export class UISession implements IUI {
                     visualizer.session = session;
                     this.showFinalPanel();
                     visualizer.events.dispatchEvent('stations-update');
+                    visualizer.events.dispatchEvent('session-is-present', true);
                 } else {
                     new MessageScreen('Error', 'No available stations were found on the provided time interval');
                     this.switchDatePanelTab(this._serverInfo.showcase_mode ? this._datePanelTabShowcase : this._datePanelTabSelectors);
@@ -225,7 +226,6 @@ export class UISession implements IUI {
 
         this.setProgressBarCompletion(4);
         this.setActivePanel(this._finishPanel);
-        visualizer.ui.optionsHud.setSessionRelatedButtonsEnabled(true);
     }
 
     private createLoadedSessionCard(save: ISessionSave, loadSessionId: string, deleteSessionId: string) {
@@ -308,6 +308,7 @@ export class UISession implements IUI {
         visualizer.ui.timeline.ippOpacity = save.ipp_opacity ?? 0.5;
         visualizer.ui.timeline.updateCurrentMomentMarkerAndInfo();
         this.showFinalPanel();
+        visualizer.events.dispatchEvent('session-is-present', true);
         visualizer.events.dispatchEvent('stations-update');
     }
 }
