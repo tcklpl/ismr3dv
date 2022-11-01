@@ -18,11 +18,11 @@ export class UIInterpolation implements IUI {
         
         this.buildUI();
 
-
         this._saveBtn.on('click', () => this.save());
 
         visualizer.events.on('session-is-present', (status: boolean, ...rest) => {
             this.updateInfoBoxVisibility(status);
+            this._newInterpFuncObj = (visualizer.session as ISMRSession).timeline.buffer.currentInterpolatingFunction;
             this.updateUI();
         });
 
@@ -45,10 +45,15 @@ export class UIInterpolation implements IUI {
     }
 
     updateUI() {
+        console.log(this._newInterpFuncObj?.name);
+        $('#interp-selector option').removeAttr('selected').filter(`[value="${this._newInterpFuncObj?.name ?? visualizer.session?.timeline.buffer.currentInterpolatingFunction.name}"]`).prop('selected', true);
         if (this._interpOptObj) {
             this._interpOptObj.purge();
         }
-        this._interpOptObj = new UIInterpOptions(this._newInterpFuncObj);
+        const params = this._newInterpFuncObj?.name == visualizer.session?.timeline.buffer.currentInterpolatingFunction.name ? visualizer.session?.timeline.buffer.currentInterpolationParameters :
+                       this._newInterpFuncObj?.options.map(x => x.default) ?? [];
+
+        this._interpOptObj = new UIInterpOptions(this._newInterpFuncObj, params);
         this._interpOptObj.buildAndAppendTo(this._interpOptions);
     }
 

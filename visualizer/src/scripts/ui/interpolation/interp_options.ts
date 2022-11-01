@@ -15,16 +15,16 @@ export class UIInterpOptions {
     private _container!: JQuery<HTMLElement>;
     private _id: string;
 
-    constructor(interpFunction?: InterpolatingFunctions) {
+    constructor(interpFunction?: InterpolatingFunctions, params?: any[]) {
         const selectedInterp = interpFunction ?? visualizer.session?.timeline.buffer.currentInterpolatingFunction;
         if (!selectedInterp) throw new EngineError('Interpolating Options', 'Trying to create interp options without an active session');
 
         this._id = `interp-opt-box-${RandomUtils.randomString(10)}`;
 
-        selectedInterp.options.forEach(opt => {
+        selectedInterp.options.forEach((opt, i) => {
             this._options.push({
                 opt: opt,
-                value: opt.default
+                value: params ? params[i] : opt.default
             });
         });
         
@@ -39,7 +39,6 @@ export class UIInterpOptions {
         const res = this._options.find(x => x.opt.name == name);
         if (!res) throw new EngineError('Interpolating Options', `Trying to set unknown interp config state '${name}', available: [${this._options.map(x => x.opt.name).join(', ')}]`);
         res.value = $(`#${id}`).val();
-        console.log(res);
     }
 
     private getHTMLSource() {

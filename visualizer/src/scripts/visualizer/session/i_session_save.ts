@@ -29,4 +29,7 @@ export interface ISessionSave {
     selected_satellite_categories: ISatellite[];
     ion_height: number;
     target_index_name: string;
+
+    interpolator_name: string;
+    interpolator_parameters: any[];
 }

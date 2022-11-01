@@ -70,11 +70,15 @@ export class MomentBufferingManager {
     }
 
     replaceInterpolator(fun: InterpolatingFunctions, params: any[]) {
+        this.replaceInterpolatorWithoutBuilding(fun, params);
+        this.setMomentByIndex(this.currentIndex);
+    }
+
+    replaceInterpolatorWithoutBuilding(fun: InterpolatingFunctions, params: any[]) {
         this.clearInterpolationCache();
         this._interpolatingFunction = fun;
         this._interpolatingParameters = params;
         this.setupInterpolator();
-        this.setMomentByIndex(this.currentIndex);
     }
 
     replaceMoments(moments: Moment[]) {
@@ -269,6 +273,10 @@ export class MomentBufferingManager {
 
     get currentInterpolatingFunction() {
         return this._interpolatingFunction;
+    }
+
+    get currentInterpolationParameters() {
+        return this._interpolatingParameters;
     }
 
 }

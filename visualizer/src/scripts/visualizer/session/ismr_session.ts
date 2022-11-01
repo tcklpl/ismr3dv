@@ -8,6 +8,7 @@ import { SatelliteEntity } from "../objects/satellite";
 import { StationEntity } from "../objects/station";
 import { ISessionConfig } from "./i_session.config";
 import { ISessionSave } from "./i_session_save";
+import { InterpolatingFunctions } from "./moments/interpolation/interpolating_functions";
 import { SessionTimeline } from "./session_timeline";
 import { StationColors } from "./station_colors";
 
@@ -230,7 +231,10 @@ export class ISMRSession {
 
             filters: visualizer.ui.dataFetcher.filterManager.serializedFilters,
             selected_satellite_categories: visualizer.ui.dataFetcher.satTypeManager.selection,
-            ion_height: visualizer.ui.dataFetcher.ionHeight
+            ion_height: visualizer.ui.dataFetcher.ionHeight,
+
+            interpolator_name: this.timeline.buffer.currentInterpolatingFunction.name,
+            interpolator_parameters: this.timeline.buffer.currentInterpolationParameters
         };
     }
 
@@ -240,7 +244,7 @@ export class ISMRSession {
 
     static constructFromSave(save: ISessionSave) {
 
-        const totalLoadSteps = 7;
+        const totalLoadSteps = 8;
         let step = 1;
         visualizer.events.dispatchEvent('load-session-started');
 
@@ -252,6 +256,12 @@ export class ISMRSession {
 
         visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Loading the station list');
         session.stations = save.station_list;
+
+        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Loading interpolator');
+        const interp = InterpolatingFunctions.getByName(save.interpolator_name);
+        if (interp) {
+            session.timeline.buffer.replaceInterpolatorWithoutBuilding(interp, save.interpolator_parameters ?? []);
+        }
 
         visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Toggling selected stations');
         save.selected_stations.forEach(s => session.toggleStationById(s));
@@ -273,6 +283,7 @@ export class ISMRSession {
         visualizer.events.dispatchEvent('load-session-finished');
 
         return session;
+
     }
 
 }
