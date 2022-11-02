@@ -106,14 +106,19 @@ export class UISession implements IUI {
             this.setLoadPanel($('#ns-load-station-session-loading'));
         });
 
-        visualizer.events.on('load-session-progress', (args: any[]) => {
-            const step = args[0] as number;
-            const total = args[1] as number;
-            const msg = args[2] as string;
-            const percentage = (step / total * 100);
+        visualizer.events.on('session-loading-moment-size', (size: number, ...rest) => {
+            $('#session-loading-progress-bar').attr('aria-valuenow', 0).css('width', `0%`);
+            $('#session-loading-message-percentage').html(`0%`);
+            $('#session-loading-message').html(`Preparing to load ${size} moments...`);
+        });
+
+        visualizer.events.on('session-loading-moment-loaded', (values: number[]) => {
+            const loaded = values[0];
+            const length = values[1];
+            const percentage = (loaded / length * 100);
             $('#session-loading-progress-bar').attr('aria-valuenow', percentage).css('width', `${percentage}%`);
             $('#session-loading-message-percentage').html(`${SizeNameUtils.truncateNumber(percentage, 1)}%`);
-            $('#session-loading-message').html(msg);
+            $('#session-loading-message').html(`Loading...`);
         });
     }
 
@@ -300,15 +305,17 @@ export class UISession implements IUI {
     }
 
     private loadSession(save: ISessionSave) {
-        const session = ISMRSession.constructFromSave(save);
+        visualizer.events.dispatchEvent('load-session-started');
+        const session = visualizer.sessionLoader.loadSession(save, () => {
+            session.timeline.bufferAvailableMoments();
+            visualizer.ui.timeline.updateForSelectedStations();
+            visualizer.ui.timeline.speed = save.moment_play_speed ?? 1000;
+            visualizer.ui.timeline.ippOpacity = save.ipp_opacity ?? 0.5;
+            visualizer.ui.timeline.updateCurrentMomentMarkerAndInfo();
+            this.showFinalPanel();
+            visualizer.events.dispatchEvent('session-is-present', true);
+            visualizer.events.dispatchEvent('stations-update');
+        });
         visualizer.session = session;
-        session.addIPP(save.raw_ipp);
-        visualizer.ui.timeline.updateForSelectedStations();
-        visualizer.ui.timeline.speed = save.moment_play_speed ?? 1000;
-        visualizer.ui.timeline.ippOpacity = save.ipp_opacity ?? 0.5;
-        visualizer.ui.timeline.updateCurrentMomentMarkerAndInfo();
-        this.showFinalPanel();
-        visualizer.events.dispatchEvent('session-is-present', true);
-        visualizer.events.dispatchEvent('stations-update');
     }
 }

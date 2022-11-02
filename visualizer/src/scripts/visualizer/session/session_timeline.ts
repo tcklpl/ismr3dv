@@ -16,36 +16,16 @@ export class SessionTimeline {
         this._momentBufferingManager = new MomentBufferingManager(currentIndex);
     }
 
-    private getTimeFromIPP(ipp: IIPPInfo) {
-        // time_utc comes as "2014-09-01 22:00:00" (UTC)
-        const regex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
-        const matches = regex.exec(ipp.time_utc);
-        if (!matches || matches.length < 7) {
-            console.warn(`BAD IPP TIME UTC: ${ipp.time_utc}`);
-            return -1;
-        }
-        return Date.UTC(parseInt(matches[1]), parseInt(matches[2]), parseInt(matches[3]), parseInt(matches[4]), parseInt(matches[5]), parseInt(matches[6]));
+    clearMoments() {
+        this._moments = [];
     }
 
-    setIPP(list: IIPPInfo[]) {
-        this._ippInfoList = list;
-        this._ippInfoList.forEach(ipp => {
-            const date = this.getTimeFromIPP(ipp);
-            let toInsert = this._ippByDate.get(Math.floor(date / 100000));
-            if (!toInsert) {
-                toInsert = [];
-                this._ippByDate.set(Math.floor(date / 100000), toInsert);
-            }
-            toInsert.push(ipp);
-            this._ippInfoList.push(ipp);
-            if (!this._coveredStations.includes(ipp.id))
-                this._coveredStations.push(ipp.id);
-        });
-        this._moments = [];
-        this._ippByDate.forEach((ippList, time) => {
-            this._moments.push(new Moment(time, ippList));
-        });
-        this._momentBufferingManager.replaceMoments([...this._moments]);
+    addMoment(m: Moment) {
+        this._moments.push(m);
+    }
+
+    bufferAvailableMoments() {
+        this._momentBufferingManager.replaceMoments(this._moments);
         visualizer.universeScene.ippSphere.currentTexture = this._momentBufferingManager.texture;
     }
 

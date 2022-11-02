@@ -3,7 +3,6 @@ import { MUtils } from "../engine/utils/math_utils";
 import { ISMRSession } from "../visualizer/session/ismr_session";
 import { DateUtils } from "../visualizer/utils/date_utils";
 import { IUI } from "./i_ui";
-import { MessageScreen } from "./message_screen";
 
 export class UITimeline implements IUI {
 
@@ -12,7 +11,6 @@ export class UITimeline implements IUI {
     private _noStationsPanel = $('#timeline-no-stations');
 
     private _needFetchPanel = $('#timeline-need-fetch');
-    private _fetchingPanel = $('#timeline-fetching');
 
     private _timelinePanel = $('#timeline-panel');
     private _timelineBarBg = $('#tl-bar-background');
@@ -263,7 +261,7 @@ export class UITimeline implements IUI {
             return;
         }
 
-        if (session.timeline.ippList.length == 0) {
+        if (session.timeline.currentMoments.length == 0) {
             this.setActivePanel(this._needFetchPanel);
             return;
         }

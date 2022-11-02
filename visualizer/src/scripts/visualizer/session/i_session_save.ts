@@ -19,7 +19,6 @@ export interface ISessionSave {
 
     station_list: IStationInfo[];
     selected_stations: number[];
-    raw_ipp: IIPPInfo[];
 
     current_moment: number;
     ipp_opacity: number;

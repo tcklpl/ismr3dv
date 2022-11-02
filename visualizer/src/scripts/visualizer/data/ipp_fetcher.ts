@@ -17,12 +17,16 @@ export class IPPFetcher {
             field: 's4'
         })
         .then(t => {
-            session.addIPP(t.map(ipp => {
+            const ipp = t.map(ipp => {
                 ipp.id = parseInt(`${ipp.id}`);
                 ipp.value = parseFloat(`${ipp.value}`);
                 return ipp;
-            }));
-            visualizer.events.dispatchEvent('new-ipp-data');
+            });
+
+            visualizer.sessionLoader.constructIPPForCurrentSession(ipp, () => {
+                session.timeline.bufferAvailableMoments();
+                visualizer.events.dispatchEvent('new-ipp-data');
+            });
         })
         .catch(err => {
             new MessageScreen('Error', 'There was an error while fetching the requested data, does it exist? is your connection ok?');

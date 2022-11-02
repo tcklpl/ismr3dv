@@ -20,6 +20,7 @@ export class ISMRSession {
     private _endDate: Date;
 
     private _controller = visualizer.idb.sessionController;
+    private _ippController = visualizer.idb.sessionIPPController;
 
     private _config: ISessionConfig = {
         save_on_browser: true,
@@ -120,7 +121,16 @@ export class ISMRSession {
 
         this._controller.put(this.asSerializable)
         .then(() => {
-            new CustomAlert('success', 'Session saved!', 1);
+            this._ippController.put({
+                name: this._name,
+                raw_ipp: this.timeline.currentMoments.flatMap(m => m.data)
+            })
+            .then(() => {
+                new CustomAlert('success', 'Session saved!', 1);
+            })
+            .catch(() => {
+                new CustomAlert('danger', 'Failed to save the session', 5);
+            });    
         })
         .catch(() => {
             new CustomAlert('danger', 'Failed to save the session', 5);
@@ -178,11 +188,6 @@ export class ISMRSession {
         visualizer.events.dispatchEvent('station-selection-update');
     }
 
-    addIPP(ipp: IIPPInfo[]) {
-        this._timeline.setIPP(ipp);
-        this.instantiateSatellitesAs3dObjects();
-    }
-
     get name() {
         return this._name;
     }
@@ -223,7 +228,6 @@ export class ISMRSession {
 
             station_list: this._stationList,
             selected_stations: this._selectedStations.map(x => x.station_id),
-            raw_ipp: this._timeline.ippList || [],
 
             current_moment: this.timeline.buffer.currentIndex,
             ipp_opacity: visualizer.universeScene.ippSphere.opacity,
@@ -233,8 +237,8 @@ export class ISMRSession {
             selected_satellite_categories: visualizer.ui.dataFetcher.satTypeManager.selection,
             ion_height: visualizer.ui.dataFetcher.ionHeight,
 
-            interpolator_name: this.timeline.buffer.currentInterpolatingFunction.name,
-            interpolator_parameters: this.timeline.buffer.currentInterpolationParameters
+            interpolator_name: this.timeline.buffer.interpolator.function.name,
+            interpolator_parameters: this.timeline.buffer.interpolator.parameters
         };
     }
 
@@ -246,27 +250,17 @@ export class ISMRSession {
 
         const totalLoadSteps = 8;
         let step = 1;
-        visualizer.events.dispatchEvent('load-session-started');
 
-        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Starting to load');
         const session = new ISMRSession(save.start_date, save.end_date, save.name, save.creation_date, save.current_moment);
-
-        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Loading configuration');
         session._config = save.config;
-
-        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Loading the station list');
         session.stations = save.station_list;
-
-        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Loading interpolator');
         const interp = InterpolatingFunctions.getByName(save.interpolator_name);
         if (interp) {
-            session.timeline.buffer.replaceInterpolatorWithoutBuilding(interp, save.interpolator_parameters ?? []);
+            session.timeline.buffer.interpolator.replaceInterpolatorOptions(interp, save.interpolator_parameters ?? [], session.timeline.buffer.bufferSize);
         }
 
-        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Toggling selected stations');
         save.selected_stations.forEach(s => session.toggleStationById(s));
 
-        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Loading filters and other selected info');
         if (save.filters) visualizer.ui.dataFetcher.filterManager.constructFiltersFromSave(save.filters);
         if (save.selected_satellite_categories) {
             visualizer.ui.dataFetcher.satTypeManager.selection.push(...save.selected_satellite_categories)
@@ -274,13 +268,11 @@ export class ISMRSession {
         };
         if (save.ion_height) visualizer.ui.dataFetcher.ionHeight = save.ion_height;
 
-        visualizer.events.dispatchEvent('load-session-progress', step++, totalLoadSteps, 'Recovering the camera position');
         if (save.camera.type == "main") {
             (visualizer.cameraManager.activeCamera as MainCamera).setData(save.camera);
         }
 
         session.instantiateSatellitesAs3dObjects();
-        visualizer.events.dispatchEvent('load-session-finished');
 
         return session;
 

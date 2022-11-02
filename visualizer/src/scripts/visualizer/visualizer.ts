@@ -21,6 +21,7 @@ import { ISMRProviders } from "./providers/providers";
 import { ISMRSession } from "./session/ismr_session";
 import { UniverseScene } from "./universe_scene";
 import { IGRFFetcher } from "./igrf/igrf_fetcher";
+import { SessionLoader } from "./session/loading/session_loader";
 
 export class Visualizer {
 
@@ -34,6 +35,7 @@ export class Visualizer {
     private _eventHandler = new EventHandler();
     private _ippFetcher = new IPPFetcher();
     private _igrfFetcher: IGRFFetcher;
+    private _sessionLoader = new SessionLoader();
 
     // Managers
     private _materialManager = new MaterialManager();
@@ -207,6 +209,10 @@ export class Visualizer {
 
     get ippFetcher() {
         return this._ippFetcher;
+    }
+
+    get sessionLoader() {
+        return this._sessionLoader;
     }
 
 }
