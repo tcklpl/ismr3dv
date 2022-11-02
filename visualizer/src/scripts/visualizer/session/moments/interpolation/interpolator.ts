@@ -41,6 +41,12 @@ export class MomentInterpolator {
         data.forEach(d => this._worker.postMessage(d));
     }
 
+    queueDataForInterpolation(data: IMomentInterpEntry) {
+        this.state = 'working';
+        this._workLoad++;
+        this._worker.postMessage(data);
+    }
+
     private set state(s: MIStates) {
         this._status = s;
         this._stateChangeListeners.forEach(l => l(s));

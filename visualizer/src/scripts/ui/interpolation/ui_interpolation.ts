@@ -22,14 +22,14 @@ export class UIInterpolation implements IUI {
 
         visualizer.events.on('session-is-present', (status: boolean, ...rest) => {
             this.updateInfoBoxVisibility(status);
-            this._newInterpFuncObj = (visualizer.session as ISMRSession).timeline.buffer.currentInterpolatingFunction;
+            this._newInterpFuncObj = (visualizer.session as ISMRSession).timeline.buffer.interpolator.function;
             this.updateUI();
         });
 
         this._interpolatorSelect.on('change', () => {
             const find = InterpolatingFunctions.getByName(this._interpolatorSelect.val() as string);
             if (find) {
-                if (find.name !== (this._newInterpFuncObj?.name ?? visualizer.session?.timeline.buffer.currentInterpolatingFunction.name)) {
+                if (find.name !== (this._newInterpFuncObj?.name ?? visualizer.session?.timeline.buffer.interpolator.function.name)) {
                     this._newInterpFuncObj = find;
                     this.updateUI();
                 }
@@ -46,11 +46,11 @@ export class UIInterpolation implements IUI {
 
     updateUI() {
         console.log(this._newInterpFuncObj?.name);
-        $('#interp-selector option').removeAttr('selected').filter(`[value="${this._newInterpFuncObj?.name ?? visualizer.session?.timeline.buffer.currentInterpolatingFunction.name}"]`).prop('selected', true);
+        $('#interp-selector option').removeAttr('selected').filter(`[value="${this._newInterpFuncObj?.name ?? visualizer.session?.timeline.buffer.interpolator.function.name}"]`).prop('selected', true);
         if (this._interpOptObj) {
             this._interpOptObj.purge();
         }
-        const params = this._newInterpFuncObj?.name == visualizer.session?.timeline.buffer.currentInterpolatingFunction.name ? visualizer.session?.timeline.buffer.currentInterpolationParameters :
+        const params = this._newInterpFuncObj?.name == visualizer.session?.timeline.buffer.interpolator.function.name ? visualizer.session?.timeline.buffer.interpolator.parameters :
                        this._newInterpFuncObj?.options.map(x => x.default) ?? [];
 
         this._interpOptObj = new UIInterpOptions(this._newInterpFuncObj, params);
@@ -58,7 +58,7 @@ export class UIInterpolation implements IUI {
     }
 
     save() {
-        const func = this._newInterpFuncObj ?? (visualizer.session as ISMRSession).timeline.buffer.currentInterpolatingFunction;
+        const func = this._newInterpFuncObj ?? (visualizer.session as ISMRSession).timeline.buffer.interpolator.function;
         visualizer.session?.timeline.buffer.replaceInterpolator(func, this._interpOptObj?.options.map(opt => opt.value) ?? []);
     }
 

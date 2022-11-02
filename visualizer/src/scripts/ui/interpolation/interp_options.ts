@@ -16,7 +16,7 @@ export class UIInterpOptions {
     private _id: string;
 
     constructor(interpFunction?: InterpolatingFunctions, params?: any[]) {
-        const selectedInterp = interpFunction ?? visualizer.session?.timeline.buffer.currentInterpolatingFunction;
+        const selectedInterp = interpFunction ?? visualizer.session?.timeline.buffer.interpolator.function;
         if (!selectedInterp) throw new EngineError('Interpolating Options', 'Trying to create interp options without an active session');
 
         this._id = `interp-opt-box-${RandomUtils.randomString(10)}`;

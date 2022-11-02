@@ -3,8 +3,9 @@ import { MomentColorer } from "./colorers/moment_buffering_colorer";
 import { Vec2 } from "../../../engine/data_formats/vec/vec2";
 import { TextureUtils } from "../../../engine/utils/texture_utils";
 import { IMomentInterpEntry } from "./interpolation/i_moment_queue_entries";
-import { MIStates, MomentInterpolator } from "./interpolation/interpolator";
+import { MIStates } from "./interpolation/interpolator";
 import { InterpolatingFunctions } from "./interpolation/interpolating_functions";
+import { InterpolatorManager } from "./interpolator_manager";
 
 export type MomentFreeingLocation = 'before' | 'after';
 
@@ -21,9 +22,7 @@ export class MomentBufferingManager {
     private _bufferSize = new Vec2(500, 250);
     private _interpColorProvider = new MomentColorer(this._bufferSize);
 
-    private _interpolator!: MomentInterpolator;
-    private _interpolatingFunction: InterpolatingFunctions = InterpolatingFunctions.DEFAULT;
-    private _interpolatingParameters: any[] = InterpolatingFunctions.DEFAULT.options.map(opt => opt.default);
+    private _interpolatorManager = new InterpolatorManager(m => this.onInterpolatorMessage(m), n => this.onInterpolatorError(n), o => this.onInterpolatorStateChange(o));
 
     private _momentWaitingForColor?: number;
     private _momentsToProcess = 0;
@@ -34,26 +33,7 @@ export class MomentBufferingManager {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 
-        this.setupInterpolator();
-    }
-
-    private killInterpolatorIfPresent() {
-        if (!!this._interpolator) {
-            this._interpolator.terminate();
-        }
-    }
-
-    setupInterpolator() {
-        this.killInterpolatorIfPresent();
-        this._interpolator = new MomentInterpolator(this._interpolatingFunction.func, this._bufferSize, ...this._interpolatingParameters);
-        this._interpolator.onMessage = m => this.onInterpolatorMessage(m);
-        this._interpolator.onError = e => this.onInterpolatorError(e);
-        this._interpolator.onStateChange(s => this.onInterpolatorStateChange(s));
-    }
-
-    private resetInterpolator() {
-        this._interpolator.terminate();
-        this.setupInterpolator();
+        this._interpolatorManager.setup(this._bufferSize);
     }
 
     clearInterpolationCache() {
@@ -70,21 +50,15 @@ export class MomentBufferingManager {
     }
 
     replaceInterpolator(fun: InterpolatingFunctions, params: any[]) {
-        this.replaceInterpolatorWithoutBuilding(fun, params);
+        this._interpolatorManager.replaceInterpolatorOptions(fun, params, this._bufferSize);
         this.setMomentByIndex(this.currentIndex);
-    }
-
-    replaceInterpolatorWithoutBuilding(fun: InterpolatingFunctions, params: any[]) {
-        this.clearInterpolationCache();
-        this._interpolatingFunction = fun;
-        this._interpolatingParameters = params;
-        this.setupInterpolator();
     }
 
     replaceMoments(moments: Moment[]) {
         // kill and replace the interpolator if it's running
-        if (this._interpolator.getStatus() != 'idle') {
-            this.resetInterpolator();
+        if (this._interpolatorManager.state != 'idle') {
+            this._interpolatorManager.killAll();
+            this._interpolatorManager.setup(this._bufferSize);
         }
         this.clearInterpolationCache();
         this._moments = moments;
@@ -184,8 +158,9 @@ export class MomentBufferingManager {
         // in a completly different area).
         if (!this._bufferBounds.containsAsMinMax(index) && initialized) {
             // If the interpolator is still running we're gonna kill it
-            if (this._interpolator.getStatus() != 'idle') {
-                this.resetInterpolator();
+            if (this._interpolatorManager.state != 'idle') {
+                this._interpolatorManager.killAll();
+                this._interpolatorManager.setup(this._bufferSize);
             }
             // If the colorer is still running (most probable) we're gonna clear it's queue
             if (this._interpColorProvider.status == 'working') {
@@ -251,7 +226,7 @@ export class MomentBufferingManager {
             });
         }
         this._momentsToProcess = (toBufferEnd - toBufferStart);
-        this._interpolator.interpolateData(dataToInterpolate);
+        this._interpolatorManager.distributeInterpolationJob(dataToInterpolate);
 
         this._currentIndex = index;
         this._bufferBounds.x = newLower;
@@ -271,12 +246,12 @@ export class MomentBufferingManager {
         return this._currentIndex;
     }
 
-    get currentInterpolatingFunction() {
-        return this._interpolatingFunction;
+    get interpolator() {
+        return this._interpolatorManager;
     }
 
-    get currentInterpolationParameters() {
-        return this._interpolatingParameters;
+    get bufferSize() {
+        return this._bufferSize;
     }
 
 }
