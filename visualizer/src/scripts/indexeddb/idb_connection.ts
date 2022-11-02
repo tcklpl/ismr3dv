@@ -3,7 +3,7 @@ import { MessageScreen } from "../ui/message_screen";
 export class IDBConnection {
 
     private _dbName = "ismr";
-    private _dbVersion = 3;
+    private _dbVersion = 4;
 
     private _db!: IDBDatabase;
     private _avaialble = false;
@@ -46,6 +46,9 @@ export class IDBConnection {
         }
         if (oldVersion < 3) {
             this._db.createObjectStore('igrf', {keyPath: 'version'});
+        }
+        if (oldVersion < 4) {
+            this._db.createObjectStore('session-ipp', {keyPath: 'name'});
         }
     }
 

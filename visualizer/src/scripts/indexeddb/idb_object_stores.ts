@@ -4,6 +4,7 @@ export class IDBObjStore {
     public static SESSION = new IDBObjStore('sessions', 'name');
     public static CONFIG = new IDBObjStore('config', 'key');
     public static IGRF = new IDBObjStore('igrf', 'version');
+    public static SESSION_IPP = new IDBObjStore('session-ipp', 'name');
 
     private _name: string;
     private _key: string;

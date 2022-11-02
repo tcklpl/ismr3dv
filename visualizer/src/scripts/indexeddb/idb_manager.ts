@@ -1,6 +1,7 @@
 import { IDBConfigController } from "./controllers/idb_config_controller";
 import { IDBIGRFController } from "./controllers/idb_igrf_controller";
 import { IDBSessionController } from "./controllers/idb_session_controller";
+import { IDBSessionIPPController } from "./controllers/idb_session_ipp";
 import { IDBConnection } from "./idb_connection";
 
 export class IDBManager {
@@ -10,6 +11,7 @@ export class IDBManager {
     private _idbSessionController: IDBSessionController;
     private _idbConfigController: IDBConfigController;
     private _idbIGRFController: IDBIGRFController;
+    private _idbSessionIPPController: IDBSessionIPPController;
 
     private _onReady: (() => void)[] = [];
 
@@ -19,6 +21,7 @@ export class IDBManager {
         this._idbSessionController = new IDBSessionController(this._idbConnection);
         this._idbConfigController = new IDBConfigController(this._idbConnection);
         this._idbIGRFController = new IDBIGRFController(this._idbConnection);
+        this._idbSessionIPPController = new IDBSessionIPPController(this._idbConnection);
     }
 
     onReady(f: () => void) {
@@ -44,6 +47,10 @@ export class IDBManager {
 
     get igrfController() {
         return this._idbIGRFController;
+    }
+
+    get sessionIPPController() {
+        return this._idbSessionIPPController;
     }
 
 }
