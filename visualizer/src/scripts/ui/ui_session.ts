@@ -100,6 +100,8 @@ export class UISession implements IUI {
             if (visualizer.session) visualizer.session.config.auto_save_interval_minutes = this._finishAutosaveInterval.val() as number;
         });
 
+        this._dateStart.on('change', () => this._dateEnd.prop('min', this._dateStart.val()));
+
         this._loadGoBackBtn.on('click', () => this.resetUI());
 
         visualizer.events.on('load-session-started', () => {
@@ -141,6 +143,9 @@ export class UISession implements IUI {
             this._finishAutosaveInterval.prop('disabled', true);
             this._finishNoIDBLabel.removeClass('d-none').addClass('row');
         }
+
+        this._dateStart.prop('max', new Date().toISOString().replace('T', ' ').replace('Z', ''));
+        this._dateEnd.prop('max', new Date().toISOString().replace('T', ' ').replace('Z', ''));
     }
     
     private cancel() {
@@ -180,6 +185,8 @@ export class UISession implements IUI {
         const startDate = new Date(this._dateStart.val() as string);
         const endDate = new Date(this._dateEnd.val() as string);
         if (startDate.getTime() > endDate.getTime()) return false;
+        const now = new Date().getTime();
+        if (startDate.getTime() > now || endDate.getTime() > now) return false;
         return [ startDate, endDate ];
     }
 

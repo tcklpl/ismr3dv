@@ -23,6 +23,8 @@ export default {
             dateBegin = new Date(dateBeginStr);
             dateEnd = new Date(dateEndStr);
 
+            if (dateBegin.getTime() >= dateEnd.getTime()) throw new Error();
+
             dateBeginStr = DateUtils.formatToLocalISOLike(dateBegin);
             dateEndStr = DateUtils.formatToLocalISOLike(dateEnd);
         } catch (e) {
