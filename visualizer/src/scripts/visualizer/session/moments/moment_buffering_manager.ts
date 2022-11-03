@@ -51,6 +51,7 @@ export class MomentBufferingManager {
 
     replaceInterpolator(fun: InterpolatingFunctions, params: any[]) {
         this._interpolatorManager.replaceInterpolatorOptions(fun, params, this._bufferSize);
+        this.clearInterpolationCache();
         this.setMomentByIndex(this.currentIndex);
     }
 

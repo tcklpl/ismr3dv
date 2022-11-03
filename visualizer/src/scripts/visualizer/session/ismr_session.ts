@@ -177,7 +177,7 @@ export class ISMRSession {
         this._selectedStations = [];
         this._stationList?.forEach(s => {
             const instance = this._instantiatedStations.find(x => x.stationInfo == s);
-            if (!instance) throw `Invalid isntance station id ${s.station_id}`;
+            if (!instance) throw `Invalid instance station id ${s.station_id}`;
 
             this._selectedStations.push(s);
 
@@ -248,9 +248,6 @@ export class ISMRSession {
 
     static constructFromSave(save: ISessionSave) {
 
-        const totalLoadSteps = 8;
-        let step = 1;
-
         const session = new ISMRSession(save.start_date, save.end_date, save.name, save.creation_date, save.current_moment);
         session._config = save.config;
         session.stations = save.station_list;
@@ -271,8 +268,6 @@ export class ISMRSession {
         if (save.camera.type == "main") {
             (visualizer.cameraManager.activeCamera as MainCamera).setData(save.camera);
         }
-
-        session.instantiateSatellitesAs3dObjects();
 
         return session;
 
