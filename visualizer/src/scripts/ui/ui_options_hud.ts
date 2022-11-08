@@ -36,10 +36,10 @@ export class UIOptionsHud implements IUI {
     }
 
     private setSessionRelatedButtonsEnabled(state: boolean) {
-        this._saveSessionBtn.prop('disabled', !state || !visualizer.idb.isAvailable);
-        this._exportSessionBtn.prop('disabled', !state);
-        this._timelineBtn.prop('disabled', !state);
-        this._dfBtn.prop('disabled', !state);
+        this._saveSessionBtn.prop('disabled', !state || !visualizer.idb.isAvailable).toggleClass('d-none', state);
+        this._exportSessionBtn.prop('disabled', !state).toggleClass('d-none', state);
+        this._timelineBtn.prop('disabled', !state).toggleClass('d-none', state);
+        this._dfBtn.prop('disabled', !state).toggleClass('d-none', state);
     }
 
     private saveSession() {
