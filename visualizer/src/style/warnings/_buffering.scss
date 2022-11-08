@@ -1,0 +1,20 @@
+
+#buffering-warning {
+    height: 2.5em;
+    width: 100%;
+    position: fixed;
+    z-index: 2;
+    background: repeating-linear-gradient(
+        to right,
+        #f6ba52,
+        #f6ba52 10px,
+        #ffd180 10px,
+        #ffd180 20px
+    );
+}
+
+#buffering-warning-middle {
+    background-color: #ffd180;
+    width: 70%;
+    font-size: 1.6em;
+}
