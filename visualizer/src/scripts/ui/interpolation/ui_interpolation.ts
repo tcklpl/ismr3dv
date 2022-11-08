@@ -71,7 +71,6 @@ export class UIInterpolation implements IUI {
     }
 
     updateUI() {
-        console.log(this._newInterpFuncObj?.name);
         $('#interp-selector option').removeAttr('selected').filter(`[value="${this._newInterpFuncObj?.name ?? visualizer.session?.timeline.buffer.interpolator.function.name}"]`).prop('selected', true);
         if (this._interpOptObj) {
             this._interpOptObj.purge();
@@ -86,6 +85,13 @@ export class UIInterpolation implements IUI {
 
         $('#colorer-preview').removeClass().addClass(`${previewClass}-opt`);
         this._infoBoxGradient.removeClass().addClass(`${previewClass}`);
+
+        const bounds = (visualizer.session as ISMRSession).timeline.buffer.colorer.bounds;
+        this._interpInfoboxMin.html(`${bounds.x.toFixed(2)}`);
+        this._interpInfoboxMax.html(`${bounds.y.toFixed(2)}`);
+        this._colorerMin.val(bounds.x);
+        this._colorerMax.val(bounds.y);
+        $('#colorer-selector option').removeAttr('selected').filter(`[value="${this._newColorerObj?.name ?? visualizer.session?.timeline.buffer.colorer.selectedProgram.name}"]`).prop('selected', true);
     }
 
     save() {
@@ -95,9 +101,9 @@ export class UIInterpolation implements IUI {
         const colorerProgram = this._newColorerObj ?? (visualizer.session as ISMRSession).timeline.buffer.colorer.selectedProgram;
         const min = parseFloat(this._colorerMin.val() as string);
         const max = parseFloat(this._colorerMax.val() as string);
-        this._interpInfoboxMin.html(`${min.toFixed(2)}`);
-        this._interpInfoboxMax.html(`${max.toFixed(2)}`);
         visualizer.session?.timeline.buffer.replaceColorer(colorerProgram, min, max);
+
+        this.updateUI();
     }
 
     private updateInfoBoxVisibility(session: boolean) {

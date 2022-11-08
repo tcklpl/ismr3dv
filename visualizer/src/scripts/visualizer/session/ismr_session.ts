@@ -8,6 +8,7 @@ import { SatelliteEntity } from "../objects/satellite";
 import { StationEntity } from "../objects/station";
 import { ISessionConfig } from "./i_session.config";
 import { ISessionSave } from "./i_session_save";
+import { ColorPrograms } from "./moments/colorers/color_programs/color_programs";
 import { InterpolatingFunctions } from "./moments/interpolation/interpolating_functions";
 import { SessionTimeline } from "./session_timeline";
 import { StationColors } from "./station_colors";
@@ -238,7 +239,11 @@ export class ISMRSession {
             ion_height: visualizer.ui.dataFetcher.ionHeight,
 
             interpolator_name: this.timeline.buffer.interpolator.function.name,
-            interpolator_parameters: this.timeline.buffer.interpolator.parameters
+            interpolator_parameters: this.timeline.buffer.interpolator.parameters,
+
+            colorer_name: this.timeline.buffer.colorer.selectedProgram.name,
+            colorer_min: this.timeline.buffer.colorer.bounds.x,
+            colorer_max: this.timeline.buffer.colorer.bounds.y
         };
     }
 
@@ -251,9 +256,18 @@ export class ISMRSession {
         const session = new ISMRSession(save.start_date, save.end_date, save.name, save.creation_date, save.current_moment);
         session._config = save.config;
         session.stations = save.station_list;
+
         const interp = InterpolatingFunctions.getByName(save.interpolator_name);
         if (interp) {
             session.timeline.buffer.interpolator.replaceInterpolatorOptions(interp, save.interpolator_parameters ?? [], session.timeline.buffer.bufferSize);
+        }
+
+        const colorer = ColorPrograms.getByName(save.colorer_name);
+        if (colorer) {
+            const colorerManager = session.timeline.buffer.colorer;
+            colorerManager.bounds.x = save.colorer_min ?? 0;
+            colorerManager.bounds.y = save.colorer_max ?? 1;
+            colorerManager.selectedProgram = colorer;
         }
 
         save.selected_stations.forEach(s => session.toggleStationById(s));

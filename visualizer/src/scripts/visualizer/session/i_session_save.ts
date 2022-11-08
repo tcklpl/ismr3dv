@@ -31,4 +31,8 @@ export interface ISessionSave {
 
     interpolator_name: string;
     interpolator_parameters: any[];
+
+    colorer_name: string;
+    colorer_min: number;
+    colorer_max: number;
 }
