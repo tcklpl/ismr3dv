@@ -25,6 +25,7 @@ export class IPPFetcher {
 
             visualizer.sessionLoader.constructIPPForCurrentSession(ipp, () => {
                 session.timeline.bufferAvailableMoments();
+                session.instantiateSatellitesAs3dObjects();
                 visualizer.events.dispatchEvent('new-ipp-data');
             });
         })
