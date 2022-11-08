@@ -7,6 +7,12 @@ in vec2 vtf_texCoords;
 out vec4 out_color;
 
 uniform sampler2D u_data;
+uniform float u_min;
+uniform float u_max;
+
+float normalization(float val) {
+    return (val - u_min) / (u_max - u_min);
+}
 
 vec3 hsvToRgb(float h, float s, float v) {
     float h2 = h / 60.0;
@@ -33,8 +39,10 @@ vec3 hsvToRgb(float h, float s, float v) {
 void main() {
 
     float data = texture(u_data, vtf_texCoords).r;
+    float normalized = normalization(data);
+
     // The values will stop at 270 because I don't want purple
-    float valDegrees = 270.0 - (data * 270.0);
+    float valDegrees = 270.0 - (normalized * 270.0);
 
     out_color = vec4(hsvToRgb(valDegrees, 1.0, 1.0), data > 0.0 ? 1.0 : 0.0);
 }

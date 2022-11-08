@@ -319,6 +319,7 @@ export class UISession implements IUI {
             visualizer.ui.timeline.speed = save.moment_play_speed ?? 1000;
             visualizer.ui.timeline.ippOpacity = save.ipp_opacity ?? 0.5;
             visualizer.ui.timeline.updateCurrentMomentMarkerAndInfo();
+            visualizer.session?.instantiateSatellitesAs3dObjects();
             this.showFinalPanel();
             visualizer.events.dispatchEvent('session-is-present', true);
             visualizer.events.dispatchEvent('stations-update');

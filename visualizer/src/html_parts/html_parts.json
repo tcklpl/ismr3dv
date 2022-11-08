@@ -116,6 +116,10 @@
         {
             "url": "interpolation/interp_config_precision.html",
             "append_to": "#interp-modal-body-content"
+        },
+        {
+            "url": "warnings/buffering.html",
+            "append_to": "body"
         }
     ]
 }

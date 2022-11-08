@@ -2,3 +2,15 @@
 .gradient-rainbow {
     background-image: linear-gradient(to bottom, red,orange,yellow,green,blue,indigo);
 }
+
+.gradient-rainbow-opt {
+    background: linear-gradient(to left, red,orange,yellow,green,blue,indigo);
+}
+
+.gradient-g2r {
+    background-image: linear-gradient(to top, lime,red);
+}
+
+.gradient-g2r-opt {
+    background: linear-gradient(to right, lime,red);
+}

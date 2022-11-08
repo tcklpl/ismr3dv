@@ -22,6 +22,7 @@ import { ISMRSession } from "./session/ismr_session";
 import { UniverseScene } from "./universe_scene";
 import { IGRFFetcher } from "./igrf/igrf_fetcher";
 import { SessionLoader } from "./session/loading/session_loader";
+import { ColorPrograms } from "./session/moments/colorers/color_programs/color_programs";
 
 export class Visualizer {
 
@@ -103,6 +104,7 @@ export class Visualizer {
         this._cameraManager.setActiveCamera(this._universeScene.mainCamera);
         this._sceneManager.active = this._universeScene;
 
+        ColorPrograms.build();
         this.ui.registerEvents();
 
         this._igrfFetcher.loadModel();

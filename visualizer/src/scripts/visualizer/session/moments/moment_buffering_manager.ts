@@ -6,6 +6,7 @@ import { IMomentInterpEntry } from "./interpolation/i_moment_queue_entries";
 import { MIStates } from "./interpolation/interpolator";
 import { InterpolatingFunctions } from "./interpolation/interpolating_functions";
 import { InterpolatorManager } from "./interpolator_manager";
+import { MomentColorProgram } from "./colorers/color_programs/moment_color_program";
 
 export type MomentFreeingLocation = 'before' | 'after';
 
@@ -49,11 +50,18 @@ export class MomentBufferingManager {
         visualizer.events.dispatchEvent('moment-interpolation-cache-cleared');
     }
 
-    replaceInterpolator(fun: InterpolatingFunctions, params: any[]) {
+    replaceInterpolator(fun: InterpolatingFunctions, params: any[], rebuild = true) {
         this._interpolatorManager.replaceInterpolatorOptions(fun, params, this._bufferSize);
         this.clearInterpolationCache();
-        this.setMomentByIndex(this.currentIndex);
+        if (rebuild) this.setMomentByIndex(this.currentIndex);
     }
+
+    replaceColorer(program: MomentColorProgram, min: number, max: number, rebuild = true) {
+        this._interpColorProvider.bounds.x = min;
+        this._interpColorProvider.bounds.y = max;
+        this._interpColorProvider.selectedProgram = program;
+        if (rebuild) this.setMomentByIndex(this.currentIndex);
+    } 
 
     replaceMoments(moments: Moment[]) {
         // kill and replace the interpolator if it's running
@@ -249,6 +257,10 @@ export class MomentBufferingManager {
 
     get interpolator() {
         return this._interpolatorManager;
+    }
+
+    get colorer() {
+        return this._interpColorProvider;
     }
 
     get bufferSize() {

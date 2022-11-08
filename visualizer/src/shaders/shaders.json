@@ -36,6 +36,11 @@
             "fragment": "ipp/coloring/rainbow.frag"
         },
         {
+            "name": "ipp_color_g2r",
+            "vertex": "common/basic_quad.vert",
+            "fragment": "ipp/coloring/green_to_red.frag"
+        },
+        {
             "name": "ipp_visualizer_color",
             "vertex": "common/basic_matrices.vert",
             "fragment": "ipp/ipp_visualizer_color.frag"

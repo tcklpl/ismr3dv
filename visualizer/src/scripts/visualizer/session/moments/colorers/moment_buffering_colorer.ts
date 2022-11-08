@@ -3,6 +3,8 @@ import { IFrameListener } from "../../../../engine/traits/i_frame_listener";
 import { BufferUtils } from "../../../../engine/utils/buffer_utils";
 import { TextureUtils } from "../../../../engine/utils/texture_utils";
 import { IMomentColorQueueEntry } from "../interpolation/i_moment_queue_entries";
+import { ColorPrograms } from "./color_programs/color_programs";
+import { MomentColorProgram } from "./color_programs/moment_color_program";
 import { MomentColorRainbow } from "./color_programs/rainbow";
 
 export type MomentColorerStatus = 'idle' | 'working';
@@ -14,10 +16,11 @@ export class MomentColorer implements IFrameListener {
     private _texOut: WebGLTexture;
     
     private _bufferSize: Vec2;
-    private _selectedColorProgram = new MomentColorRainbow();
+    private _selectedColorProgram: MomentColorProgram = ColorPrograms.DEFAULT;
 
     private _queue: IMomentColorQueueEntry[] = [];
     private _status: MomentColorerStatus = 'idle';
+    bounds = new Vec2(0, 1);
 
     constructor(bufferSize: Vec2) {
         this._bufferSize = bufferSize;
@@ -38,7 +41,7 @@ export class MomentColorer implements IFrameListener {
         // get the first element on the queue
         const entry = this._queue.shift() as IMomentColorQueueEntry;
 
-        const out = this._selectedColorProgram.colorBuffer(entry.buffer, this._fb, this._texIn, this._bufferSize);
+        const out = this._selectedColorProgram.colorBuffer(entry.buffer, this._fb, this._texIn, this._bufferSize, this.bounds);
 
         // notify the entry that it's interpolation is complete
         entry.onColorCompletion(out);
@@ -59,5 +62,13 @@ export class MomentColorer implements IFrameListener {
     get status() {
         return this._status;
     }
+
+    get selectedProgram() {
+        return this._selectedColorProgram;
+    }
+
+    set selectedProgram(cp: MomentColorProgram) {
+        this._selectedColorProgram = cp;
+    } 
 
 }
