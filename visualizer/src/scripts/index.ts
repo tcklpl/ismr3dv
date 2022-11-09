@@ -3,7 +3,7 @@ import { Visualizer } from "./visualizer/visualizer";
 
 // First acquire the WebGL2 Rendering Context
 const canvas = $('#ismr3dcanvas');
-const glCtx = (canvas.get(0) as HTMLCanvasElement).getContext('webgl2');
+const glCtx = (canvas.get(0) as HTMLCanvasElement).getContext('webgl2', {stencil: true});
 if (!glCtx) throw new EngineError('Engine', `Failed to acquire WebGL2 context`);
 globalThis.gl = glCtx;
 

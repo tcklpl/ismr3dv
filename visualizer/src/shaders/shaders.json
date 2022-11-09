@@ -64,6 +64,11 @@
             "name": "satellite",
             "vertex": "satellite/satellite.vert",
             "fragment": "satellite/satellite.frag"
+        },
+        {
+            "name": "outline",
+            "vertex": "common/basic_matrices.vert",
+            "fragment": "outline/outline.frag"
         }
     ]
 }

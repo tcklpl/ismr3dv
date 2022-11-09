@@ -13,6 +13,7 @@ export abstract class RenderableObject extends MatrixCompliant3DTransformative i
     pickable = false;
     transparent = false;
     visible = true;
+    outline = false;
 
     protected _mesh: Mesh;
     protected _material: Material;
@@ -45,6 +46,12 @@ export abstract class RenderableObject extends MatrixCompliant3DTransformative i
 
         this.modelMatrix.bindUniform(gl, this._pickingModelMat4Uniform);
         (this.pickable ? this._idVec4 : this._zeroVec4).bindUniform(gl, idUniform);
+        uniformConfiguration();
+        this._mesh.draw();
+    }
+
+    renderOutline(modelUniform: WebGLUniformLocation, uniformConfiguration: () => void) {
+        this.outlineMatrix.bindUniform(gl, modelUniform);
         uniformConfiguration();
         this._mesh.draw();
     }

@@ -20,6 +20,8 @@ export class Basic3DTransformative implements IPositionable, IRotatable, IScalab
     private _usingLookAtMatrix: boolean = false;
 
     private _modelMatrix: Mat4 = Mat4.identity();
+    private _outlineScalar = 1.1;
+    private _outlineMatrix: Mat4 = Mat4.scaling(this._outlineScalar, this._outlineScalar, this._outlineScalar);
 
     private buildModelMatrix() {
         this._modelMatrix = Mat4.identity();
@@ -30,10 +32,13 @@ export class Basic3DTransformative implements IPositionable, IRotatable, IScalab
             this._modelMatrix.multiplyBy(this._rotationMatrix);
         }
         this._modelMatrix.multiplyBy(this._scaleMatrix);
+
+        // outline 1% bigger than the model
+        this._outlineMatrix = this._modelMatrix.duplicate().multiplyBy(Mat4.scaling(this._outlineScalar, this._outlineScalar, this._outlineScalar));
         
         if (this._parent) {
-            const model = this._parent.modelMatrix.duplicate().multiplyBy(this._modelMatrix);
-            this._modelMatrix = model;
+            this._modelMatrix = this._parent.modelMatrix.duplicate().multiplyBy(this._modelMatrix);
+            this._outlineMatrix = this._parent.modelMatrix.duplicate().multiplyBy(this._outlineMatrix);
         }
     }
 
@@ -102,8 +107,12 @@ export class Basic3DTransformative implements IPositionable, IRotatable, IScalab
         this.buildRotationMatrix();
     }
 
-    public get modelMatrix() {
+    get modelMatrix() {
         return this._modelMatrix;
+    }
+
+    get outlineMatrix() {
+        return this._outlineMatrix;
     }
 
     get position() {

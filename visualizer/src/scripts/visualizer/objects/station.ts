@@ -44,12 +44,16 @@ export class StationEntity extends Entity implements IInteractable {
         const ndc = projection.multiplyByVec4(view.multiplyByVec4(model.multiplyByVec4(pos)));
         visualizer.ui.canvas.showStationInfoPopup(this.stationInfo, new Vec2(ndc.x / ndc.w, ndc.y / ndc.w));
         visualizer.universeScene.isHoveringOverStation = true;
+
+        this.outline = true;
     }
 
     onMouseLeave() {
         this.color = StationColors.IDLE;
         visualizer.ui.canvas.hideStationInfoPopup();
         visualizer.universeScene.isHoveringOverStation = false;
+
+        this.outline = false;
     }
 
     onMouseLeftClick() {

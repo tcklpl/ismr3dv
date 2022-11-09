@@ -13,6 +13,7 @@ import { Camera } from "../camera/camera";
 import { IScreenshotRequest } from "./i_screenshot_request";
 import { HTMLUtils } from "../../visualizer/utils/html_utils";
 import { Vec3 } from "../data_formats/vec/vec3";
+import { OutlineProvider } from "./outline/outline_provider";
 
 export class Renderer implements IMouseListener {
 
@@ -36,6 +37,7 @@ export class Renderer implements IMouseListener {
 
     private _picking = new RenderPickProvider();
     private _bloom = new RenderBloomProvider();
+    private _outline = new OutlineProvider();
     private _compositor = new RenderComposer();
 
     private _rlRenderbuffer!: WebGLRenderbuffer;
@@ -52,9 +54,11 @@ export class Renderer implements IMouseListener {
 
     private setupGl() {
         gl.clearColor(0, 0, 0, 1);
-
-        gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
+        
+        gl.enable(gl.STENCIL_TEST);
+        
+        gl.enable(gl.DEPTH_TEST);
         gl.depthFunc(gl.LEQUAL);
         gl.blendEquation(gl.FUNC_ADD);
 
@@ -64,6 +68,8 @@ export class Renderer implements IMouseListener {
         this._picking.setup(this._renderSettings);
         this._bloom.setup(this._renderSettings);
         this._compositor.setup(this._renderSettings);
+        this._outline.setup(this._renderSettings);
+
         this.resize(gl.canvas.clientWidth, gl.canvas.clientHeight);
     }
 
@@ -108,8 +114,8 @@ export class Renderer implements IMouseListener {
         // renderbuffer used for depth testing
         this._rlRenderbuffer = BufferUtils.createRenderbuffer();
         gl.bindRenderbuffer(gl.RENDERBUFFER, this._rlRenderbuffer);
-        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT32F, this._renderSettings.width, this._renderSettings.height);
-        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this._rlRenderbuffer);
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH32F_STENCIL8, this._renderSettings.width, this._renderSettings.height);
+        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_STENCIL_ATTACHMENT, gl.RENDERBUFFER, this._rlRenderbuffer);
 
         gl.drawBuffers([ gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1 ]);
 
@@ -145,7 +151,10 @@ export class Renderer implements IMouseListener {
         }
 
         gl.viewport(0, 0, this._renderSettings.width, this._renderSettings.height);
+
         this.renderSceneIntoLayerbuffers();
+
+        this._outline.render(this._layers);
         if (this._config.bloom) this._bloom.render(this._layers);
         this._compositor.compose(this._layers);
 
@@ -158,18 +167,25 @@ export class Renderer implements IMouseListener {
 
     private renderSceneIntoLayerbuffers() {
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._rlFramebuffer);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.stencilMask(0xFF);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
 
         const scene = this._sceneManager.active as Scene;
         const camera = this._cameraManager.activeCamera as Camera;
 
+        gl.stencilFunc(gl.ALWAYS, 1, 0xFF);
+        gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+
         // first render all opaque objects
         scene.opaqueObjects.forEach(o => {
+            gl.stencilMask(o.outline ? 0xFF : 0x00);
             o.render(() => {
                 camera.viewMat.bindUniform(gl, o.u_view);
                 this._perspectiveProjectionMatrix.bindUniform(gl, o.u_projection);
             });
         });
+
+        gl.stencilMask(0x00);
 
         // then render all gizmos
         visualizer.gizmoManager.allGizmos.filter(x => x.enabled).forEach(g => {
@@ -199,9 +215,6 @@ export class Renderer implements IMouseListener {
         });
         gl.depthMask(true);
         gl.disable(gl.BLEND);
-
-        // free the framebuffer
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     }
 
     renderQuad() {

@@ -54,10 +54,14 @@ export class SatelliteEntity extends Entity implements IInteractable {
 
         const ndc = projection.multiplyByVec4(view.multiplyByVec4(model.multiplyByVec4(pos)));
         visualizer.ui.canvas.showSatelliteInfoPopup(this.curInfo, new Vec2(ndc.x / ndc.w, ndc.y / ndc.w));
+
+        this.outline = true;
     }
 
     onMouseLeave() {
         visualizer.ui.canvas.hideSatelliteInfoPopup();
+
+        this.outline = false;
     }
 
 }
