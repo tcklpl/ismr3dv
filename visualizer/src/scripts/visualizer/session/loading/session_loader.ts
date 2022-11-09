@@ -69,15 +69,22 @@ export class SessionLoader {
 
                 // If the loading is over
                 if (this._loadedMoments >= this._momentLength) {
-                    visualizer.events.dispatchEvent('session-loading-complete');
-                    if (this._onSessionLoad) this._onSessionLoad();
-                    this._loadedMoments = 0;
-                    this._momentLength = 0;
-                    this._sessionBeingLoaded = undefined;
+                    this.dispatchLoadCompletion();
                 }
+                break;
+            case 'empty':
+                this.dispatchLoadCompletion();
                 break;
                 
         }
+    }
+
+    private dispatchLoadCompletion() {
+        visualizer.events.dispatchEvent('session-loading-complete');
+        if (this._onSessionLoad) this._onSessionLoad();
+        this._loadedMoments = 0;
+        this._momentLength = 0;
+        this._sessionBeingLoaded = undefined;
     }
 
 }

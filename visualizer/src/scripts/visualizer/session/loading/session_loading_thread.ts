@@ -42,7 +42,15 @@ export const sessionLoadingThread = () => {
         });
 
         // 3 - Construct the moments
-        ippByDate.forEach((v, k) => constructMoment(k, v));
+        if (ippByDate.size > 0) {
+            ippByDate.forEach((v, k) => constructMoment(k, v));
+        } else {
+            // send 'empty' message if there's nothing to load
+            self.postMessage(<ISessionLoadingThreadResponse>{
+                key: 'empty',
+                body: 0
+            });
+        }
 
     }
 
@@ -179,7 +187,7 @@ export interface ISessionLoadingThreadRequest {
 }
 
 export interface ISessionLoadingThreadResponse {
-    key: 'count' | 'moment';
+    key: 'count' | 'moment' | 'empty';
     body: number | IMomentCalculatedInfo;
 }
 
