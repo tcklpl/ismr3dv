@@ -21,6 +21,9 @@ export class UIInterpolation implements IUI {
     private _interpInfoboxMin = $('#interp-min');
     private _interpInfoboxMax = $('#interp-max');
 
+    private _precisionWidth = $('#interp-precision-width');
+    private _precisionHeight = $('#interp-precision-height');
+
     private _interpOptObj?: UIInterpOptions;
     private _newInterpFuncObj?: InterpolatingFunctions;
     private _newColorerObj?: MomentColorProgram;
@@ -95,13 +98,22 @@ export class UIInterpolation implements IUI {
     }
 
     save() {
-        const func = this._newInterpFuncObj ?? (visualizer.session as ISMRSession).timeline.buffer.interpolator.function;
-        visualizer.session?.timeline.buffer.replaceInterpolator(func, this._interpOptObj?.options.map(opt => opt.value) ?? [], false);
+        const session = visualizer.session as ISMRSession;
+        // Update the resolution, we'll set the resolution first because then the new interpolator and colorer will already be
+        // in the correct resolution.
+        const width = parseInt(this._precisionWidth.val() as string);
+        const height = parseInt(this._precisionHeight.val() as string);
+        session.timeline.buffer.setResolution(width, height);
 
-        const colorerProgram = this._newColorerObj ?? (visualizer.session as ISMRSession).timeline.buffer.colorer.selectedProgram;
+        // Update the interpolator
+        const func = this._newInterpFuncObj ?? session.timeline.buffer.interpolator.function;
+        session.timeline.buffer.replaceInterpolator(func, this._interpOptObj?.options.map(opt => opt.value) ?? [], false);
+
+        // Update the colorer
+        const colorerProgram = this._newColorerObj ?? session.timeline.buffer.colorer.selectedProgram;
         const min = parseFloat(this._colorerMin.val() as string);
         const max = parseFloat(this._colorerMax.val() as string);
-        visualizer.session?.timeline.buffer.replaceColorer(colorerProgram, min, max);
+        session.timeline.buffer.replaceColorer(colorerProgram, min, max);
 
         this.updateUI();
     }

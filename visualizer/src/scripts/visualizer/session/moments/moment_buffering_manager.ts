@@ -18,9 +18,9 @@ export class MomentBufferingManager {
     // Total number, +1 because of the current moment
     private _maxBufferedMoments = 101;
     private _bufferBounds = new Vec2(-1, -1);
-    private _currentTexture: WebGLTexture;
+    private _currentTexture!: WebGLTexture;
 
-    private _bufferSize = new Vec2(500, 250);
+    private _bufferSize = new Vec2(360, 180);
     private _interpColorProvider = new MomentColorer(this._bufferSize);
 
     private _interpolatorManager = new InterpolatorManager(m => this.onInterpolatorMessage(m), n => this.onInterpolatorError(n), o => this.onInterpolatorStateChange(o));
@@ -30,11 +30,20 @@ export class MomentBufferingManager {
 
     constructor(currentIndex = 0) {
         this._currentIndex = currentIndex;
-        this._currentTexture = TextureUtils.createBufferTexture(500, 250);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        this.buildTexture();
 
         this._interpolatorManager.setup(this._bufferSize);
+    }
+
+    private clearTexture() {
+        gl.deleteTexture(this._currentTexture);
+    }
+
+    private buildTexture() {
+        this.clearTexture();
+        this._currentTexture = TextureUtils.createBufferTexture(this._bufferSize.x, this._bufferSize.y);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     }
 
     clearInterpolationCache() {
@@ -61,7 +70,16 @@ export class MomentBufferingManager {
         this._interpColorProvider.bounds.y = max;
         this._interpColorProvider.selectedProgram = program;
         if (rebuild) this.setMomentByIndex(this.currentIndex);
-    } 
+    }
+
+    setResolution(width: number, height: number) {
+        if (width == this._bufferSize.x && height == this._bufferSize.y) return;
+        this._bufferSize.x = width;
+        this._bufferSize.y = height;
+        this._interpColorProvider.setResolution(this._bufferSize);
+        this.buildTexture();
+        visualizer.universeScene.ippSphere.currentTexture = this._currentTexture;
+    }
 
     replaceMoments(moments: Moment[]) {
         // kill and replace the interpolator if it's running

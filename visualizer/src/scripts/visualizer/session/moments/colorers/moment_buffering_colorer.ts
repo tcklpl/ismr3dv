@@ -5,15 +5,14 @@ import { TextureUtils } from "../../../../engine/utils/texture_utils";
 import { IMomentColorQueueEntry } from "../interpolation/i_moment_queue_entries";
 import { ColorPrograms } from "./color_programs/color_programs";
 import { MomentColorProgram } from "./color_programs/moment_color_program";
-import { MomentColorRainbow } from "./color_programs/rainbow";
 
 export type MomentColorerStatus = 'idle' | 'working';
 
 export class MomentColorer implements IFrameListener {
 
-    private _fb: WebGLFramebuffer;
-    private _texIn: WebGLTexture;
-    private _texOut: WebGLTexture;
+    private _fb!: WebGLFramebuffer;
+    private _texIn!: WebGLTexture;
+    private _texOut!: WebGLTexture;
     
     private _bufferSize: Vec2;
     private _selectedColorProgram: MomentColorProgram = ColorPrograms.DEFAULT;
@@ -24,14 +23,30 @@ export class MomentColorer implements IFrameListener {
 
     constructor(bufferSize: Vec2) {
         this._bufferSize = bufferSize;
+        this.buildTextures();
+        visualizer.engine.registerFrameListener(this);
+    }
+
+    private deleteTextures() {
+        gl.deleteFramebuffer(this._fb);
+        gl.deleteTexture(this._texIn);
+        gl.deleteTexture(this._texOut);
+    }
+
+    private buildTextures() {
+        this.deleteTextures();
+
         this._fb = BufferUtils.createFramebuffer();
-        this._texIn = TextureUtils.createR32FTexture(bufferSize.x, bufferSize.y, gl.NEAREST);
-        this._texOut = TextureUtils.createBufferTexture(bufferSize.x, bufferSize.y, gl.NEAREST);
+        this._texIn = TextureUtils.createR32FTexture(this._bufferSize.x, this._bufferSize.y, gl.NEAREST);
+        this._texOut = TextureUtils.createBufferTexture(this._bufferSize.x, this._bufferSize.y, gl.NEAREST);
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._fb);
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this._texOut, 0);
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    }
 
-        visualizer.engine.registerFrameListener(this);
+    setResolution(res: Vec2) {
+        this._bufferSize = res;
+        this.buildTextures();
     }
 
     update(): void {
