@@ -13,6 +13,7 @@ export class UIInterpolation implements IUI {
 
     private _interpolatorSelect = $('#interp-selector');
     private _interpOptions = $('#interp-options');
+    private _interpThreads = $('#interp-threads');
 
     private _colorerSelect = $('#colorer-selector');
     private _colorerMin = $('#colorer-bounds-min');
@@ -98,6 +99,8 @@ export class UIInterpolation implements IUI {
 
         this._precisionWidth.val(visualizer.session?.timeline.buffer.bufferSize.x ?? 360);
         this._precisionHeight.val(visualizer.session?.timeline.buffer.bufferSize.y ?? 180);
+
+        this._interpThreads.val(visualizer.session?.timeline.buffer.interpolator.threadCount ?? 4);
     }
 
     save() {
@@ -109,6 +112,8 @@ export class UIInterpolation implements IUI {
         session.timeline.buffer.setResolution(width, height);
 
         // Update the interpolator
+        const threadCount = parseInt(this._interpThreads.val() as string);
+        session.timeline.buffer.interpolator.threadCount = threadCount;
         const func = this._newInterpFuncObj ?? session.timeline.buffer.interpolator.function;
         session.timeline.buffer.replaceInterpolator(func, this._interpOptObj?.options.map(opt => opt.value) ?? [], false);
 

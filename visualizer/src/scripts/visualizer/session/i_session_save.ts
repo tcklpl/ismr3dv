@@ -31,6 +31,7 @@ export interface ISessionSave {
 
     interpolator_name: string;
     interpolator_parameters: any[];
+    interpolator_threads: number;
 
     colorer_name: string;
     colorer_min: number;

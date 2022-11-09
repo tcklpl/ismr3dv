@@ -5,7 +5,7 @@ import { IMomentInterpEntry } from "./interpolation/i_moment_queue_entries";
 
 export class InterpolatorManager {
 
-    private _numberOfInterpolators = 4;
+    private _threadCount = 4;
     private _interpolators: MomentInterpolator[] = [];
     private _interpolatingFunction: InterpolatingFunctions = InterpolatingFunctions.DEFAULT;
     private _interpolatingParameters: any[] = InterpolatingFunctions.DEFAULT.options.map(opt => opt.default);
@@ -29,7 +29,7 @@ export class InterpolatorManager {
 
     setup(bufferSize: Vec2) {
         this.killAll();
-        for (let i = 0; i < this._numberOfInterpolators; i++) {
+        for (let i = 0; i < this._threadCount; i++) {
             const interp = new MomentInterpolator(this._interpolatingFunction.func, bufferSize, ...this._interpolatingParameters);
             interp.onMessage = m => this._onMsg(m);
             interp.onError = e => this._onErr(e);
@@ -46,7 +46,7 @@ export class InterpolatorManager {
 
     distributeInterpolationJob(data: IMomentInterpEntry[]) {
         data.forEach((d, i) => {
-            this._interpolators[i % this._numberOfInterpolators].queueDataForInterpolation(d);
+            this._interpolators[i % this._threadCount].queueDataForInterpolation(d);
         });
     }
 
@@ -67,6 +67,14 @@ export class InterpolatorManager {
 
     get state() {
         return this._state;
+    }
+
+    get threadCount() {
+        return this._threadCount;
+    }
+
+    set threadCount(c: number) {
+        this._threadCount = c;
     }
 
 }

@@ -238,6 +238,7 @@ export class ISMRSession {
             selected_satellite_categories: visualizer.ui.dataFetcher.satTypeManager.selection,
             ion_height: visualizer.ui.dataFetcher.ionHeight,
 
+            interpolator_threads: this.timeline.buffer.interpolator.threadCount,
             interpolator_name: this.timeline.buffer.interpolator.function.name,
             interpolator_parameters: this.timeline.buffer.interpolator.parameters,
 
@@ -262,6 +263,7 @@ export class ISMRSession {
 
         const interp = InterpolatingFunctions.getByName(save.interpolator_name);
         if (interp) {
+            session.timeline.buffer.interpolator.threadCount = save.interpolator_threads ?? 4;
             session.timeline.buffer.interpolator.replaceInterpolatorOptions(interp, save.interpolator_parameters ?? [], session.timeline.buffer.bufferSize);
         }
 
