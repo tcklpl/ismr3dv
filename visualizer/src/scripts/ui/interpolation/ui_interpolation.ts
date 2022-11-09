@@ -95,6 +95,9 @@ export class UIInterpolation implements IUI {
         this._colorerMin.val(bounds.x);
         this._colorerMax.val(bounds.y);
         $('#colorer-selector option').removeAttr('selected').filter(`[value="${this._newColorerObj?.name ?? visualizer.session?.timeline.buffer.colorer.selectedProgram.name}"]`).prop('selected', true);
+
+        this._precisionWidth.val(visualizer.session?.timeline.buffer.bufferSize.x ?? 360);
+        this._precisionHeight.val(visualizer.session?.timeline.buffer.bufferSize.y ?? 180);
     }
 
     save() {

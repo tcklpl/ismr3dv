@@ -35,4 +35,7 @@ export interface ISessionSave {
     colorer_name: string;
     colorer_min: number;
     colorer_max: number;
+
+    precision_width: number;
+    precision_height: number;
 }

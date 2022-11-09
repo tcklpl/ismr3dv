@@ -243,7 +243,10 @@ export class ISMRSession {
 
             colorer_name: this.timeline.buffer.colorer.selectedProgram.name,
             colorer_min: this.timeline.buffer.colorer.bounds.x,
-            colorer_max: this.timeline.buffer.colorer.bounds.y
+            colorer_max: this.timeline.buffer.colorer.bounds.y,
+
+            precision_width: this.timeline.buffer.bufferSize.x,
+            precision_height: this.timeline.buffer.bufferSize.y
         };
     }
 
@@ -269,6 +272,8 @@ export class ISMRSession {
             colorerManager.bounds.y = save.colorer_max ?? 1;
             colorerManager.selectedProgram = colorer;
         }
+
+        session.timeline.buffer.setResolution(save.precision_width ?? 360, save.precision_height ?? 180);
 
         save.selected_stations.forEach(s => session.toggleStationById(s));
 
