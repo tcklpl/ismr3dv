@@ -5,7 +5,6 @@ export class IPPFetcher {
     fetchData(ion: number, satellites: string, cb?: () => void) {
         const session = visualizer.session;
         if (!session) return;
-        console.log(session);
 
         visualizer.api.fetchIPP({
             startDate: session.startDate,

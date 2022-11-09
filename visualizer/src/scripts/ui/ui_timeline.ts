@@ -115,7 +115,6 @@ export class UITimeline implements IUI {
         });
 
         visualizer.events.on('moment-interpolation-cache-cleared', () => {
-            console.log('cache cleared!');
             this._bufferBounds = Vec2.fromValue(0);
             this._colorBounds = Vec2.fromValue(0);
 
