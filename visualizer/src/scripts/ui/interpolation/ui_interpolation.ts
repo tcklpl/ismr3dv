@@ -18,6 +18,7 @@ export class UIInterpolation implements IUI {
     private _colorerSelect = $('#colorer-selector');
     private _colorerMin = $('#colorer-bounds-min');
     private _colorerMax = $('#colorer-bounds-max');
+    private _colorerBudget = $('#colorer-budget');
 
     private _interpInfoboxMin = $('#interp-min');
     private _interpInfoboxMax = $('#interp-max');
@@ -101,6 +102,7 @@ export class UIInterpolation implements IUI {
         this._precisionHeight.val(visualizer.session?.timeline.buffer.bufferSize.y ?? 180);
 
         this._interpThreads.val(visualizer.session?.timeline.buffer.interpolator.threadCount ?? 4);
+        this._colorerBudget.val(visualizer.session?.timeline.buffer.colorer.budgetPerFrame ?? 5);
     }
 
     save() {
@@ -121,6 +123,8 @@ export class UIInterpolation implements IUI {
         const colorerProgram = this._newColorerObj ?? session.timeline.buffer.colorer.selectedProgram;
         const min = parseFloat(this._colorerMin.val() as string);
         const max = parseFloat(this._colorerMax.val() as string);
+        const budget = parseInt(this._colorerBudget.val() as string);
+        session.timeline.buffer.colorer.budgetPerFrame = budget;
         session.timeline.buffer.replaceColorer(colorerProgram, min, max);
 
         this.updateUI();

@@ -20,6 +20,7 @@ export class MomentColorer implements IFrameListener {
     private _queue: IMomentColorQueueEntry[] = [];
     private _status: MomentColorerStatus = 'idle';
     bounds = new Vec2(0, 1);
+    budgetPerFrame: number = 5;
 
     constructor(bufferSize: Vec2) {
         this._bufferSize = bufferSize;
@@ -53,13 +54,18 @@ export class MomentColorer implements IFrameListener {
         // Do nothing if the queue is empty
         if (this._queue.length == 0) return;
 
-        // get the first element on the queue
-        const entry = this._queue.shift() as IMomentColorQueueEntry;
+        let colored = 0;
+        while (++colored <= this.budgetPerFrame) {
+            if (this._queue.length == 0) return;
 
-        const out = this._selectedColorProgram.colorBuffer(entry.buffer, this._fb, this._texIn, this._bufferSize, this.bounds);
+            // get the first element on the queue
+            const entry = this._queue.shift() as IMomentColorQueueEntry;
 
-        // notify the entry that it's interpolation is complete
-        entry.onColorCompletion(out);
+            const out = this._selectedColorProgram.colorBuffer(entry.buffer, this._fb, this._texIn, this._bufferSize, this.bounds);
+
+            // notify the entry that it's interpolation is complete
+            entry.onColorCompletion(out);
+        }
 
         if (this._queue.length == 0) this._status = 'idle';
     }

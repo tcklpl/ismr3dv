@@ -245,6 +245,7 @@ export class ISMRSession {
             colorer_name: this.timeline.buffer.colorer.selectedProgram.name,
             colorer_min: this.timeline.buffer.colorer.bounds.x,
             colorer_max: this.timeline.buffer.colorer.bounds.y,
+            colorer_budget_per_frame: this.timeline.buffer.colorer.budgetPerFrame,
 
             precision_width: this.timeline.buffer.bufferSize.x,
             precision_height: this.timeline.buffer.bufferSize.y
@@ -270,6 +271,7 @@ export class ISMRSession {
         const colorer = ColorPrograms.getByName(save.colorer_name);
         if (colorer) {
             const colorerManager = session.timeline.buffer.colorer;
+            colorerManager.budgetPerFrame = save.colorer_budget_per_frame ?? 5;
             colorerManager.bounds.x = save.colorer_min ?? 0;
             colorerManager.bounds.y = save.colorer_max ?? 1;
             colorerManager.selectedProgram = colorer;
