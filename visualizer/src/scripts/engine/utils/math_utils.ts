@@ -75,6 +75,22 @@ export class MUtils {
         return list.map(v => this.minMaxNormalization(v, min, max));
     }
 
+    static mean(list: number[]) {
+        return list.reduce((prev, cur) => prev += cur, 0) / list.length;
+    }
+
+    static standardDeviation(list: number[]) {
+        const mean = this.mean(list);
+        const nominator = list.map(x => (x - mean)**2).reduce((prev, cur) => prev += cur, 0);
+        return Math.sqrt(nominator / list.length);
+    }
+
+    static zScoreNormalization(list: number[]) {
+        const mean = this.mean(list);
+        const sd = this.standardDeviation(list);
+        return list.map(x => (x - mean) / sd);
+    }
+
     static fatorial(x: number) {
         if (x < 0) throw `Cannot calculate the fatorial of a negative number`;
         if (Math.floor(x) != x) throw `Cannot calculate the fatorial of a non-integer`;
