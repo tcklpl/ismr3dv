@@ -3,6 +3,9 @@ import { Vec2 } from "./vec2";
 
 export class Vec3 extends Vec2 {
 
+    static up = new Vec3(0, 1, 0);
+    static forward = new Vec3(0, 0, -1);
+
     constructor(x: number, y: number, z: number) {
         super(x, y);
         this._values[2] = z;
@@ -48,6 +51,31 @@ export class Vec3 extends Vec2 {
 
     checkIfAllValuesInRange(min: number, max: number) {
         return this.x >= min && this.x <= max && this.y >= min && this.y <= max && this.z >= min && this.z <= max;
+    }
+
+    squaredNorm() {
+        return this.x**2 + this.y**2 + this.z**2;
+    }
+
+    normalize() {
+        let length = Math.sqrt(this.squaredNorm());
+        if (length >  0.00001) {
+            this.x /= length;
+            this.y /= length;
+            this.z /= length;
+        } else {
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+        }
+        return this;
+    }
+
+    inverse() {
+        this.x *= -1;
+        this.y *= -1;
+        this.z *= -1;
+        return this;
     }
 
     public get z() {
@@ -123,6 +151,14 @@ export class Vec3 extends Vec2 {
         const yDiff = a.y - b.y;
         const zDiff = a.z - b.z;
         return new Vec3(a.x + (xDiff * n), a.y + (yDiff * n), a.z + (zDiff * n));
+    }
+
+    static dot(a: Vec3, b: Vec3) {
+        return (
+            a.x * b.x +
+            a.y * b.y +
+            a.z * b.z
+        );
     }
 
 }
