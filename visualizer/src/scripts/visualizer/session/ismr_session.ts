@@ -1,7 +1,6 @@
 import { Vec3 } from "../../engine/data_formats/vec/vec3";
 import { MUtils } from "../../engine/utils/math_utils";
 import { CustomAlert } from "../../ui/custom_alert";
-import { IIPPInfo } from "../api/formats/i_ipp_info";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { MainCamera } from "../camera/main_camera";
 import { SatelliteEntity } from "../objects/satellite";
