@@ -80,20 +80,18 @@ export class ISMRSession {
         });
 
         satelliteNameList.forEach(sn => {
+        
+            const instance = this._objectManager.summon("satellite", SatelliteEntity);
+            instance.pickable = true;
+            instance.curInfo.name = sn;
 
-            if (this._timeline.currentMoments[0].satellitesCoords.has(sn)) {
-                const instance = this._objectManager.summon("satellite", SatelliteEntity);
-                instance.pickable = true;
-                instance.curInfo.name = sn;
+            const pos = this._timeline.currentMoments[0].satellitesCoords.get(sn) ?? Vec3.fromValue(0);
+            pos.multiplyByFactor(1.2);
+            instance.setPosition(pos);
+            instance.setScale(Vec3.fromValue(0.01));
+            instance.lookAt(Vec3.add(pos, pos));
 
-                const pos = this._timeline.currentMoments[0].satellitesCoords.get(sn) as Vec3;
-                pos.multiplyByFactor(1.2);
-                instance.setPosition(pos);
-                instance.setScale(Vec3.fromValue(0.01));
-                instance.lookAt(Vec3.add(pos, pos));
-
-                this._instantiatedSatellites.push(instance);
-            }
+            this._instantiatedSatellites.push(instance);
             
         });
 
