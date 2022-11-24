@@ -280,22 +280,25 @@ export class UITimeline implements IUI {
         const height = moment2DCanvas.canvas.getBoundingClientRect().height;
 
         // For some reason the canvas stays at 0,0 for the first run
-        if (width == 0 && height == 0) {
-            setTimeout(() => this.constructMomentValueIndicators(), 1000);
+        if (width == 0 || height == 0) {
+            setTimeout(() => this.constructMomentValueIndicators(), 500);
+            return;
         }
 
         moment2DCanvas.canvas.width = width;
         moment2DCanvas.canvas.height = height;
 
-        const stepX = Math.round(width / session.timeline.currentMoments.length);
+        const stepX = width / session.timeline.currentMoments.length;
 
         moment2DCanvas.clearRect(0, 0, width, height);
         const path = new Path2D();
         path.moveTo(0, height);
 
-        MUtils.normalizeListMinMax(session.timeline.currentMoments.map(m => m.ippMeasurements.avg)).forEach((m, i) => {
-            const y = height - Math.round(m * height);
-            path.lineTo(stepX * i, y);
+        const indicatorHeight = Math.floor(height / 2);
+
+        MUtils.zScoreNormalization(session.timeline.currentMoments.map(m => m.ippMeasurements.max)).forEach((m, i) => {
+            const y = indicatorHeight - Math.round(m * indicatorHeight);
+            path.lineTo(Math.round(stepX * i), y);
         });
 
         path.lineTo(width, height);
