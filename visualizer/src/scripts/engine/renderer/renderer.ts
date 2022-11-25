@@ -155,6 +155,7 @@ export class Renderer implements IMouseListener {
         this.renderSceneIntoLayerbuffers();
 
         this._outline.render(this._layers);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         if (this._config.bloom) this._bloom.render(this._layers);
         this._compositor.compose(this._layers);
 
