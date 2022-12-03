@@ -51,6 +51,7 @@ export class UICanvas implements IUI {
         if (this._hideSatelliteTimeout > -1) {
             clearTimeout(this._hideSatelliteTimeout);
         }
+        if (!info || !info.name || !info.value) return;
         this._satName.html(info.name);
         this._satValue.html(info.value.toFixed(5));
         this._satInfoPopup.fadeIn(50);
