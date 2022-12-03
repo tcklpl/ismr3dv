@@ -1,5 +1,5 @@
 import { ISerializedFilter } from "../../ui/data_fetcher/i_serialized_filter";
-import { IIPPInfo } from "../api/formats/i_ipp_info";
+import { TimelineNormalizator, TimelineNormValue } from "../../ui/timeline/ui_timeline_config";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { ICameraSerializableInfo } from "../camera/main_camera";
 import { ISatellite } from "../data/satellites/i_satellite";
@@ -40,4 +40,7 @@ export interface ISessionSave {
 
     precision_width: number;
     precision_height: number;
+
+    timeline_normalizator: TimelineNormalizator;
+    timeline_norm_value: TimelineNormValue;
 }

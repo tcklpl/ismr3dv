@@ -33,7 +33,7 @@
             "append_to": "#config-modal-body-content"
         },
         {
-            "url": "timeline.html",
+            "url": "timeline/timeline.html",
             "append_to": "body"
         },
         {
@@ -120,6 +120,18 @@
         {
             "url": "warnings/buffering.html",
             "append_to": "body"
+        },
+        {
+            "url": "timeline/timeline_config_modal.html",
+            "append_to": "body"
+        },
+        {
+            "url": "timeline/timeline_config_tabs.html",
+            "append_to": "#timeline-cfg-modal-body-nav"
+        },
+        {
+            "url": "timeline/timeline_config_indicator.html",
+            "append_to": "#timeline-cfg-modal-body-content"
         }
     ]
 }

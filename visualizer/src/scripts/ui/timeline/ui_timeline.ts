@@ -1,10 +1,17 @@
-import { Vec2 } from "../engine/data_formats/vec/vec2";
-import { MUtils } from "../engine/utils/math_utils";
-import { ISMRSession } from "../visualizer/session/ismr_session";
-import { DateUtils } from "../visualizer/utils/date_utils";
-import { IUI } from "./i_ui";
+import { Vec2 } from "../../engine/data_formats/vec/vec2";
+import { EngineError } from "../../engine/errors/engine_error";
+import { MUtils } from "../../engine/utils/math_utils";
+import { ISMRSession } from "../../visualizer/session/ismr_session";
+import { IMomentIPPMeasurements } from "../../visualizer/session/moments/moment";
+import { DateUtils } from "../../visualizer/utils/date_utils";
+import { IUI } from "../i_ui";
+import { TimelineNormalizator, TimelineNormValue } from "./ui_timeline_config";
+
 
 export class UITimeline implements IUI {
+
+    timelineNormalizator: TimelineNormalizator = 'minmax';
+    timelineNormalValue: TimelineNormValue = 'max';
 
     private _container = $('#timeline-container');
 
@@ -266,13 +273,13 @@ export class UITimeline implements IUI {
         }
 
         session.timeline.updateSelectedStations(session.selectedStations.map(s => s.station_id));
-        this.constructMomentValueIndicators();
+        this.draw2DIndicatorGraph();
         this.setActivePanel(this._timelinePanel);
         this.updateBufferIndicators();
         this.updateCurrentMomentMarkerAndInfo();
     }
 
-    private constructMomentValueIndicators() {
+    draw2DIndicatorGraph() {
         const session = visualizer.session;
         if (!session) return;
 
@@ -281,7 +288,7 @@ export class UITimeline implements IUI {
 
         // For some reason the canvas stays at 0,0 for the first run
         if (width == 0 || height == 0) {
-            setTimeout(() => this.constructMomentValueIndicators(), 500);
+            setTimeout(() => this.draw2DIndicatorGraph(), 500);
             return;
         }
 
@@ -296,7 +303,19 @@ export class UITimeline implements IUI {
 
         const indicatorHeight = Math.floor(height / 2);
 
-        MUtils.zScoreNormalization(session.timeline.currentMoments.map(m => m.ippMeasurements.max)).forEach((m, i) => {
+        const useNormalizator = (list: number[]) => {
+            switch (this.timelineNormalizator) {
+                case 'minmax': return MUtils.normalizeListMinMax(list);
+                case 'zscore': return MUtils.zScoreNormalization(list);
+                default: throw new EngineError('timeline', `Invalid normalizator: '${this.timelineNormalizator}'`);
+            }
+        }
+
+        const getValue = (m: IMomentIPPMeasurements) => {
+            return (m as any)[this.timelineNormalValue];
+        }
+
+        useNormalizator(session.timeline.currentMoments.map(m => getValue(m.ippMeasurements))).forEach((m, i) => {
             const y = indicatorHeight - Math.round(m * indicatorHeight);
             path.lineTo(Math.round(stepX * i), y);
         });

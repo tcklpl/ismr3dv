@@ -245,7 +245,10 @@ export class ISMRSession {
             colorer_budget_per_frame: this.timeline.buffer.colorer.budgetPerFrame,
 
             precision_width: this.timeline.buffer.bufferSize.x,
-            precision_height: this.timeline.buffer.bufferSize.y
+            precision_height: this.timeline.buffer.bufferSize.y,
+
+            timeline_normalizator: visualizer.ui.timeline.timelineNormalizator,
+            timeline_norm_value: visualizer.ui.timeline.timelineNormalValue
         };
     }
 
@@ -288,6 +291,9 @@ export class ISMRSession {
         if (save.camera.type == "main") {
             (visualizer.cameraManager.activeCamera as MainCamera).setData(save.camera);
         }
+
+        if (save.timeline_normalizator) visualizer.ui.timeline.timelineNormalizator = save.timeline_normalizator;
+        if (save.timeline_norm_value) visualizer.ui.timeline.timelineNormalValue = save.timeline_norm_value;
 
         return session;
 

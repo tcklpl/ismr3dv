@@ -1,5 +1,7 @@
 import { UIDataFetcher } from "./data_fetcher/ui_data_fetcher";
 import { UIInterpolation } from "./interpolation/ui_interpolation";
+import { UITimeline } from "./timeline/ui_timeline";
+import { UITimelineConfig } from "./timeline/ui_timeline_config";
 import { UIBottomHud } from "./ui_bottom_hud";
 import { UICanvas } from "./ui_canvas";
 import { UIConfig } from "./ui_config";
@@ -11,7 +13,6 @@ import { UIOptionsHud } from "./ui_options_hud";
 import { UIScreenshot } from "./ui_screenshot";
 import { UISession } from "./ui_session";
 import { UIStationsHud } from "./ui_stations_hud";
-import { UITimeline } from "./ui_timeline";
 
 export class UI {
     
@@ -29,6 +30,7 @@ export class UI {
     private _bottomHud = new UIBottomHud();
     private _dataFetcher = new UIDataFetcher();
     private _interpolation = new UIInterpolation();
+    private _timelineConfig = new UITimelineConfig();
 
     registerEssential() {
         this._config.registerEvents();
@@ -57,6 +59,7 @@ export class UI {
         this._dataFetcher.registerEvents();
         this._bottomHud.registerEvents();
         this._interpolation.registerEvents();
+        this._timelineConfig.registerEvents();
     }
 
     get config() {
@@ -105,5 +108,9 @@ export class UI {
 
     get interpolation() {
         return this._interpolation;
+    }
+
+    get timelineConfig() {
+        return this._timelineConfig;
     }
 }
