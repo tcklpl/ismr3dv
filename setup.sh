@@ -6,12 +6,6 @@ then
     exit
 fi
 
-if ! command -v scss > /dev/null
-then
-    echo "[!] scss (sass) was not found, please install it or correct your path."
-    exit
-fi
-
 if ! command -v python3 > /dev/null
 then
     echo "[!] Python 3 was not found, please install it or correct your path."

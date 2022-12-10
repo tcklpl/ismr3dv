@@ -10,7 +10,6 @@ The project contains 2 folders: `server` and `visualizer`. `visualizer` is the a
 To build the project you'll need the following dependencies:
 * NodeJS (I'm using 16.13.2)
 * NPM (I'm using 8.5.0)
-* SCSS (SASS Compiler Implementation, I'm using Ruby Sass 3.7.4)
 * Python 3 (I'm using 3.8.10)
 * PIP3 (python3-pip, I'm using 20.0.2)
 
