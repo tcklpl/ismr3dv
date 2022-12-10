@@ -27,7 +27,6 @@ help() {
     echo "n     --npm-only      Skips the .env file configuration."
     echo "p     --prerequisites Only checks for prerequisites."
     echo "c     --clear         Removes the node_modules and out folders as well as the .env file."
-    echo "q     --quiet         Sends the NPM output to /dev/null."
     echo "h     --help          Displays this message."
     exit
 }
@@ -85,7 +84,6 @@ FLAG_PREREQUISITES_ONLY=false
 FLAG_ENV_ONLY=false
 FLAG_CLEAR=false
 FLAG_NPM_ONLY=false
-FLAG_QUIET_NPM=false
 
 while getopts ecnqph-: OPT; do
     if [ "$OPT" = "-" ]; then
@@ -98,7 +96,6 @@ while getopts ecnqph-: OPT; do
         c | clear ) FLAG_CLEAR=true ;;
         n | npm-only ) FLAG_NPM_ONLY=true ;;
         p | prerequisites ) FLAG_PREREQUISITES_ONLY=true ;;
-        q | quiet ) FLAG_QUIET_NPM=true ;;
         h | help ) help ;;
         ??* ) echo "Illegal option --$OPT"; exit ;;
         ? ) exit

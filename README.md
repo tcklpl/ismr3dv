@@ -24,10 +24,19 @@ If you decide to run the server without a key it will run in `showcase mode`, wh
 ## Script
 
 There is an automated script to setup the project, the script will automatically check the dependencies, install the prerequisites, setup and compile the project. You can run it using
+
+**On Linux**:
 ```
 $ ./setup.sh
 ```
 > If the `setup.sh` script is not runnable, you can make it so with `chmod +x setup.sh`.
+
+**On Windows**:
+```
+PS> .\setup.ps1
+```
+> Please note that by default Powershell will not let you execute unsigned scripts, you can change this behaviour by entering the following command: `Set-ExecutionPolicy Unrestricted`.
+
 
 ## Manually
 
