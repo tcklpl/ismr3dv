@@ -1,0 +1,28 @@
+<button style="display: none;" data-bs-toggle="modal" data-bs-target="#new-magnetic-line-modal" id="new-magnetic-line-modal-show-btn"></button>
+<div class="modal fade" id="new-magnetic-line-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="new-magnetic-line-modal-title">Create new Magnetic Line Gizmo</h5>
+                <button type="button" class="btn btn-outline-dark close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body" id="new-magnetic-line-modal-body">
+                <div class="row">
+                    <div class="col-sm-6 d-flex align-items-center">Degrees</div>
+                    <div class="col-sm-6 d-flex">
+                        <input type="number" min="-90" max="90" value="0" id="new-magnetic-line-degrees" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="new-magnetic-line-modal-no">Cancel</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="new-magnetic-line-modal-yes">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
