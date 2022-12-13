@@ -70,7 +70,7 @@ export class Renderer implements IMouseListener {
         this._compositor.setup(this._renderSettings);
         this._outline.setup(this._renderSettings);
 
-        this.resize(gl.canvas.clientWidth, gl.canvas.clientHeight);
+        this.resize((gl.canvas as HTMLCanvasElement).clientWidth, (gl.canvas as HTMLCanvasElement).clientHeight);
     }
 
     private constructPerspectiveProjectionMatrix() {
@@ -160,7 +160,7 @@ export class Renderer implements IMouseListener {
         this._compositor.compose(this._layers);
 
         if (this._screenshotRequest) {
-            gl.canvas.toBlob((blob) => HTMLUtils.saveBlob(blob, 'screenshot.png'));
+            (gl.canvas as HTMLCanvasElement).toBlob((blob) => HTMLUtils.saveBlob(blob, 'screenshot.png'));
             this._screenshotRequest = undefined;
             gl.clearColor(0, 0, 0, 1);
         }

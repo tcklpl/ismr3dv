@@ -132,6 +132,10 @@
         {
             "url": "timeline/timeline_config_indicator.html",
             "append_to": "#timeline-cfg-modal-body-content"
+        },
+        {
+            "url": "new_magnetic_gizmo_prompt.html",
+            "append_to": "body"
         }
     ]
 }

@@ -4,10 +4,19 @@
         <h5 class="offcanvas-title">Gizmos</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body d-flex container-fluid h-100">
+    <div class="offcanvas-body d-flex flex-column container-fluid h-100">
 
-        <div class="accordion w-100" id="accordion-gizmos">
-        </div>
+        <h5><i class="bi-hourglass icon-left"></i>Fixed Lines</h5>
+        <div class="accordion w-100" id="accordion-gizmos"></div>
+
+        <h5 id="accordion-gizmos-magnetic-title" class="d-none" style="margin-top: 1rem;">
+            <i class="bi-magnet icon-left"></i>
+            Magnetic (IGRF-13 Inclination)
+            <button class="btn" id="add-magnetic-gizmo-btn">
+                <i class="bi-plus-circle"></i>
+            </button>
+        </h5>
+        <div class="accordion w-100 d-none" id="accordion-gizmos-magnetic"></div>
         
     </div>
 </div>
