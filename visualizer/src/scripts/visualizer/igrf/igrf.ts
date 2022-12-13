@@ -150,10 +150,6 @@ export class IGRFModel {
         const lowerValues = lowerBound.allIndices;
         // We multiply by 5 because the SV is given by year and we're using 5-year intervals
         const upperValues = latestMode == 'Indices' ? upperBound.allIndices : lowerBound.allIndices.map((v, i) => v + ((upperBound as IIGRFTableEntry).allIndices[i] * 5));
-        
-        console.log(lowerValues);
-        console.log(upperValues);
-        console.log(lowerValues.map((v, i) => v + ((upperValues[i] - v) / 5) * (y - (lowerBound as IIGRFTableEntry).year)));
 
         return lowerValues.map((v, i) => v + ((upperValues[i] - v) / 5) * (y - (lowerBound as IIGRFTableEntry).year));
     }

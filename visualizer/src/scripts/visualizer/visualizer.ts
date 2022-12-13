@@ -23,6 +23,7 @@ import { UniverseScene } from "./universe_scene";
 import { IGRFFetcher } from "./igrf/igrf_fetcher";
 import { SessionLoader } from "./session/loading/session_loader";
 import { ColorPrograms } from "./session/moments/colorers/color_programs/color_programs";
+import { IGRFLineBuilder } from "./igrf/igrf_line_builder";
 
 export class Visualizer {
 
@@ -37,6 +38,7 @@ export class Visualizer {
     private _ippFetcher = new IPPFetcher();
     private _igrfFetcher: IGRFFetcher;
     private _sessionLoader = new SessionLoader();
+    private _igrfLineBuilder!: IGRFLineBuilder;
 
     // Managers
     private _materialManager = new MaterialManager();
@@ -108,6 +110,7 @@ export class Visualizer {
         this.ui.registerEvents();
 
         this._igrfFetcher.loadModel();
+        this._igrfLineBuilder = new IGRFLineBuilder();
 
         requestAnimationFrame(t => this._engine.render(t));
     }
@@ -215,6 +218,14 @@ export class Visualizer {
 
     get sessionLoader() {
         return this._sessionLoader;
+    }
+
+    get igrfFetcher() {
+        return this._igrfFetcher;
+    }
+
+    get igrfLineBuilder() {
+        return this._igrfLineBuilder;
     }
 
 }

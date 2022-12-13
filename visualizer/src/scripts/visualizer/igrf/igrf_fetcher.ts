@@ -1,7 +1,6 @@
 import { IGRFModel } from "./igrf";
 import { IGRFModelCoeffs, IIGRFTableEntry } from "./igrf_model_coeffs";
 
-
 export class IGRFFetcher {
 
     private _igrfFolderUrl = 'https://www.ngdc.noaa.gov/IAGA/vmod/coeffs/';
@@ -124,5 +123,9 @@ export class IGRFFetcher {
         }
 
         return entries;
+    }
+
+    get instance() {
+        return this._igrfInstance;
     }
 }
