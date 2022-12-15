@@ -60,4 +60,9 @@ export class IDBController<T> {
             request.onerror = () => reject();
         }); 
     }
+
+    delete(key: string) {
+        const objectStore = this.getObjectStore('readwrite');
+        objectStore.delete(key);
+    }
 }

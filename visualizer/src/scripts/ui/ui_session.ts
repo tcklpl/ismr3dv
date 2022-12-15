@@ -292,6 +292,7 @@ export class UISession implements IUI {
                         new ConfirmationScreen('Are you sure?', `Do you really wish to delete the session '${s.name}'? This action is irreversible.`, () => {
                             visualizer.idb.sessionController.remove(s)
                             .then(() => {
+                                visualizer.idb.sessionIPPController.delete(s.name);
                                 this.constructLoadSessionPanel();
                             })
                             .catch(e => {
