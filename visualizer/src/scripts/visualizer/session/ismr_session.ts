@@ -3,6 +3,7 @@ import { MUtils } from "../../engine/utils/math_utils";
 import { CustomAlert } from "../../ui/custom_alert";
 import { IStationInfo } from "../api/formats/i_station_info";
 import { MainCamera } from "../camera/main_camera";
+import { getISMRFilterByName } from "../data/filters/filter_list";
 import { SatelliteEntity } from "../objects/satellite";
 import { StationEntity } from "../objects/station";
 import { ISessionConfig } from "./i_session.config";
@@ -234,6 +235,7 @@ export class ISMRSession {
             filters: visualizer.ui.dataFetcher.filterManager.serializedFilters,
             selected_satellite_categories: visualizer.ui.dataFetcher.satTypeManager.selection,
             ion_height: visualizer.ui.dataFetcher.ionHeight,
+            target_index_name: visualizer.ui.dataFetcher.targetDataIndex.name,
 
             interpolator_threads: this.timeline.buffer.interpolator.threadCount,
             interpolator_name: this.timeline.buffer.interpolator.function.name,
@@ -287,6 +289,12 @@ export class ISMRSession {
             visualizer.ui.dataFetcher.satTypeManager.updateForExternallySetSelection();
         };
         if (save.ion_height) visualizer.ui.dataFetcher.ionHeight = save.ion_height;
+        if (save.target_index_name) {
+            const res = getISMRFilterByName(save.target_index_name);
+            if (res) {
+                visualizer.ui.dataFetcher.targetDataIndex = res;
+            }
+        }
 
         if (save.camera.type == "main") {
             (visualizer.cameraManager.activeCamera as MainCamera).setData(save.camera);

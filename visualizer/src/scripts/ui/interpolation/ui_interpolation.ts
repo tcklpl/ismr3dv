@@ -8,6 +8,7 @@ import { UIInterpOptions } from "./interp_options";
 export class UIInterpolation implements IUI {
 
     private _infoBox = $('#interp-info-box');
+    private _infoBoxValueName = $('#interp-info-box-value-name');
     private _infoBoxGradient = $('#interp-grad');
     private _saveBtn = $('#interp-btn-save');
 
@@ -40,6 +41,10 @@ export class UIInterpolation implements IUI {
             this.updateInfoBoxVisibility(status);
             this._newInterpFuncObj = (visualizer.session as ISMRSession).timeline.buffer.interpolator.function;
             this.updateUI();
+        });
+
+        visualizer.events.on('data-fetcher-target-index-update', () => {
+            this._infoBoxValueName.html(visualizer.ui.dataFetcher.targetDataIndex.displayName);
         });
 
         this._interpolatorSelect.on('change', () => {
@@ -103,6 +108,7 @@ export class UIInterpolation implements IUI {
 
         this._interpThreads.val(visualizer.session?.timeline.buffer.interpolator.threadCount ?? 4);
         this._colorerBudget.val(visualizer.session?.timeline.buffer.colorer.budgetPerFrame ?? 5);
+        this._infoBoxValueName.html(visualizer.ui.dataFetcher.targetDataIndex.displayName);
     }
 
     save() {

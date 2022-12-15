@@ -1,8 +1,9 @@
 import { MessageScreen } from "../../ui/message_screen";
+import { IISMRFilter } from "./filters/filter_list";
 
 export class IPPFetcher {
 
-    fetchData(ion: number, satellites: string, cb?: () => void) {
+    fetchData(ion: number, targetField: IISMRFilter, satellites: string, cb?: () => void) {
         const session = visualizer.session;
         if (!session) return;
 
@@ -13,7 +14,7 @@ export class IPPFetcher {
             satellites: satellites,
             stations: session.selectedStations.map(x => x.station_id),
             filter: visualizer.ui.dataFetcher.filterManager.filtersAsString,
-            field: 's4'
+            field: targetField.name
         })
         .then(t => {
             const ipp = t.map(ipp => {

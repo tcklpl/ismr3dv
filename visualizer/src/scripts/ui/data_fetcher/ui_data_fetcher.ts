@@ -1,5 +1,5 @@
 import { IStationInfo } from "../../visualizer/api/formats/i_station_info";
-import { getISMRFiltersAsOptgroupHTMLSource } from "../../visualizer/data/filters/filter_list";
+import { assertGetISMRFilterByName, getISMRFiltersAsOptgroupHTMLSource, IISMRFilter, ISMRFilterList } from "../../visualizer/data/filters/filter_list";
 import { RandomUtils } from "../../visualizer/utils/random_utils";
 import { ConfirmationScreen } from "../confirmation_screen";
 import { IUI } from "../i_ui";
@@ -32,6 +32,8 @@ export class UIDataFetcher implements IUI {
 
     private _dstIndexSelect = $('#df-dst-index-selector');
 
+    private _targetDataIndex: IISMRFilter = assertGetISMRFilterByName('s4');
+
     constructor() {
         const dstSrc = $.parseHTML(getISMRFiltersAsOptgroupHTMLSource());
         this._dstIndexSelect.append(dstSrc);
@@ -61,6 +63,16 @@ export class UIDataFetcher implements IUI {
         this._newFilterOther.on('click', () => this._filterManager.createDefaultFilterCard());
 
         this._stSearch.on('input', () => this.updateStationCards());
+        this._dstIndexSelect.on('change', () => {
+            const targetIndex = this._dstIndexSelect.val() as string;
+            const targetData = ISMRFilterList.find(x => x.name == targetIndex);
+            if (!targetData) {
+                new MessageScreen('Error', `No filter was found for the selected option`);
+                return;
+            }
+            this._targetDataIndex = targetData;
+        });
+
         this._btnFetchData.on('click', () => {
             const ionValue = this._ionDistance.val() as string;
             let ionNumber = -1;
@@ -70,8 +82,12 @@ export class UIDataFetcher implements IUI {
                 new MessageScreen('Error', 'There was an error while parsing the ION distance value');
                 return;
             }
+
             this.loading = true;
-            visualizer.ippFetcher.fetchData(ionNumber, this._satelliteTypeSelectionManager.selectedSatellitesAsString, () => this.loading = false);
+            visualizer.ippFetcher.fetchData(ionNumber, this._targetDataIndex, this._satelliteTypeSelectionManager.selectedSatellitesAsString, () => {
+                this.loading = false;
+                visualizer.events.dispatchEvent('data-fetcher-target-index-update');
+            });
         });
     }
 
@@ -165,6 +181,17 @@ export class UIDataFetcher implements IUI {
 
     set ionHeight(val: number) {
         this._ionDistance.val(val);
+    }
+
+    get targetDataIndex() {
+        return this._targetDataIndex;
+    }
+
+    set targetDataIndex(i: IISMRFilter) {
+        this._targetDataIndex = i;
+
+        const filterTypeChildren = $(`#df-dst-index-selector option`);
+        filterTypeChildren.removeAttr('selected').filter(`[value=${i.name}]`).prop('selected', true);
     }
     
 }

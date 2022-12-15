@@ -1,3 +1,4 @@
+import { EngineError } from "../../../engine/errors/engine_error";
 
 export interface IISMRFilter {
     name: string;
@@ -113,6 +114,12 @@ export const ISMRFilterList: IISMRFilter[] = [
 export function getISMRFilterByName(name: string) {
     return ISMRFilterList.find(x => x.name == name);
 };
+
+export function assertGetISMRFilterByName(name: string) {
+    const res = getISMRFilterByName(name);
+    if (!res) throw new EngineError('ISMR Filter List Assert', `Failed to get filter by name: '${name}'`);
+    return res;
+}
 
 export function getISMRFiltersAsOptgroupHTMLSource() {
     const filtersByCategory: Map<ISMRFilterGroup, IISMRFilter[]> = new Map();
