@@ -179,6 +179,10 @@ export class UITimeline implements IUI {
             try {
                 const val = Number.parseInt(valStr);
                 this._playInterval = val;
+                // Restart the playback task to change the velocity instantly
+                if (this._isPlaying) {
+                    this.playTask();
+                }
             } catch (e) {
                 console.warn(e);
             }
@@ -219,7 +223,7 @@ export class UITimeline implements IUI {
     private playTask() {
         if (this._playTask > -1) clearTimeout(this._playTask);
         this._playTask = -1;
-        
+
         if (this._isPlaying) {
             const index = this.session.timeline.currentMomentIndex;
             if (index < (this.session.timeline.currentMoments.length - 1)) {
