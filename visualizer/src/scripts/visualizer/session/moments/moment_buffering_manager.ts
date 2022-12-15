@@ -126,6 +126,7 @@ export class MomentBufferingManager {
                 if (this._momentWaitingForColor === data.index) {
                     this.subTexAt(data.index);
                     this._momentWaitingForColor = undefined;
+                    visualizer.events.dispatchEvent('timeline-cur-moment-buffered');
                 }
 
                 visualizer.events.dispatchEvent('moment-colored', data.index);
@@ -242,6 +243,7 @@ export class MomentBufferingManager {
         // If the required moment was now buffered upon the request, it will be shown as soon as it's buffered and colored.
         if (!hasBeenTexturedYet) {
             this._momentWaitingForColor = index;
+            visualizer.events.dispatchEvent('timeline-cur-moment-buffering', true);
         }
 
         // Now buffer all the moments

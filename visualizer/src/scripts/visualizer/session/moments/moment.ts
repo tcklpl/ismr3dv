@@ -28,12 +28,14 @@ export class Moment {
     
     private _date: Date;
     private _data: IIPPInfo[];
-    bufferInterpolatedData?: IMomentInterpolatedData;
-    bufferColoredData?: IMomentImageData;
+    private _bufferInterpolatedData?: IMomentInterpolatedData;
+    private _bufferColoredData?: IMomentImageData;
 
     private _ippMeasurements: IMomentIPPMeasurements;
     private _ippPerSatellite: Map<string, number>;
     private _satellitesCoords: Map<string, Vec3>;
+
+    private _bufferWaitingListeners: (() => void)[] = [];
 
     constructor(info: IMomentCalculatedInfo) {
         this._date = new Date(info.time);
@@ -73,6 +75,10 @@ export class Moment {
         this.bufferInterpolatedData = undefined;
     }
 
+    registerColorWaitingListener(l: () => void) {
+        this._bufferWaitingListeners.push(l);
+    }
+
     get date() {
         return this._date;
     }
@@ -102,6 +108,26 @@ export class Moment {
 
     get ippPerSatellite() {
         return this._ippPerSatellite;
+    }
+
+    get bufferInterpolatedData() {
+        return this._bufferInterpolatedData;
+    }
+
+    get bufferColoredData() {
+        return this._bufferColoredData;
+    }
+
+    set bufferInterpolatedData(d: IMomentInterpolatedData | undefined) {
+        this._bufferInterpolatedData = d;
+    }
+
+    set bufferColoredData(d: IMomentImageData | undefined) {
+        this._bufferColoredData = d;
+        if (this._bufferWaitingListeners.length > 0) {
+            this._bufferWaitingListeners.forEach(l => l());
+            this._bufferWaitingListeners = [];
+        }
     }
 
 }

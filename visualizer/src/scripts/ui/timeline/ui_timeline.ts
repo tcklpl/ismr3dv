@@ -44,9 +44,13 @@ export class UITimeline implements IUI {
     private _timelineMode: 'static' | 'user-hovering' = 'static';
     private _isPlaying = false;
     private _playInterval = 1000;
+    private _playTask = -1;
+    private _shouldResumePlayingAfterBuffer = false;
     
     private _bufferBounds = new Vec2(0, 0);
     private _colorBounds = new Vec2(0, 0);
+
+    private _bufferingWarning = $('#buffering-warning');
 
     private setActivePanel(panel: JQuery<HTMLElement>) {
         this._container.children().removeClass('d-flex show').addClass('d-none');
@@ -150,11 +154,12 @@ export class UITimeline implements IUI {
 
         this._btnPlay.on('click', () => {
             this._isPlaying = !this._isPlaying;
+            this._btnPlay.toggleClass('bi-play-fill', !this._isPlaying).toggleClass('bi-pause-fill', this._isPlaying);
             if (this._isPlaying) {
-                this._btnPlay.removeClass('bi-play-fill').addClass('bi-pause-fill');
                 this.playTask();
             } else {
-                this._btnPlay.removeClass('bi-pause-fill').addClass('bi-play-fill');
+                if (this._playTask > -1) clearTimeout(this._playTask);
+                this._shouldResumePlayingAfterBuffer = false;
             }
         });
 
@@ -186,19 +191,58 @@ export class UITimeline implements IUI {
 
         visualizer.events.on('moment-changed', () => {
             this.updateCurrentMomentMarkerAndInfo();
-        })
+        });
+
+        visualizer.events.on('timeline-cur-moment-buffering', (args: any[]) => {
+            const showSpinner = args[0] as boolean;
+            if (showSpinner) this._bufferingWarning.removeClass('d-none').addClass('d-flex');
+
+            // If the user clicks on another unbuffered moment while the timeline is playing.
+            // in this case we should pause while we buffer the required moment
+            if (this._isPlaying) {
+                if (this._playTask > -1) clearTimeout(this._playTask);
+                this._shouldResumePlayingAfterBuffer = true;
+            }
+        });
+
+        visualizer.events.on('timeline-cur-moment-buffered', () => {
+            this._bufferingWarning.removeClass('d-flex').addClass('d-none');
+
+            // Resume the playback is the user was playing and clicks on a new moment
+            if (this._shouldResumePlayingAfterBuffer) {
+                this._shouldResumePlayingAfterBuffer = false;
+                this.playTask();
+            }
+        });
     }
 
     private playTask() {
+        if (this._playTask > -1) clearTimeout(this._playTask);
+        this._playTask = -1;
+        
         if (this._isPlaying) {
             const index = this.session.timeline.currentMomentIndex;
             if (index < (this.session.timeline.currentMoments.length - 1)) {
-                this.session.timeline.setActiveMoment(index + 1);
+
+                // Pause the playback if the next moment is not yet buffered and colored
+                if (!this.session.timeline.currentMoments[index + 1].hasImageData) {
+                    
+                    // Register a listener for when the next moment is ready
+                    this.session.timeline.currentMoments[index + 1].registerColorWaitingListener(() => {
+                        visualizer.events.dispatchEvent('timeline-cur-moment-buffered');
+                        this._playTask = setTimeout(() => this.playTask(), this._playInterval);
+                    });
+
+                    // Dispath event to show the spinner while the next moment is being loaded
+                    visualizer.events.dispatchEvent('timeline-cur-moment-buffering', false);
+                } else {
+                    this.session.timeline.setActiveMoment(index + 1);
+                    this._playTask = setTimeout(() => this.playTask(), this._playInterval);
+                }
             } else {
                 this._isPlaying = false;
                 this._btnPlay.removeClass('bi-pause-fill').addClass('bi-play-fill');
             }
-            setTimeout(() => this.playTask(), this._playInterval);
         }
     }
 
