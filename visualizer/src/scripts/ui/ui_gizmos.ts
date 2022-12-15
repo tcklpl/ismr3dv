@@ -26,7 +26,7 @@ export class UIGizmos implements IUI {
 
         visualizer.events.on('session-is-present', (sessionStatus: boolean, ...rest) => {
             this._magneticGizmosContainer.toggleClass('d-block', sessionStatus).toggleClass('d-none', !sessionStatus);
-            this._magneticTitle.toggleClass('d-block', sessionStatus).toggleClass('d-none', !sessionStatus);
+            this._magneticTitle.toggleClass('d-flex', sessionStatus).toggleClass('d-none', !sessionStatus);
         });
 
         this._addMagGizmoBtn.on('click', () => new CreateMagneticLineGizmoModal());

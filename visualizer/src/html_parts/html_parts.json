@@ -92,7 +92,6 @@
             "url": "data_fetcher.html",
             "append_to": "body"
         },
-        
         {
             "url": "interpolation/interp_info.html",
             "append_to": "body"
