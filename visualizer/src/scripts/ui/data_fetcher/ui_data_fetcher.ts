@@ -87,6 +87,8 @@ export class UIDataFetcher implements IUI {
             visualizer.ippFetcher.fetchData(ionNumber, this._targetDataIndex, this._satelliteTypeSelectionManager.selectedSatellitesAsString, () => {
                 this.loading = false;
                 visualizer.events.dispatchEvent('data-fetcher-target-index-update');
+                // auto close the data fetcher when we get the data
+                this._closeBtn.trigger('click');
             });
         });
     }
