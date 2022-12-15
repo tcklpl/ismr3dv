@@ -41,6 +41,8 @@ export class SessionLoader {
 
     constructIPPForCurrentSession(ipp: IIPPInfo[], onFinish?: () => void) {
         if (!visualizer.session) throw new EngineError('Session Loader', 'Failed to load ipp for a null current session');
+        visualizer.session.timeline.clearMoments();
+
         this._onSessionLoad = onFinish;
         this._sessionBeingLoaded = visualizer.session;
         this._momentLength = 0;
