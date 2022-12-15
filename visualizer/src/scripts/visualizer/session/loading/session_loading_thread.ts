@@ -26,7 +26,8 @@ export const sessionLoadingThread = () => {
 
         // 1 - Separate by date
         o.forEach(ipp => {
-            const date = getTimeFromIPP(ipp) / 100000;
+            // 60000 so that we ignore seconds: 1000ms * 60s
+            const date = Math.floor(getTimeFromIPP(ipp) / 60000) * 60000;
             const res = ippByDate.get(date);
             if (res) {
                 res.push(ipp);

@@ -36,7 +36,7 @@ export class Moment {
     private _satellitesCoords: Map<string, Vec3>;
 
     constructor(info: IMomentCalculatedInfo) {
-        this._date = new Date(info.time * 100000);
+        this._date = new Date(info.time);
         this._data = info.ipp;
         this._ippMeasurements = info.measurements;
         this._ippPerSatellite = info.ippPerSatellite;
