@@ -288,9 +288,13 @@ export class UITimeline implements IUI {
             moment.bufferProgression == 0 ? 'Not Buffered' :
             moment.bufferProgression == 1 ? 'Interpolated' :
             moment.bufferProgression == 2 ? 'Buffered' : 'ERROR';
+
+        const getValue = (m: IMomentIPPMeasurements) => {
+            return (m as any)[this.timelineNormalValue];
+        }
         this._tlMomentName.html(`
             <span><i class="bi-alarm icon-left"></i>${DateUtils.to_DDMMYYYY_HHMMSS(moment.date)}</span>
-            <span><i class="bi-bar-chart icon-left"></i>${moment.ippMeasurements.avg.toFixed(2)}</span>
+            <span><i class="bi-bar-chart icon-left"></i>${getValue(moment.ippMeasurements).toFixed(2)}</span>
             <span><i class="bi-memory icon-left"></i>${bufferStatus}</span>`
         );
     }

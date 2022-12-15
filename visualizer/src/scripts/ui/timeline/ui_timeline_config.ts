@@ -15,6 +15,7 @@ export class UITimelineConfig implements IUI {
             visualizer.ui.timeline.timelineNormalizator = this._normalizatorSelect.val() as TimelineNormalizator;
             visualizer.ui.timeline.timelineNormalValue = this._normalizationValue.val() as TimelineNormValue;
             visualizer.ui.timeline.draw2DIndicatorGraph();
+            visualizer.ui.timeline.updateCurrentMomentMarkerAndInfo();
         });
 
         visualizer.events.on('session-is-present', (...rest) => {
