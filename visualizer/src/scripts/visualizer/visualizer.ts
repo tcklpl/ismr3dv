@@ -17,7 +17,6 @@ import { IPPFetcher } from "./data/ipp_fetcher";
 import { EventHandler } from "./events/event_handler";
 import { GizmoManager } from "./gizmos/gizmo_manager";
 import { VisualizerIO } from "./io/visualizer_io";
-import { ISMRProviders } from "./providers/providers";
 import { ISMRSession } from "./session/ismr_session";
 import { UniverseScene } from "./universe_scene";
 import { IGRFFetcher } from "./igrf/igrf_fetcher";
@@ -53,7 +52,6 @@ export class Visualizer {
 
     // Api
     private _api = new ISMRAPIConnector();
-    private _providers!: ISMRProviders;
     private _session?: ISMRSession;
     private _serverInfo!: IServerInfo;
 
@@ -99,8 +97,6 @@ export class Visualizer {
 
         this._engine = new Engine();
         this._engine.adjustToWindowSize();
-
-        this._providers = new ISMRProviders();
 
         this._universeScene = new UniverseScene("universe");
         this._cameraManager.setActiveCamera(this._universeScene.mainCamera);
@@ -190,10 +186,6 @@ export class Visualizer {
 
     get idb() {
         return this._idb;
-    }
-
-    get providers() {
-        return this._providers;
     }
 
     set session(s: ISMRSession | undefined) {
